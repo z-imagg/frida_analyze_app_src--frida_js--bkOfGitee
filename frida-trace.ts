@@ -2,7 +2,7 @@
 
 function followFunc(){
     Process.enumerateModules().forEach(m=>console.log(`module=${m.name}`))
-    const _mod:Module | null=Process.findModuleByName("libcaffe2.so");
+    const _mod:Module | null=Process.findModuleByName("frida-agent-64.so");
     if (!_mod ){
         return ;
     }
