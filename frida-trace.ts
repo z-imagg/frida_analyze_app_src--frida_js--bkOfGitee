@@ -1,7 +1,7 @@
 //from  https://gitee.com/x619920921/frida-js/raw/main/frida-trace.js
 
 function followFunc(){
-    const _mod:Module | null=Process.findModuleByName("libc10.so");
+    const _mod:Module | null=Process.findModuleByName("libcaffe2.so");
     if (!_mod ){
         return ;
     }
