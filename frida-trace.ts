@@ -15,7 +15,7 @@ function createFnSymTab(){
     //遍历调试信息中的全部函数
     for (let fnAdrK of fnLsInDbgSym) {
         //想要通过日志打印 人工知道 哪个函数的 DebugSymbol.fromAddress 很卡？
-        console.log(`k=${k++},fnAdr=${fnAdrK}`);
+        // console.log(`k=${k++},fnAdr=${fnAdrK}`);
 
         //函数地址k的详情
         const fnSymK:DebugSymbol=DebugSymbol.fromAddress(fnAdrK);
@@ -43,6 +43,11 @@ function createFnSymTab(){
             console.log(`函数表格尺寸:${gFnSymTab.size}`)
         }
 
+      //为了尽快拿到结果，提前退出循环
+      if(gFnSymTab.size > 1000 ){
+        break;
+      }
+
     }
 
 
@@ -59,6 +64,8 @@ function interceptFnLs(){
             // send(args);
         //    console.log('args:'+args);
             // console.log('Context information:');
+            const fnSym=DebugSymbol.fromAddress(this.context.pc)
+            console.log(`fnSym=${fnSym}`)
             console.log('Context  : ' + JSON.stringify(this.context));
             console.log('Return   : ' + this.returnAddress);
             console.log('ThreadId : ' + this.threadId);
