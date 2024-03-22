@@ -1,7 +1,7 @@
 //from  https://gitee.com/x619920921/frida-js/raw/main/frida-trace.js
 
 function followFunc(){
-    const _mod:Module | null=Process.findModuleByName("simple_nn.elf");
+    const _mod:Module | null=Process.findModuleByName("libtorch.so.1");
     if (!_mod ){
         return ;
     }
