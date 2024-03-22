@@ -1,6 +1,7 @@
 //from  https://gitee.com/x619920921/frida-js/raw/main/frida-trace.js
 
 function followFunc(){
+    Process.enumerateModules().forEach(m=>console.log(`module=${m.name}`))
     const _mod:Module | null=Process.findModuleByName("libcaffe2.so");
     if (!_mod ){
         return ;
@@ -11,7 +12,7 @@ function followFunc(){
     const base_size:number = modu.size;
 
     const threadId:ThreadId = Process.getCurrentThreadId();
-Stalker.follow(threadId, {
+Stalker.follow(undefined, {
     events: {
         call: true,
 //frida文档  https://frida.re/docs/javascript-api/#stalker
