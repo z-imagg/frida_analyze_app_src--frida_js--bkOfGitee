@@ -9,13 +9,13 @@ function createFnSymTab(){
     // const Mod=Process.findModuleByName("libtorch.so.1");
     //获取调试信息中全部函数地址
     const fnLsInDbgSym:NativePointer[]=DebugSymbol.findFunctionsMatching("*")
-    console.log(`调试信心中函数个数=${fnLsInDbgSym.length}`)
+    // console.log(`调试信心中函数个数=${fnLsInDbgSym.length}`)
     
     let k:number = 0;
     //遍历调试信息中的全部函数
     for (let fnAdrK of fnLsInDbgSym) {
         //想要通过日志打印 人工知道 哪个函数的 DebugSymbol.fromAddress 很卡？
-        console.log(`k=${k++},fnAdr=${fnAdrK}`);
+        // console.log(`k=${k++},fnAdr=${fnAdrK}`);
 
         //函数地址k的详情
         const fnSymK:DebugSymbol=DebugSymbol.fromAddress(fnAdrK);
@@ -39,9 +39,9 @@ function createFnSymTab(){
         //该函数地址插入表格: 建立 函数地址 到 函数调试符号详情 的 表格
         gFnSymTab.set(fnAdrK, fnSymK);
 
-        if(gFnSymTab.size % 1000 == 0 ){
-            console.log(`函数表格尺寸:${gFnSymTab.size}`)
-        }
+        // if(gFnSymTab.size % 1000 == 0 ){
+        //     console.log(`函数表格尺寸:${gFnSymTab.size}`)
+        // }
 
     }
 
@@ -84,7 +84,7 @@ frida 运行报超时错误 "Failed to load script: timeout was reached" 解决
 setTimeout(function () {
     //业务代码
     createFnSymTab()
-    interceptFnLs()
+    // interceptFnLs()
   }, 0);
 
 

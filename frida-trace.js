@@ -1,8 +1,8 @@
 📦
-1968 /frida-trace.js.map
-3708 /frida-trace.js
+1778 /frida-trace.js.map
+3722 /frida-trace.js
 ✄
-{"version":3,"file":"frida-trace.js","sourceRoot":"/fridaAnlzAp/frida_js/","sources":["frida-trace.ts"],"names":[],"mappings":"AACA,aAAa;AACb,MAAM,SAAS,GAAkC,IAAI,GAAG,EAAE,CAAC;AAC3D,UAAU;AACV,SAAS,cAAc;IACnB,QAAQ;IACR,yEAAyE;IAEzE,uDAAuD;IACvD,eAAe;IACf,MAAM,YAAY,GAAiB,WAAW,CAAC,qBAAqB,CAAC,GAAG,CAAC,CAAA;IACzE,OAAO,CAAC,GAAG,CAAC,aAAa,YAAY,CAAC,MAAM,EAAE,CAAC,CAAA;IAE/C,IAAI,CAAC,GAAU,CAAC,CAAC;IACjB,cAAc;IACd,KAAK,IAAI,MAAM,IAAI,YAAY,EAAE;QAC7B,iDAAiD;QACjD,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC,EAAE,UAAU,MAAM,EAAE,CAAC,CAAC;QAExC,UAAU;QACV,MAAM,MAAM,GAAa,WAAW,CAAC,WAAW,CAAC,MAAM,CAAC,CAAC;QAEzD,MAAM,KAAK,GAAa,MAAM,CAAC,UAAU,CAAC;QAC1C,MAAM,MAAM,GAAa,MAAM,CAAC,QAAQ,CAAC;QACzC,GAAG;QACH;QACI,0BAA0B;QAC1B,MAAM,IAAI,IAAI,IAAI,MAAM,IAAI,SAAS,IAAI,MAAM,IAAI,EAAE;YACrD,+BAA+B;YAC/B,MAAM,EAAE,UAAU,CAAC,kBAAkB,CAAC;YACtC,MAAM,EAAE,UAAU,CAAC,mCAAmC,CAAC,EAC1D;YACG,SAAS;SACZ;QAED,SAAS;QACT,OAAO,CAAC,GAAG,CAAC,IAAI,CAAC,SAAS,CAAC,MAAM,CAAC,CAAC,CAAC;QAEpC,oCAAoC;QACpC,SAAS,CAAC,GAAG,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC;QAE9B,IAAG,SAAS,CAAC,IAAI,GAAG,IAAI,IAAI,CAAC,EAAE;YAC3B,OAAO,CAAC,GAAG,CAAC,UAAU,SAAS,CAAC,IAAI,EAAE,CAAC,CAAA;SAC1C;KAEJ;AAGL,CAAC;AAED,mBAAmB;AACnB,SAAS,aAAa;IAClB,MAAM,OAAO,GAAC,SAAS,CAAC,IAAI,EAAE,CAAC;IAC/B,KAAK,IAAI,MAAM,IAAI,OAAO,EAAE;QAExB,oDAAoD;QACpD,WAAW,CAAC,MAAM,CAAC,MAAM,EAAE;YACzB,OAAO,EAAE,UAAe,IAAI;gBAC1B,cAAc;gBAClB,gCAAgC;gBAC5B,uCAAuC;gBACvC,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,SAAS,CAAC,IAAI,CAAC,OAAO,CAAC,CAAC,CAAC;gBAC1D,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,aAAa,CAAC,CAAC;gBAChD,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,QAAQ,CAAC,CAAC;gBAC3C,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,KAAK,CAAC,CAAC;gBACxC,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,GAAG,CAAC,CAAC;YACxC,CAAC;YACD,OAAO,CAAM,MAAM;gBACjB,+CAA+C;gBAC/C,wCAAwC;gBACxC,iDAAiD;YACnD,CAAC;SACF,CAAC,CAAC;KACF;AACT,CAAC;AACD;;;;;;GAMG;AACH,0EAA0E;AAC1E,UAAU,CAAC;IACP,MAAM;IACN,cAAc,EAAE,CAAA;IAChB,aAAa,EAAE,CAAA;AACjB,CAAC,EAAE,CAAC,CAAC,CAAC;AAGR;;;;;;;;;;;;;;GAcG"}
+{"version":3,"file":"frida-trace.js","sourceRoot":"/fridaAnlzAp/frida_js/","sources":["frida-trace.ts"],"names":[],"mappings":"AACA,aAAa;AACb,MAAM,SAAS,GAAkC,IAAI,GAAG,EAAE,CAAC;AAC3D,UAAU;AACV,SAAS,cAAc;IACnB,QAAQ;IACR,yEAAyE;IAEzE,uDAAuD;IACvD,eAAe;IACf,MAAM,YAAY,GAAiB,WAAW,CAAC,qBAAqB,CAAC,GAAG,CAAC,CAAA;IACzE,kDAAkD;IAElD,IAAI,CAAC,GAAU,CAAC,CAAC;IACjB,cAAc;IACd,KAAK,IAAI,MAAM,IAAI,YAAY,EAAE;QAC7B,iDAAiD;QACjD,2CAA2C;QAE3C,UAAU;QACV,MAAM,MAAM,GAAa,WAAW,CAAC,WAAW,CAAC,MAAM,CAAC,CAAC;QAEzD,MAAM,KAAK,GAAa,MAAM,CAAC,UAAU,CAAC;QAC1C,MAAM,MAAM,GAAa,MAAM,CAAC,QAAQ,CAAC;QACzC,GAAG;QACH;QACI,0BAA0B;QAC1B,MAAM,IAAI,IAAI,IAAI,MAAM,IAAI,SAAS,IAAI,MAAM,IAAI,EAAE;YACrD,+BAA+B;YAC/B,MAAM,EAAE,UAAU,CAAC,kBAAkB,CAAC;YACtC,MAAM,EAAE,UAAU,CAAC,mCAAmC,CAAC,EAC1D;YACG,SAAS;SACZ;QAED,SAAS;QACT,OAAO,CAAC,GAAG,CAAC,IAAI,CAAC,SAAS,CAAC,MAAM,CAAC,CAAC,CAAC;QAEpC,oCAAoC;QACpC,SAAS,CAAC,GAAG,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC;QAE9B,mCAAmC;QACnC,8CAA8C;QAC9C,IAAI;KAEP;AAGL,CAAC;AAED,mBAAmB;AACnB,SAAS,aAAa;IAClB,MAAM,OAAO,GAAC,SAAS,CAAC,IAAI,EAAE,CAAC;IAC/B,KAAK,IAAI,MAAM,IAAI,OAAO,EAAE;QAExB,oDAAoD;QACpD,WAAW,CAAC,MAAM,CAAC,MAAM,EAAE;YACzB,OAAO,EAAE,UAAe,IAAI;gBAC1B,cAAc;gBAClB,gCAAgC;gBAC5B,uCAAuC;gBACvC,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,SAAS,CAAC,IAAI,CAAC,OAAO,CAAC,CAAC,CAAC;gBAC1D,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,aAAa,CAAC,CAAC;gBAChD,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,QAAQ,CAAC,CAAC;gBAC3C,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,KAAK,CAAC,CAAC;gBACxC,OAAO,CAAC,GAAG,CAAC,aAAa,GAAG,IAAI,CAAC,GAAG,CAAC,CAAC;YACxC,CAAC;YACD,OAAO,CAAM,MAAM;gBACjB,+CAA+C;gBAC/C,wCAAwC;gBACxC,iDAAiD;YACnD,CAAC;SACF,CAAC,CAAC;KACF;AACT,CAAC;AACD;;;;;;GAMG;AACH,0EAA0E;AAC1E,UAAU,CAAC;IACP,MAAM;IACN,cAAc,EAAE,CAAA;IAChB,kBAAkB;AACpB,CAAC,EAAE,CAAC,CAAC,CAAC;AAGR;;;;;;;;;;;;;;GAcG"}
 ✄
 //函数符号表格 全局变量
 const gFnSymTab = new Map();
@@ -13,12 +13,12 @@ function createFnSymTab() {
     // const Mod=Process.findModuleByName("libtorch.so.1");
     //获取调试信息中全部函数地址
     const fnLsInDbgSym = DebugSymbol.findFunctionsMatching("*");
-    console.log(`调试信心中函数个数=${fnLsInDbgSym.length}`);
+    // console.log(`调试信心中函数个数=${fnLsInDbgSym.length}`)
     let k = 0;
     //遍历调试信息中的全部函数
     for (let fnAdrK of fnLsInDbgSym) {
         //想要通过日志打印 人工知道 哪个函数的 DebugSymbol.fromAddress 很卡？
-        console.log(`k=${k++},fnAdr=${fnAdrK}`);
+        // console.log(`k=${k++},fnAdr=${fnAdrK}`);
         //函数地址k的详情
         const fnSymK = DebugSymbol.fromAddress(fnAdrK);
         const modNm = fnSymK.moduleName;
@@ -36,9 +36,9 @@ function createFnSymTab() {
         console.log(JSON.stringify(fnSymK));
         //该函数地址插入表格: 建立 函数地址 到 函数调试符号详情 的 表格
         gFnSymTab.set(fnAdrK, fnSymK);
-        if (gFnSymTab.size % 1000 == 0) {
-            console.log(`函数表格尺寸:${gFnSymTab.size}`);
-        }
+        // if(gFnSymTab.size % 1000 == 0 ){
+        //     console.log(`函数表格尺寸:${gFnSymTab.size}`)
+        // }
     }
 }
 //拦截 函数符号表格 中的 每个函数
@@ -76,7 +76,7 @@ frida 运行报超时错误 "Failed to load script: timeout was reached" 解决
 setTimeout(function () {
     //业务代码
     createFnSymTab();
-    interceptFnLs();
+    // interceptFnLs()
 }, 0);
 /**
 调试信心中函数个数=289146
