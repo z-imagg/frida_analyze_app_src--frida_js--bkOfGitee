@@ -14,12 +14,12 @@ function buszFunIntercept(){
 
             this.fnCallId=++gFnCallId;
 
-            console.log(`cThId=${cThId},OnEnter_fnCallId=${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`)
+            console.log(`cThId=${cThId},OnEnter,fnCallId_${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`)
         },
         onLeave:function (this: InvocationContext, retval: InvocationReturnValue) {
             const cThId:ThreadId=Process.getCurrentThreadId();
     
-            console.log(`cThId=${cThId},OnLeave_fnCallId=${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`)
+            console.log(`cThId=${cThId},OnLeave,fnCallId_${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`)
         }
     })
 }

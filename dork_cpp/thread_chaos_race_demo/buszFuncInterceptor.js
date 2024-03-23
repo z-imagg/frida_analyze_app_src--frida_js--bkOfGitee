@@ -10,11 +10,11 @@ function buszFunIntercept() {
             this.threadIdx = args[0].toInt32();
             this.callId = args[1].toInt32();
             this.fnCallId = ++gFnCallId;
-            console.log(`cThId=${cThId},OnEnter_fnCallId=${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`);
+            console.log(`cThId=${cThId},OnEnter,fnCallId=${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`);
         },
         onLeave: function (retval) {
             const cThId = Process.getCurrentThreadId();
-            console.log(`cThId=${cThId},OnLeave_fnCallId=${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`);
+            console.log(`cThId=${cThId},OnLeave,fnCallId=${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`);
         }
     });
 }
