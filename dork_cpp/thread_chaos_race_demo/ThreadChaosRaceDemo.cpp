@@ -35,23 +35,32 @@ std::string createStr2(std::string title1,int v1,std::string title2,int v2){
     msg.append("\n");
     return msg;
 }
-void buszFunc(int threadIdx,int *p_gVar) {
+std::string createStr3(std::string title1,int v1,std::string title2,int v2,std::string title3,int v3){
+    std::string msg;
+    msg.append(title1); msg.append(std::to_string(v1));
+    msg.append(title2);  msg.append(std::to_string(v2));
+    msg.append(title3);  msg.append(std::to_string(v3));
+    msg.append("\n");
+    return msg;
+}
+void buszFunc(int threadIdx,int callId,int *p_gVar) {
     sleepRandMs(10);
     (*p_gVar)= ( ++(*p_gVar) );
 
-    std::cout << createStr2("进入业务函数,线程",threadIdx,",全局变量=",*p_gVar);
+    std::cout << createStr3("进入业务函数,threadIdx_",threadIdx,",callId_",callId,",全局变量=",*p_gVar);
 
     sleepRandMs(5);
 
-    std::cout <<  createStr1("离开业务函数,线程",threadIdx );
+    std::cout <<  createStr1("离开业务函数,threadIdx_",threadIdx );
 }
 
 #define ThreadCnt 10
 int main() {
+    int gCallId=5000;
     int gVar=0;
     std::thread threads[ThreadCnt];
     for (int thrdIdx = 0; thrdIdx < ThreadCnt; ++thrdIdx) {
-        threads[thrdIdx] = std::thread(buszFunc, thrdIdx,&gVar);
+        threads[thrdIdx] = std::thread(buszFunc, thrdIdx, gCallId++, &gVar);
         sleepRandMs(3);
         threads[thrdIdx].detach();
     }

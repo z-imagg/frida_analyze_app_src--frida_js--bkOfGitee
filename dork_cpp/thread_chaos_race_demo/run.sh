@@ -14,5 +14,5 @@ g++ -g ThreadChaosRaceDemo.obj -o ThreadChaosRaceDemo.elf
 npx frida-compile  buszFuncInterceptor.ts --no-source-maps --output buszFuncInterceptor.js  && \
 #删除frida-compile生成的 js文件开头 乱七八糟的 几行
 sed -i '1,/buszFunc拦截js脚本/d' buszFuncInterceptor.js && \
-frida  --load ./buszFuncInterceptor.js      --file ThreadChaosRaceDemo.elf
+frida  --load ./buszFuncInterceptor.js      --file ThreadChaosRaceDemo.elf  --output out.log | tee mix_out.log
 

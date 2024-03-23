@@ -6,12 +6,16 @@ function buszFunIntercept() {
     console.log(`fnSym=${JSON.stringify(fnSym)}`);
     Interceptor.attach(fnAdr, {
         onEnter: function (args) {
+            const cThId = Process.getCurrentThreadId();
+            const threadIdx = args[0].toInt32();
+            const callId = args[1].toInt32();
             gFnCallId++;
             this.fnCallId = gFnCallId;
-            console.log(`OnEnter_fnCallId=${this.fnCallId}`);
+            console.log(`cThId=${cThId},OnEnter_fnCallId=${this.fnCallId},arg.threadIdx_${threadIdx},arg.callId_${callId}`);
         },
         onLeave: function (retval) {
-            console.log(`OnLeave_fnCallId=${this.fnCallId}`);
+            const cThId = Process.getCurrentThreadId();
+            console.log(`cThId=${cThId},OnLeave_fnCallId=${this.fnCallId}`);
         }
     });
 }
