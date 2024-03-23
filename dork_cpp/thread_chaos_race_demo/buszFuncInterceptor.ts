@@ -1,6 +1,6 @@
 //buszFunc拦截js脚本
 function buszFunIntercept(){
-    let gFnCallId:number = 0;
+    let gFnCallId:number = 5000;
 
     const fnAdrLs=DebugSymbol.findFunctionsMatching("*buszFunc*")
     const fnAdr = fnAdrLs[0]
@@ -9,18 +9,17 @@ function buszFunIntercept(){
     Interceptor.attach(fnAdr,{
         onEnter:function (this: InvocationContext, args: InvocationArguments) {
             const cThId:ThreadId=Process.getCurrentThreadId();
-            const threadIdx:number = args[0].toInt32();
-            const callId:number = args[1].toInt32();
+            this. threadIdx = args[0].toInt32();
+            this. callId = args[1].toInt32();
 
-            gFnCallId++;
-            this.fnCallId=gFnCallId;
+            this.fnCallId=++gFnCallId;
 
-            console.log(`cThId=${cThId},OnEnter_fnCallId=${this.fnCallId},arg.threadIdx_${threadIdx},arg.callId_${callId}`)
+            console.log(`cThId=${cThId},OnEnter_fnCallId=${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`)
         },
         onLeave:function (this: InvocationContext, retval: InvocationReturnValue) {
             const cThId:ThreadId=Process.getCurrentThreadId();
     
-            console.log(`cThId=${cThId},OnLeave_fnCallId=${this.fnCallId}`)
+            console.log(`cThId=${cThId},OnLeave_fnCallId=${this.fnCallId},C_arg.threadIdx_${this.threadIdx},C_arg.callId_${this.callId}`)
         }
     })
 }

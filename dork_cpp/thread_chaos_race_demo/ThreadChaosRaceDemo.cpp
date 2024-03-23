@@ -45,13 +45,16 @@ std::string createStr3(std::string title1,int v1,std::string title2,int v2,std::
 }
 void buszFunc(int threadIdx,int callId,int *p_gVar) {
     sleepRandMs(10);
-    (*p_gVar)= ( ++(*p_gVar) );
-
     std::cout << createStr3("进入业务函数,threadIdx_",threadIdx,",callId_",callId,",全局变量=",*p_gVar);
 
-    sleepRandMs(5);
+    int x= ( ++(*p_gVar) );
 
-    std::cout <<  createStr1("离开业务函数,threadIdx_",threadIdx );
+
+    sleepRandMs(15);
+
+    (*p_gVar)= x;
+
+    std::cout <<  createStr3("离开业务函数,threadIdx_",threadIdx,",callId_",callId,",全局变量=",*p_gVar);
 }
 
 #define ThreadCnt 10
@@ -60,7 +63,7 @@ int main() {
     int gVar=0;
     std::thread threads[ThreadCnt];
     for (int thrdIdx = 0; thrdIdx < ThreadCnt; ++thrdIdx) {
-        threads[thrdIdx] = std::thread(buszFunc, thrdIdx, gCallId++, &gVar);
+        threads[thrdIdx] = std::thread(buszFunc, thrdIdx, ++gCallId, &gVar);
         sleepRandMs(3);
         threads[thrdIdx].detach();
     }

@@ -7,8 +7,7 @@ cat  /proc/sys/kernel/randomize_va_space  #0
 
 
 cd /fridaAnlzAp/frida_js/dork_cpp/thread_chaos_race_demo/
-g++ -g -c  ThreadChaosRaceDemo.cpp -o ThreadChaosRaceDemo.obj
-g++ -g ThreadChaosRaceDemo.obj -o ThreadChaosRaceDemo.elf
+g++ -g ThreadChaosRaceDemo.cpp -o  ThreadChaosRaceDemo.elf
 
 
 npx frida-compile  buszFuncInterceptor.ts --no-source-maps --output buszFuncInterceptor.js  && \
