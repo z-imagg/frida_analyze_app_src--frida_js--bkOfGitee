@@ -45,7 +45,7 @@ std::string createStr3(std::string title1,int v1,std::string title2,int v2,std::
 }
 void buszFunc(int threadIdx,int fnCallId,int *p_gVar) {
     sleepRandMs(10);
-    std::cout << createStr3("进入业务函数,threadIdx_",threadIdx,",fnCallId_",fnCallId,",全局变量=",*p_gVar);
+    std::cout << createStr3("c; 进入业务函数,threadIdx_",threadIdx,",fnCallId_",fnCallId,",全局变量=",*p_gVar);
 
     int x= ( ++(*p_gVar) );
 
@@ -54,7 +54,7 @@ void buszFunc(int threadIdx,int fnCallId,int *p_gVar) {
 
     (*p_gVar)= x;
 
-    std::cout <<  createStr3("离开业务函数,threadIdx_",threadIdx,",fnCallId_",fnCallId,",全局变量=",*p_gVar);
+    std::cout <<  createStr3("c; 离开业务函数,threadIdx_",threadIdx,",fnCallId_",fnCallId,",全局变量=",*p_gVar);
 }
 
 #define ThreadCnt 10
@@ -68,9 +68,9 @@ int main() {
         threads[thrdIdx].detach();
     }
 
-    std::cout << "主线程进入休眠\n"  ;
+    std::cout << "c; 主线程进入休眠\n"  ;
     sleepS(ThreadCnt/3);
-    std::cout << "主线程退出\n"  ;
+    std::cout << "c; 主线程退出\n"  ;
 
     return 0;
 }
