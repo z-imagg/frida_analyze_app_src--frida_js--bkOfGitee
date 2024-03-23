@@ -11,7 +11,7 @@ function call_frida_trace() {
 # frida-trace  --output  frida-trace-out-$(date +%s).log --init-session ./DebugSymbolUtil.js  --decorate  --include  "simple_nn.elf!*Linear*"  --include "libtorch.so.1!*tensor*"  --file /fridaAnlzAp/torch-cpp/v1.0.0/simple_nn.elf
 
 #生产用的命令，更全面，但运行耗时更久
-frida-trace  --output  frida-trace-out-${LogTitle}-$(date +%s).log --init-session ./DebugSymbolUtil.js  --decorate   -I "simple_nn.elf"  -I "libtorch.so.1"  -I "libc10.so"  -I "libcaffe2.so"    --file /fridaAnlzAp/torch-cpp/v1.0.0/simple_nn.elf
+frida-trace  --quiet   --output  frida-trace-out-${LogTitle}-$(date +%s).log --init-session ./DebugSymbolUtil.js  --decorate   -I "simple_nn.elf"  -I "libtorch.so.1"  -I "libc10.so"  -I "libcaffe2.so"    --file /fridaAnlzAp/torch-cpp/v1.0.0/simple_nn.elf
 }
 
 cd /fridaAnlzAp/frida_js/
