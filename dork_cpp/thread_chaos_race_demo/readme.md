@@ -1,12 +1,23 @@
-##  结论: 多线程环境下 frida的 js函数 Interceptor.attach.OnEnter 是 被串行执行的 
+##  结论:  多线程目标进程 中的 同一个本地函数buszFunc 的 js函数 Interceptor.attach.OnEnter  被frida串行执行
 
-```bash -x run.sh``` 
 
-其输出结果 说明了 : **frida保证了 多个线程 以 串行方式 进入 js函数 jsOnEnterFunc** ， 即 多线程环境下  Interceptor.attach.OnEnter 是 串行的 是 线程安全的
+目标进程ThreadChaosRaceDemo.elf中有1个主线程、10个线程， 10个线程 自由地不受任何控制地 并发执行 本地c++函数buszFunc
+
+frida脚本buszFuncInterceptor.js 实现了 ,  用 js函数 jsOnEnterFunc 拦截  本地c++函数buszFunc ， 
+
+执行结果 为
+
+1.  本地c++函数buszFunc 被 10个线程 错乱执行，结果是无序的、错误的
+
+2. frida的拦截函数jsOnEnterFunc 被 10个线程 串行执行，结果是有序的、正确的
+
+由此 获得 标题 中的 结论
 
 其中  ```Interceptor.attach.OnEnter == jsOnEnterFunc ```
 
----- 
+
+###### 特别说明
+
 
 这里说的 是 目标进程中同一个本地函数buszFunc 的各个线程的jsOnEnterFunc 之间 是 串行的 
 
@@ -15,6 +26,13 @@
 当然了 同一个线程 显然有 先执行 线程1的jsOnEnterFunc 、 后执行 线程1的jsOnLeaveFunc
 
 其中   ```Interceptor.attach.OnLeave == jsOnLeaveFunc ```
+
+
+## 运行步骤
+
+
+```bash -x run.sh``` 
+
 
 
 ## 分析过程
