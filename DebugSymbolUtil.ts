@@ -10,17 +10,30 @@ let gFnCallId:number = 0;
 
 //到目前为止，函数地址的调用id列表。  
 //  主要用于另一个函数f知道其父亲函数地址pa, 从而 fnAdr2CaIdLs[pa][0] 即为函数f的本次父调用id
-const caIdTab:Map<FnAdrHex,CallRec> = new Map();
+const caIdTab:Map<FnAdrHex,CallRec[]> = new Map();
 
-function AddCaId(fnAdr:NativePointer,fnCallId:number):CallRec{
+function AddCaId(fnAdr:NativePointer,fnCallId:number){
   const fnAdrHex:FnAdrHex=fnAdr.toString();
-  let callRec:CallRec|undefined = caIdTab.get(fnAdrHex);
-  if (callRec==undefined || callRec==null){
-    callRec=new CallRec(fnAdr,fnCallId);
-    caIdTab.set(fnAdrHex,callRec);
+  let caRecLs:CallRec[]|undefined = caIdTab.get(fnAdrHex);
+  if (caRecLs==undefined || caRecLs==null){
+    caRecLs= []; //new Array(?)
   }
-  console.log(`##从缓存获得调用记录，${fnAdr}`);
-  return callRec;
+
+  const caRec:CallRec=new CallRec(fnAdr,fnCallId);
+  caRecLs.push(caRec)
+  return  ;
+}
+
+function EndCaId(fnAdr:NativePointer):CallRec|null{
+  const fnAdrHex:FnAdrHex=fnAdr.toString();
+  let caRecLs:CallRec[]|undefined = caIdTab.get(fnAdrHex);
+  if (caRecLs==undefined || caRecLs==null || caRecLs.length<=0){
+    return null;
+  }
+
+  
+  const endCaRec:CallRec=caRecLs[caRecLs.length-1]
+  return  endCaRec;
 }
 //填充函数符号表格
 function findFnDbgSym(fnAdr:NativePointer):DebugSymbol|undefined{
@@ -125,14 +138,17 @@ function fridaTraceJsOnLeaveBusz(thiz:InvocationContext, log:any, retval:any, st
   const fnLeaveLog:FnLog=new FnLog(Direct.LeaveFn, fnEnterLog.fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);
   log(fnLeaveLog.toJson())
 
-
   var fnAdr=thiz.context.pc;
   const fnAdrHex:FnAdrHex=fnAdr.toString();
 
-  let callRec:CallRec|undefined=caIdTab.get(fnAdrHex)
-  if(callRec==undefined || callRec==null){
+  const endCaId:CallRec|null=EndCaId(fnAdr)
+  // let caRecLs:CallRec|undefined=caIdTab.get(fnAdrHex)
+  if(endCaId==undefined || endCaId==null){
     return;//TODO 发生错误，立即退出进程
   }
-  callRec.direct=Direct.LeaveFn;
+  if(endCaId.fnCallId!=fnEnterLog.fnCallId){
+    return;//TODO 发生错误，立即退出进程
+  }
+  endCaId.direct=Direct.LeaveFn;
 
 }
