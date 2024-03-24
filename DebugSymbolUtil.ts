@@ -1,23 +1,31 @@
 //【术语】 CaIdLs == CallIdList
 
+type FnAdrHex=string;
 ////frida-trace初始化js
 //函数符号表格 全局变量
-const gFnSymTab:Map<string,DebugSymbol> = new Map();
+const gFnSymTab:Map<FnAdrHex,DebugSymbol> = new Map();
 
 //调用id分配器
 let gFnCallId:number = 0;
 
 //到目前为止，函数地址的调用id列表。  
 //  主要用于另一个函数f知道其父亲函数地址pa, 从而 fnAdr2CaIdLs[pa][0] 即为函数f的本次父调用id
-const fnAdr2CaIdLs:Map<string,number[]> = new Map();
+const caIdTab:Map<FnAdrHex,CallRec> = new Map();
 
-function fnAdrAddCaId(fnAdr:NativePointer,fnCaId:number){
-
+function AddCaId(fnAdr:NativePointer,fnCallId:number):CallRec{
+  const fnAdrHex:FnAdrHex=fnAdr.toString();
+  let callRec:CallRec|undefined = caIdTab.get(fnAdrHex);
+  if (callRec==undefined || callRec==null){
+    callRec=new CallRec(fnAdr,fnCallId);
+    caIdTab.set(fnAdrHex,callRec);
+  }
+  console.log(`##从缓存获得调用记录，${fnAdr}`);
+  return callRec;
 }
 //填充函数符号表格
 function findFnDbgSym(fnAdr:NativePointer):DebugSymbol|undefined{
   // 相同内容的NativePointer可以是不同的对象，因为不能作为Map的key，必须用该NativePointer对应的字符串作为Map的key
-  const fnAdrHex:string=fnAdr.toString();
+  const fnAdrHex:FnAdrHex=fnAdr.toString();
       if(gFnSymTab.has(fnAdrHex)){
         console.log(`##从缓存获得调试信息，${fnAdr}`);
         return gFnSymTab.get(fnAdrHex);
@@ -46,6 +54,27 @@ enum Direct{
   // 函数离开
   LeaveFn = 2,
 }
+
+
+class CallRec {
+  //方向: 函数进入 或 函数离开
+  direct:Direct;
+  //函数地址
+  fnAdr:NativePointer;
+  //针对此次函数调用的唯一编号
+  fnCallId:number;
+  constructor ( fnAdr:NativePointer, fnCallId: number ) {
+    this.direct = Direct.EnterFn;
+    this.fnAdr = fnAdr;
+    this.fnCallId = fnCallId;
+  }
+
+  leave(){
+    this.direct = Direct.LeaveFn;
+    return this;
+  }
+}
+
 
 class FnLog {
   //方向: 函数进入 或 函数离开
@@ -77,14 +106,14 @@ function fridaTraceJsOnEnterBusz(thiz:InvocationContext, log:any, args:any[], st
   const fnCallId:number = ++gFnCallId;
   
   var fnAdr=thiz.context.pc;
-  
-  //记录 该函数地址的本次调用id
-  fnAdrAddCaId(fnAdr,fnCallId);
 
   var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc)
   thiz.fnEnterLog=new FnLog(Direct.EnterFn, fnAdr, fnCallId, fnSym);
   log(thiz.fnEnterLog.toJson())
 
+
+  //记录 该函数地址的本次调用id
+  AddCaId(fnAdr,fnCallId);
 }
 
 /** 被frida-trace工具生成的.js函数中的OnLeave调用
@@ -95,4 +124,15 @@ function fridaTraceJsOnLeaveBusz(thiz:InvocationContext, log:any, retval:any, st
   const fnEnterLog:FnLog=thiz.fnEnterLog;
   const fnLeaveLog:FnLog=new FnLog(Direct.LeaveFn, fnEnterLog.fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);
   log(fnLeaveLog.toJson())
+
+
+  var fnAdr=thiz.context.pc;
+  const fnAdrHex:FnAdrHex=fnAdr.toString();
+
+  let callRec:CallRec|undefined=caIdTab.get(fnAdrHex)
+  if(callRec==undefined || callRec==null){
+    return;//TODO 发生错误，立即退出进程
+  }
+  callRec.direct=Direct.LeaveFn;
+
 }
