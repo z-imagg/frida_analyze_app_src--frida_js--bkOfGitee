@@ -1,7 +1,19 @@
+//【术语】 CaIdLs == CallIdList
+
 ////frida-trace初始化js
 //函数符号表格 全局变量
 const gFnSymTab:Map<string,DebugSymbol> = new Map();
+
+//调用id分配器
 let gFnCallId:number = 0;
+
+//到目前为止，函数地址的调用id列表。  
+//  主要用于另一个函数f知道其父亲函数地址pa, 从而 fnAdr2CaIdLs[pa][0] 即为函数f的本次父调用id
+const fnAdr2CaIdLs:Map<string,number[]> = new Map();
+
+function fnAdrAddCaId(fnAdr:NativePointer,fnCaId:number){
+
+}
 //填充函数符号表格
 function findFnDbgSym(fnAdr:NativePointer):DebugSymbol|undefined{
   // 相同内容的NativePointer可以是不同的对象，因为不能作为Map的key，必须用该NativePointer对应的字符串作为Map的key
@@ -62,9 +74,15 @@ class FnLog {
  */
 
 function fridaTraceJsOnEnterBusz(thiz:InvocationContext, log:any, args:any[], state:any){
+  const fnCallId:number = ++gFnCallId;
+  
   var fnAdr=thiz.context.pc;
+  
+  //记录 该函数地址的本次调用id
+  fnAdrAddCaId(fnAdr,fnCallId);
+
   var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc)
-  thiz.fnEnterLog=new FnLog(Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
+  thiz.fnEnterLog=new FnLog(Direct.EnterFn, fnAdr, fnCallId, fnSym);
   log(thiz.fnEnterLog.toJson())
 
 }
