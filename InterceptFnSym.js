@@ -54,7 +54,7 @@ function findFnDbgSym(fnAdr) {
     // const modNm:string|null=fnSym.moduleName;
     // const fileNm:string|null=fnSym.fileName;
     //打印函数地址k
-    send(`##只有首次查调试信息文件，${JSON.stringify(fnSym)}`);
+    send(`##只有首次查调试信息文件，${JSON.stringify(fnSym)}`, fnAdr.readByteArray(4));
     //该函数地址插入表格: 建立 函数地址 到 函数调试符号详情 的 表格
     gFnSymTab.set(fnAdrHex, fnSym);
     return fnSym;
@@ -125,7 +125,7 @@ function OnFnEnterBusz(thiz, args) {
     var fnAdr = thiz.context.pc;
     var fnSym = findFnDbgSym(thiz.context.pc);
     thiz.fnEnterLog = new FnLog(tmPntVal, ++gLogId, Process.id, curThreadId, Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
-    send(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`);
+    send(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`, fnAdr.readByteArray(4));
 }
 /**  OnLeave ，函数离开
  */
@@ -134,11 +134,11 @@ function OnFnLeaveBusz(thiz, retval) {
     const tmPnt = nextTmPnt(Process.id, curThreadId);
     var fnAdr = thiz.context.pc;
     if (!adrEq(fnAdr, thiz.fnEnterLog.fnAdr)) {
-        send(`##断言失败，onEnter、onLeave的函数地址居然不同？ 立即退出进程，排查问题. OnLeave.fnAdr=【${fnAdr}】, thiz.fnEnterLog.fnAdr=【${thiz.fnEnterLog.fnAdr}】`);
+        send(`##断言失败，onEnter、onLeave的函数地址居然不同？ 立即退出进程，排查问题. OnLeave.fnAdr=【${fnAdr}】, thiz.fnEnterLog.fnAdr=【${thiz.fnEnterLog.fnAdr}】`, fnAdr.readByteArray(4));
     }
     const fnEnterLog = thiz.fnEnterLog;
     const fnLeaveLog = new FnLog(tmPnt, ++gLogId, Process.id, curThreadId, Direct.LeaveFn, fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);
-    send(`${LogLinePrefix}${fnLeaveLog.toJson()}`);
+    send(`${LogLinePrefix}${fnLeaveLog.toJson()}`, fnAdr.readByteArray(4));
 }
 /**
 ldd /fridaAnlzAp/cgsecurity--testdisk/src/testdisk
@@ -185,7 +185,7 @@ function _main_() {
             continue;
         }
         // const fnSym=DebugSymbol.fromAddress(fnAdr);
-        send(`##${nowTxt()};Interceptor.attach fnAdr=${fnAdr};  进度【${k}~${fnAdrCnt} 】`);
+        send(`##${nowTxt()};Interceptor.attach fnAdr=${fnAdr};  进度【${k}~${fnAdrCnt} 】`, fnAdr.readByteArray(4));
         Interceptor.attach(fnAdr, {
             onEnter: function (args) {
                 OnFnEnterBusz(this, args);
