@@ -22,7 +22,11 @@ $bash_en_dbg && set +x #如果启用了调试模式, 则关闭调试模式
 source /app/Miniconda3-py310_22.11.1-1/bin/activate
 $bash_en_dbg && set -x #如果启用了调试模式, 则打开调试模式
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-pip install -r requirements.txt
+
+#为正常运行 cgsecurity--testdisk 修改frida-tools 如下。 但是 Interceptor.attach(OnEnter、onLeave)中的console.log都没有输出，原因未知
+#  stdio改为继承"inherit"  、 删除全部键盘输入相关
+# 
+bash /fridaAnlzAp/frida--frida-tools/copy_modify.sh
 
 #删除旧日志
 rm -frv *.log
