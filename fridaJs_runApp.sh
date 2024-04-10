@@ -56,3 +56,7 @@ md5sum $_LogFP_Pure > $_LogFP_Pure.md5sum.txt
 
 #最终产物日志文件名举例： frida-out-Pure-1712031317.log  
 #    其数字签名举例： frida-out-Pure-1712031317.log.md5sum.txt
+
+# Interceptor.attach(onEnter) 根据就没有进入onEnter
+wc -l tmp.txt 
+# 0 tmp.txt

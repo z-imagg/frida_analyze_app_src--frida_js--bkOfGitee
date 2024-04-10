@@ -169,6 +169,7 @@ function adrEq(adr1:NativePointer, adr2:NativePointer){
 //  以换行开头的理由是，避开应用程序日志中不换行的日志 造成的干扰。
 const LogLinePrefix:string="\n__@__@";
 
+const f1=new File("./tmp.txt","w")
 /** onEnter ， 函数进入
  */
 function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
@@ -177,7 +178,11 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   var fnAdr=thiz.context.pc;
   var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc)
   thiz.fnEnterLog=new FnLog(tmPntVal,++gLogId,Process.id,curThreadId, Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
-  console.log(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`)
+  const lnMsg=`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`
+  console.log(lnMsg)
+  
+  f1.write(lnMsg)
+  f1.flush()
 
 }
 
@@ -192,7 +197,11 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   }
   const fnEnterLog:FnLog=thiz.fnEnterLog;
   const fnLeaveLog:FnLog=new FnLog(tmPnt,++gLogId,Process.id,curThreadId, Direct.LeaveFn, fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);
-  console.log(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
+  const lnMsg=`${LogLinePrefix}${fnLeaveLog.toJson()}`
+  console.log(lnMsg)
+
+  f1.write(lnMsg)
+  f1.flush()
 }
 
 /**
