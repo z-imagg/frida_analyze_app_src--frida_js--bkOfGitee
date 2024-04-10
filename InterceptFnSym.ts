@@ -187,7 +187,7 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   var fnAdr=thiz.context.pc;
   var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc)
   thiz.fnEnterLog=new FnLog(tmPntVal,++gLogId,Process.id,curThreadId, Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
-  send(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`)
+  console.log(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`)
 
 }
 
@@ -202,20 +202,13 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   }
   const fnEnterLog:FnLog=thiz.fnEnterLog;
   const fnLeaveLog:FnLog=new FnLog(tmPnt,++gLogId,Process.id,curThreadId, Direct.LeaveFn, fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);
-  send(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
+  console.log(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
 }
 
-/**
-ldd /fridaAnlzAp/cgsecurity--testdisk/src/testdisk
-	linux-vdso.so.1 (0x00007ffff7fc1000)
-	libncursesw.so.6 => /lib/x86_64-linux-gnu/libncursesw.so.6 (0x00007ffff7f00000)
-	libtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007ffff7ece000)
-	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ffff7c00000)
-	/lib64/ld-linux-x86-64.so.2 (0x00007ffff7fc3000)
-*/
+
 
 const modules_include=[
-  "testdisk",
+  "simple_app.elf",
 ];
 const modules_exclude=[
   // "libstdc++.so.6.0.30", //?如果libstdc++的代码 穿插在业务代码中， 若忽略之 则调用链条断裂
@@ -231,7 +224,7 @@ function focus_fnAdr(fnAdr:NativePointer){
   if(moduleName==null){
     throw new Error(`【断言失败】moduleName为null`)
   }
-  if(moduleName=="testdisk" && fnSym.name=="main"){
+  if(moduleName=="simple_app.elf" && fnSym.name=="main"){
     send(`获取到main函数,fnSym=${fnSym}`)
     return true;
   }
