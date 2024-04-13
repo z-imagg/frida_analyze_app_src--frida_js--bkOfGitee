@@ -309,6 +309,19 @@ function focus_fnAdr(fnAdr:NativePointer){
     return false;
   }
 
+  // 忽略qtGUI函数草稿，未验证
+  if(moduleName=="qphotorec" ){
+    if(fnSym.name != undefined && fnSym.name != null){
+      if (
+        // 这两个条件 是从 已经得到的可视化结果 看出来的 http://giteaz:3000/frida_analyze_app_src/analyze_by_graph/src/branch/main/visual/cytoscape__testdisk_qphotorec#yfiles-orgnatic-layout
+        fnSym.name.indexOf("qt_") >=0 
+      || fnSym.name.indexOf("QObject") >=0 
+      ){
+        return false;
+      }
+    }
+  }
+
 /**已确认 结束时frida出现'Process terminated' 对应的进程qphotorec有正常退出码0
 https://gitee.com/repok/dwmkerr--linux-kernel-module/blob/e36a16925cd60c6e4b3487d254bfe7fa5b150f75/greeter/run.sh
 */
