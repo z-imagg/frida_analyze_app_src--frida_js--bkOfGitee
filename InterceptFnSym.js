@@ -2,19 +2,19 @@
 function _main_() {
     const fnAdrLs = DebugSymbol.findFunctionsMatching("*");
     const fnAdrCnt = fnAdrLs.length;
-    console.timeLog(`## fnAdrCnt=${fnAdrCnt}`);
+    console.log(`## fnAdrCnt=${fnAdrCnt}`);
     for (let [k, fnAdr] of fnAdrLs.entries()) {
         const fnSym = DebugSymbol.fromAddress(fnAdr);
         if (fnSym.moduleName && fnSym.moduleName == "ls" && fnSym.name == "main") {
         }
         // const fnSym=DebugSymbol.fromAddress(fnAdr);
-        console.timeLog(`##Interceptor.attach ${fnAdr}`);
+        console.log(`##Interceptor.attach ${fnAdr}`);
         Interceptor.attach(fnAdr, {
             onEnter: function (args) {
-                console.timeLog(`onEnter${this.context.pc}`);
+                console.log(`onEnter${this.context.pc}`);
             },
             onLeave: function (retval) {
-                console.timeLog(`onLeave${this.context.pc}`);
+                console.log(`onLeave${this.context.pc}`);
             }
         });
     }
