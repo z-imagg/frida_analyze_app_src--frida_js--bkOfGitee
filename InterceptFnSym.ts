@@ -5,22 +5,22 @@
 function _main_(){
   const fnAdrLs:NativePointer[]=DebugSymbol.findFunctionsMatching("*");
   const fnAdrCnt=fnAdrLs.length
-  console.timeLog(`## fnAdrCnt=${fnAdrCnt}`)
+  console.log(`## fnAdrCnt=${fnAdrCnt}`)
   for (let [k,fnAdr] of  fnAdrLs.entries()){
     
   const fnSym=DebugSymbol.fromAddress(fnAdr);
   if (fnSym.moduleName && fnSym.moduleName=="ls" && fnSym.name=="main"){
   }
     // const fnSym=DebugSymbol.fromAddress(fnAdr);
-    console.timeLog(`##Interceptor.attach ${fnAdr}`)
+    console.log(`##Interceptor.attach ${fnAdr}`)
 
 
     Interceptor.attach(fnAdr,{
       onEnter:function  (this: InvocationContext, args: InvocationArguments) {
-        console.timeLog(`onEnter${this.context.pc}`)
+        console.log(`onEnter${this.context.pc}`)
       },
       onLeave:function (this: InvocationContext, retval: InvocationReturnValue) {
-        console.timeLog(`onLeave${this.context.pc}`)
+        console.log(`onLeave${this.context.pc}`)
       }
 
     })
