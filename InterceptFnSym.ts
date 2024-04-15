@@ -17,10 +17,14 @@ function _main_(){
 
     Interceptor.attach(fnAdr,{
       onEnter:function  (this: InvocationContext, args: InvocationArguments) {
-        console.log(`onEnter${this.context.pc}`)
+        const msg=`onEnter${this.context.pc}`
+        send(`send:${msg}`)
+        console.log(`${msg}`)
       },
       onLeave:function (this: InvocationContext, retval: InvocationReturnValue) {
-        console.log(`onLeave${this.context.pc}`)
+        const msg=`onLeave${this.context.pc}`
+        send(`send:${msg}`)
+        console.log(`${msg}`)
       }
 
     })

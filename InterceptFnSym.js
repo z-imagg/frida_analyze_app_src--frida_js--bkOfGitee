@@ -11,10 +11,14 @@ function _main_() {
         console.log(`##Interceptor.attach ${fnAdr}`);
         Interceptor.attach(fnAdr, {
             onEnter: function (args) {
-                console.log(`onEnter${this.context.pc}`);
+                const msg = `onEnter${this.context.pc}`;
+                send(`send:${msg}`);
+                console.log(`${msg}`);
             },
             onLeave: function (retval) {
-                console.log(`onLeave${this.context.pc}`);
+                const msg = `onLeave${this.context.pc}`;
+                send(`send:${msg}`);
+                console.log(`${msg}`);
             }
         });
     }
