@@ -26,4 +26,4 @@ pip install -r requirements.txt
 # 运行frida , 产生日志文件 ， 并 记录日志文件的数字签名
 #  注意　   　目标应用和其参数　比如为 "aaa.elf arg1 arg2" frida不允许其中的参数以中划线开头　否则会被当成是frida的参数, 
 #     即 frida只允许应用携带非中划线参数
-sudo env "PATH=$PATH" frida  --load ./InterceptFnSym.js    --output out.log    --file /usr/bin/ls /tmp/
+sudo env "PATH=$PATH" frida  --load ./InterceptFnSym.js    --output out.log    --file /usr/bin/ls
