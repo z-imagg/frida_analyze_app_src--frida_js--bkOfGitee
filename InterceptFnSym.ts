@@ -335,6 +335,9 @@ https://gitee.com/repok/dwmkerr--linux-kernel-module/blob/e36a16925cd60c6e4b3487
     //  全局条件 'return ...'   , 不需要 'if ... return' 只关注给定条件
     return false;
   }
+
+  //其他情况 跳过
+  return false;
 }
 
 /** 获取 clang-var运行时基础 中函数 TL_TmPnt__update(tmPntVal)
