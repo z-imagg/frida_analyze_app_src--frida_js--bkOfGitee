@@ -12,32 +12,8 @@
 //           2. 在 单应用进程 内 的某个线程 内 tmPnt 唯一且递增
 //           3. 在 单应用进程 内 ，线程1的 tmPnt 为 从1到N的连续自然数  ，线程2的 tmPnt 也为 从1到N的连续自然数 ，但是这两不同线程的 tmPnt 不表达任何关系
 
-function baseNameOfFilePath(filePath:string):string{
-  // const filePath = '/app/qemu/build-v8.2.2/qemu-system-x86_64';
-const parts = filePath.split('/');
-const baseName = parts[parts.length - 1];
-
-// console.log(baseName); 
-return baseName;
-}
-function nowTxt(){
-  const now:Date=new Date();
-  
-  //时区没生效，暂时忽略
-  const localNowTxt=now.toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai', })
-
-  const txt=`${now.getTime()},${localNowTxt}`
-  return txt
-}
-function isNil(x:any):boolean{
-  const empty=(x == undefined || x==null);
-  return empty;
-}
-
-type FnAdrHex=string;
-function adrToHex(fnAdr:NativePointer):FnAdrHex{
-  return fnAdr.toString(16);
-}
+// 导入 _msic_util.ts
+//MyTsCmd//_replaceCurLineByTsFileContent("./_msic_util.ts" , curNextLn)
 
 type AbsThrdId=string;
 //时刻
