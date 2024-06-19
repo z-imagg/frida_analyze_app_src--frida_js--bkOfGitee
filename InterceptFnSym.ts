@@ -15,33 +15,8 @@
 // 导入 _msic_util.ts
 //MyTsCmd//_replaceCurLineByTsFileContent("./_msic_util.ts" , curNextLn)
 
-type G_AbsThrdId=string;
-//时刻
-type G_TmPntVal=number;
-class TimePoint {
-  static initTmPntVal(processId:number,thrdId:ThreadId){
-    return new TimePoint(processId,thrdId,0)
-  }
-  //进程id
-  processId:number
-  //线程id
-  thrdId:ThreadId
-  //进程_线程　对应的　最新时刻值
-  curTmPnt:G_TmPntVal
-  constructor (processId:number,thrdId:ThreadId,tmPnt:G_TmPntVal) {
-    this.processId = processId
-    this.thrdId = thrdId
-    this.curTmPnt = tmPnt
-  }
-
-  nextVal():G_TmPntVal{
-    ++this.curTmPnt
-    return this.curTmPnt
-  }
-  toJson(){
-    return JSON.stringify(this)  
-  }
-}
+// 导入 _TimePoint.ts
+//MyTsCmd//_replaceCurLineByTsFileContent("./_TimePoint.ts" , curNextLn)
 
 let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<void,[ThreadId,G_TmPntVal]>  |null;  // ThreadId == number , TmPntVal == number 
 // let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<'void',['int']>  ;
@@ -53,7 +28,7 @@ let gFnCallId:number = 0;
 let gLogId:number = 0;
 //时刻表格 全局变量
 //  进程_线程　对应的　最新时刻值
-const gTmPntTb:Map<G_AbsThrdId,TimePoint> = new Map();
+const gTmPntTb:Map<G_AbsThrdId,G_TimePoint> = new Map();
 
 //填充函数符号表格
 function findFnDbgSym(fnAdr:NativePointer):DebugSymbol {
@@ -89,13 +64,13 @@ function toAbsThrdId(processId:number, thrdId:ThreadId):G_AbsThrdId{
 //填充时刻表格
 function nextTmPnt(processId:number, thrdId:ThreadId):G_TmPntVal{
   const absThrdId:G_AbsThrdId=toAbsThrdId(processId,thrdId)
-  let tmPnt:TimePoint|undefined=gTmPntTb.get(absThrdId);
+  let tmPnt:G_TimePoint|undefined=gTmPntTb.get(absThrdId);
   if(tmPnt){ // !isNil(tmPnt)
     // console.log(`##从缓存获得时刻tmPnt，　${absThrdId}:${JSON.stringify(tmPnt)}`);
     return tmPnt.nextVal();
   }
 
-  tmPnt=TimePoint.initTmPntVal(processId,thrdId)
+  tmPnt=G_TimePoint.initTmPntVal(processId,thrdId)
   gTmPntTb.set(absThrdId, tmPnt);
 
   console.log(`##只有首次新建对象tmPnt，${JSON.stringify(tmPnt)}`);
