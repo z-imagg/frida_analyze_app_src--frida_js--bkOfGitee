@@ -1,18 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 #【描述】 重新编译 ts 为 js 
 #【备注】 并删除frida-compile再js文件开头添加的乱七八糟的几行
 
 #去此脚本所在目录
-f=$(readlink -f ${BASH_SOURCE[0]})  ; d=$(dirname $f)
-cd $d
+cd /fridaAnlzAp/frida_js_demo/
 
-
+#激活py环境 、 py依赖安装
+source py_envAct_depInstl.sh
 
 function build_proj(){
-npx frida-compile  InterceptFnSym.ts --no-source-maps --output InterceptFnSym.js  && \
+local inTsFName=./InterceptFnSym.ts
+local outTsFName=InterceptFnSym_generated.ts
+local outJsFName=InterceptFnSym_generated.js
+
+#输出文件 $outTsFName
+python3 processMyTsCmd.py $inTsFName && \
+npx frida-compile  $outTsFName --no-source-maps --output $outJsFName  && \
 #删除frida-compile生成的 js文件开头 乱七八糟的 几行
-sed -i '1,/frida-trace初始化js/d' InterceptFnSym.js
+sed -i '1,/MyTsBegin/d' $outJsFName
 }
 
 
