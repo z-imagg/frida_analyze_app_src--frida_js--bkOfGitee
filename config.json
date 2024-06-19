@@ -1,4 +1,4 @@
 {
-"appPath":"/fridaAnlzAp/frida_js_demo/app.elf",
-"appArgLs":["arg1", 2, "arg3"]
+"appPath":"/app/qemu/build-v8.2.2/qemu-system-x86_64",
+"appArgLsAsTxt": "-nographic  -append 'console=ttyS0'  -kernel  /app/linux/vmlinux -initrd /app/linux/initRamFsHome/initramfs-busybox-i686.cpio.tar.gz"
 }
