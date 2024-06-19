@@ -18,7 +18,7 @@
 // 导入 _TimePoint.ts
 //MyTsCmd//_replaceCurLineByTsFileContent("./_TimePoint.ts" , curNextLn)
 
-let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<void,[ThreadId,G_TmPntVal]>  |null;  // ThreadId == number , TmPntVal == number 
+let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<void,[ThreadId,MG_TmPntVal]>  |null;  // ThreadId == number , TmPntVal == number 
 // let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<'void',['int']>  ;
 //函数符号表格 全局变量
 const gFnSymTab:Map<FnAdrHex,DebugSymbol> = new Map();
@@ -28,7 +28,7 @@ let gFnCallId:number = 0;
 let gLogId:number = 0;
 //时刻表格 全局变量
 //  进程_线程　对应的　最新时刻值
-const gTmPntTb:Map<G_AbsThrdId,G_TimePoint> = new Map();
+const gTmPntTb:Map<MG_AbsThrdId,MG_TimePoint> = new Map();
 
 //填充函数符号表格
 function findFnDbgSym(fnAdr:NativePointer):DebugSymbol {
@@ -56,21 +56,21 @@ function findFnDbgSym(fnAdr:NativePointer):DebugSymbol {
 
 }
 
-function toAbsThrdId(processId:number, thrdId:ThreadId):G_AbsThrdId{
-  const _absThrdId:G_AbsThrdId=`${processId}_${thrdId}`;
+function toAbsThrdId(processId:number, thrdId:ThreadId):MG_AbsThrdId{
+  const _absThrdId:MG_AbsThrdId=`${processId}_${thrdId}`;
   return _absThrdId
 }
 
 //填充时刻表格
-function nextTmPnt(processId:number, thrdId:ThreadId):G_TmPntVal{
-  const absThrdId:G_AbsThrdId=toAbsThrdId(processId,thrdId)
-  let tmPnt:G_TimePoint|undefined=gTmPntTb.get(absThrdId);
+function nextTmPnt(processId:number, thrdId:ThreadId):MG_TmPntVal{
+  const absThrdId:MG_AbsThrdId=toAbsThrdId(processId,thrdId)
+  let tmPnt:MG_TimePoint|undefined=gTmPntTb.get(absThrdId);
   if(tmPnt){ // !isNil(tmPnt)
     // console.log(`##从缓存获得时刻tmPnt，　${absThrdId}:${JSON.stringify(tmPnt)}`);
     return tmPnt.nextVal();
   }
 
-  tmPnt=G_TimePoint.initTmPntVal(processId,thrdId)
+  tmPnt=MG_TimePoint.initTmPntVal(processId,thrdId)
   gTmPntTb.set(absThrdId, tmPnt);
 
   console.log(`##只有首次新建对象tmPnt，${JSON.stringify(tmPnt)}`);
@@ -89,7 +89,7 @@ enum Direct{
 
 class FnLog {
   //进程_线程　下的　时刻值
-  tmPnt:G_TmPntVal
+  tmPnt:MG_TmPntVal
   //日志id
   logId:number
   //当前进程id
@@ -105,7 +105,7 @@ class FnLog {
   //函数符号
   fnSym:DebugSymbol|undefined;
   modueBase:NativePointer|null;
-  constructor (tmPntVal:G_TmPntVal, logId:number,processId:number,curThreadId:ThreadId, direct:Direct, fnAdr:NativePointer, fnCallId: number,fnSym:DebugSymbol|undefined) {
+  constructor (tmPntVal:MG_TmPntVal, logId:number,processId:number,curThreadId:ThreadId, direct:Direct, fnAdr:NativePointer, fnCallId: number,fnSym:DebugSymbol|undefined) {
     this.tmPnt=tmPntVal
     this.logId = logId
     this.processId=processId
@@ -155,7 +155,7 @@ const LogLinePrefix:string="\n__@__@";
  */
 function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   const curThreadId:ThreadId=Process.getCurrentThreadId()
-  const tmPntVal:G_TmPntVal=nextTmPnt(Process.id,curThreadId)
+  const tmPntVal:MG_TmPntVal=nextTmPnt(Process.id,curThreadId)
   var fnAdr=thiz.context.pc;
   var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc)
   thiz.fnEnterLog=new FnLog(tmPntVal,++gLogId,Process.id,curThreadId, Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
@@ -183,7 +183,7 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
  */
 function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   const curThreadId:ThreadId=Process.getCurrentThreadId()
-  const tmPnt:G_TmPntVal=nextTmPnt(Process.id,curThreadId)
+  const tmPnt:MG_TmPntVal=nextTmPnt(Process.id,curThreadId)
   var fnAdr=thiz.context.pc;
   const fnEnterLog:FnLog=thiz.fnEnterLog;
   const fnLeaveLog:FnLog=new FnLog(tmPnt,++gLogId,Process.id,curThreadId, Direct.LeaveFn, fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);

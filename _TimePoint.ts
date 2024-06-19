@@ -1,25 +1,27 @@
 // [依赖] : 无
+// [术语] : MG_ == Module Global Type == 模块中定义的全局类型
+// [术语] : mg_ == Module Global var  == mg模块中定义的全局变量
 
-type G_AbsThrdId=string;
+type MG_AbsThrdId=string;
 //时刻
-type G_TmPntVal=number;
-class G_TimePoint {
+type MG_TmPntVal=number;
+class MG_TimePoint {
   static initTmPntVal(processId:number,thrdId:ThreadId){
-    return new G_TimePoint(processId,thrdId,0)
+    return new MG_TimePoint(processId,thrdId,0)
   }
   //进程id
   processId:number
   //线程id
   thrdId:ThreadId
   //进程_线程　对应的　最新时刻值
-  curTmPnt:G_TmPntVal
-  constructor (processId:number,thrdId:ThreadId,tmPnt:G_TmPntVal) {
+  curTmPnt:MG_TmPntVal
+  constructor (processId:number,thrdId:ThreadId,tmPnt:MG_TmPntVal) {
     this.processId = processId
     this.thrdId = thrdId
     this.curTmPnt = tmPnt
   }
 
-  nextVal():G_TmPntVal{
+  nextVal():MG_TmPntVal{
     ++this.curTmPnt
     return this.curTmPnt
   }
