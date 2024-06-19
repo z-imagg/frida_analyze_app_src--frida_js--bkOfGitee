@@ -12,9 +12,6 @@ bash -x /fridaAnlzAp/frida_js/rebuild_ts.sh
 echo 0 | sudo tee   /proc/sys/kernel/randomize_va_space
 cat  /proc/sys/kernel/randomize_va_space  #0
 
-function get_bash_en_dbg() {
-  bash_en_dbg=false; [[ $- == *x* ]] && bash_en_dbg=true #记录bash是否启用了调试模式
-}
 
 function sleep_tail_f() {
 #【属于】 跟在本函数后面的命令 == 后命令
@@ -29,10 +26,7 @@ cd /fridaAnlzAp/frida_js/
 
 #安装frida py工具
 # 临时关闭bash调试模式， 是 由于 miniconda 的 activate 脚本内容太大，从而减少视觉干扰
-get_bash_en_dbg  #记录bash是否启用了调试模式
-$bash_en_dbg && set +x #如果启用了调试模式, 则关闭调试模式
 source /app/Miniconda3-py310_22.11.1-1/bin/activate
-$bash_en_dbg && set -x #如果启用了调试模式, 则打开调试模式
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 pip install -r requirements.txt
 
