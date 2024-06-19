@@ -1,6 +1,5 @@
 // [依赖] : 无
-// [术语] : MG_ == Module Global Type == 模块中定义的全局类型
-// [术语] : mg_ == Module Global var  == mg模块中定义的全局变量
+// [术语] : MG_ 、 mg_ 见 readme.md
 
 type MG_AbsThrdId=string;
 //时刻
