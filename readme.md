@@ -1,4 +1,9 @@
 
+## 术语
+
+- [术语] : MG_ == Module Global Type == 模块中定义的全局类型
+
+- [术语] : mg_ == Module Global var  == mg模块中定义的全局变量
 
 
 ## frida命令只允许目标应用携带非中划线参数
