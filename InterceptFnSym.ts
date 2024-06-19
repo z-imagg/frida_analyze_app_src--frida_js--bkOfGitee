@@ -15,9 +15,9 @@
 // 导入 _msic_util.ts
 //MyTsCmd//_replaceCurLineByTsFileContent("./_msic_util.ts" , curNextLn)
 
-type AbsThrdId=string;
+type G_AbsThrdId=string;
 //时刻
-type TmPntVal=number;
+type G_TmPntVal=number;
 class TimePoint {
   static initTmPntVal(processId:number,thrdId:ThreadId){
     return new TimePoint(processId,thrdId,0)
@@ -27,14 +27,14 @@ class TimePoint {
   //线程id
   thrdId:ThreadId
   //进程_线程　对应的　最新时刻值
-  curTmPnt:TmPntVal
-  constructor (processId:number,thrdId:ThreadId,tmPnt:TmPntVal) {
+  curTmPnt:G_TmPntVal
+  constructor (processId:number,thrdId:ThreadId,tmPnt:G_TmPntVal) {
     this.processId = processId
     this.thrdId = thrdId
     this.curTmPnt = tmPnt
   }
 
-  nextVal():TmPntVal{
+  nextVal():G_TmPntVal{
     ++this.curTmPnt
     return this.curTmPnt
   }
@@ -43,7 +43,7 @@ class TimePoint {
   }
 }
 
-let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<void,[ThreadId,TmPntVal]>  |null;  // ThreadId == number , TmPntVal == number 
+let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<void,[ThreadId,G_TmPntVal]>  |null;  // ThreadId == number , TmPntVal == number 
 // let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<'void',['int']>  ;
 //函数符号表格 全局变量
 const gFnSymTab:Map<FnAdrHex,DebugSymbol> = new Map();
@@ -53,7 +53,7 @@ let gFnCallId:number = 0;
 let gLogId:number = 0;
 //时刻表格 全局变量
 //  进程_线程　对应的　最新时刻值
-const gTmPntTb:Map<AbsThrdId,TimePoint> = new Map();
+const gTmPntTb:Map<G_AbsThrdId,TimePoint> = new Map();
 
 //填充函数符号表格
 function findFnDbgSym(fnAdr:NativePointer):DebugSymbol {
@@ -81,14 +81,14 @@ function findFnDbgSym(fnAdr:NativePointer):DebugSymbol {
 
 }
 
-function toAbsThrdId(processId:number, thrdId:ThreadId):AbsThrdId{
-  const _absThrdId:AbsThrdId=`${processId}_${thrdId}`;
+function toAbsThrdId(processId:number, thrdId:ThreadId):G_AbsThrdId{
+  const _absThrdId:G_AbsThrdId=`${processId}_${thrdId}`;
   return _absThrdId
 }
 
 //填充时刻表格
-function nextTmPnt(processId:number, thrdId:ThreadId):TmPntVal{
-  const absThrdId:AbsThrdId=toAbsThrdId(processId,thrdId)
+function nextTmPnt(processId:number, thrdId:ThreadId):G_TmPntVal{
+  const absThrdId:G_AbsThrdId=toAbsThrdId(processId,thrdId)
   let tmPnt:TimePoint|undefined=gTmPntTb.get(absThrdId);
   if(tmPnt){ // !isNil(tmPnt)
     // console.log(`##从缓存获得时刻tmPnt，　${absThrdId}:${JSON.stringify(tmPnt)}`);
@@ -114,7 +114,7 @@ enum Direct{
 
 class FnLog {
   //进程_线程　下的　时刻值
-  tmPnt:TmPntVal
+  tmPnt:G_TmPntVal
   //日志id
   logId:number
   //当前进程id
@@ -130,7 +130,7 @@ class FnLog {
   //函数符号
   fnSym:DebugSymbol|undefined;
   modueBase:NativePointer|null;
-  constructor (tmPntVal:TmPntVal, logId:number,processId:number,curThreadId:ThreadId, direct:Direct, fnAdr:NativePointer, fnCallId: number,fnSym:DebugSymbol|undefined) {
+  constructor (tmPntVal:G_TmPntVal, logId:number,processId:number,curThreadId:ThreadId, direct:Direct, fnAdr:NativePointer, fnCallId: number,fnSym:DebugSymbol|undefined) {
     this.tmPnt=tmPntVal
     this.logId = logId
     this.processId=processId
@@ -180,7 +180,7 @@ const LogLinePrefix:string="\n__@__@";
  */
 function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   const curThreadId:ThreadId=Process.getCurrentThreadId()
-  const tmPntVal:TmPntVal=nextTmPnt(Process.id,curThreadId)
+  const tmPntVal:G_TmPntVal=nextTmPnt(Process.id,curThreadId)
   var fnAdr=thiz.context.pc;
   var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc)
   thiz.fnEnterLog=new FnLog(tmPntVal,++gLogId,Process.id,curThreadId, Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
@@ -208,7 +208,7 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
  */
 function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   const curThreadId:ThreadId=Process.getCurrentThreadId()
-  const tmPnt:TmPntVal=nextTmPnt(Process.id,curThreadId)
+  const tmPnt:G_TmPntVal=nextTmPnt(Process.id,curThreadId)
   var fnAdr=thiz.context.pc;
   const fnEnterLog:FnLog=thiz.fnEnterLog;
   const fnLeaveLog:FnLog=new FnLog(tmPnt,++gLogId,Process.id,curThreadId, Direct.LeaveFn, fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);
