@@ -1,3 +1,4 @@
+// [描述] 模块的函数名过滤器 配置
 // [依赖] : g_appName
 // [术语] :  参考 _focus_fnAdr/_impl.ts
 
@@ -96,4 +97,11 @@ const _moduleApp__exclude_fnNameLs:string[]=[
 const _appFilter:MG_ModuleFilter=MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs])
 const _moduleFilterLs:MG_ModuleFilter[]=[_appFilter];
 
-
+// 之后 _wrap.ts 中 组装出 最终使用的过滤器 mg_moduleFilter_ls  如下所示 
+/*
+const mg_moduleFilter_ls: MG_ModuleFilter[]=[
+  ..._moduleFilterLs, //一般模块过滤器们
+  ..._modules_exclude, //讨厌其所有函数的模块
+  ..._modules_include //关注其所有函数的模块
+];
+ */
