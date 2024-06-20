@@ -1,62 +1,51 @@
-#!/usr/bin/env bash
-
-#去此脚本所在目录
-f=$(readlink -f ${BASH_SOURCE[0]})  ; d=$(dirname $f)
-cd $d
-
-#重新编译 ts 为 js 
-bash -x /fridaAnlzAp/frida_js/rebuild_ts.sh
-
-#临时关闭Linux的ASLR(地址空间随机化) ， 否则 x.so 中的函数地址 每次都不同， 
-#  参考  https://blog.csdn.net/counsellor/article/details/81543197
-echo 0 | sudo tee   /proc/sys/kernel/randomize_va_space
-cat  /proc/sys/kernel/randomize_va_space  #0
-
-
-function sleep_tail_f() {
-#【属于】 跟在本函数后面的命令 == 后命令
-#【用法】 sleep_tail_f__LogFp_App ; xxx.cmd > $_LogFp_App
-# 后台延迟tailf
-#    'sleep ; tail'整体作为后台 , sleep必须串行在tail前 以迟滞tail， 即2秒后启动tail,
-#          而2秒后 后命令 肯定已经启动完成了,  tail正是显示 后命令 的日志输出文件 
-  ( ( sleep 2 ; echo begin_tail ; ( tail -f  $_LogFp_App & ) ; ( tail -f $_LogFP_Mix & ) ;  ) & )
-}
+#!/bin/bash
 
 cd /fridaAnlzAp/frida_js/
 
-#安装frida py工具
-# 临时关闭bash调试模式， 是 由于 miniconda 的 activate 脚本内容太大，从而减少视觉干扰
-source /app/Miniconda3-py310_22.11.1-1/bin/activate
-pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-pip install -r requirements.txt
+#临时关闭Linux的ASLR(地址空间随机化) ， 否则 x.so 中的函数地址 每次都不同
+bash ASLR_disable.sh
 
-#运行frida
-now="$(date +%s)"
+
+#激活py环境 、 py依赖安装
+source py_envAct_depInstl.sh
+
+#重新编译 ts 为 js 
+bash ./rebuild_ts.sh
+
+# 从配置文件中读取应用名
+_appPath=$(jq -r .appPath config.json)
+_appArgLsAsTxt=$(jq -r .appArgLsAsTxt config.json)
+_appName=$(basename $_appPath)
+
+_ErrCode=2
+_ErrMsg2="错误2,可执行应用程序不存在[$_appPath]，错误代码[$_ErrCode]"
+[[ -f $_appPath ]] || { echo $_ErrMsg2 ; exit $_ErrCode ;}
+
+#应用运行前准备工作
+bash  pre_appRun.sh
+
+#尝试直接运行该应用,以确认是否能正常运行
+_appCmdFull="$_appPath $_appArgLsAsTxt"
+_Err3Code=3
+_Err3Msg="错误3,直接运行该应用失败[$_appCmdFull]，错误代码[$_Err3Code]"
+$_appCmdFull ||  { echo $_Err3Msg ; exit $_Err3Code ;}
+
+# 查找编译产物中的函数
+objdump --syms $_appPath 2>./error.log | grep TL_TmPnt__update
+
+#运行frida命令前，删除所有之前产生的日志文件
+logFPattern="InterceptFnSym-$_appName-*"
+rm -v $logFPattern
+
+outJsFPath=./InterceptFnSym_generated.js
+
+# 以frida运行应用
+sudo env "PATH=$PATH" frida  --load $outJsFPath        --file  $_appPath
+ls -lht $logFPattern
+
+exit 0
+#日志后处理(日志文件更名)
 #  'appName--' 是analyze_by_graph/config.py获取应用名称的依据, 不要乱动 
-FridaOut="/gain/frida-out/appName--qemu-system-x86_64--v8.2.2" && mkdir -p ${FridaOut}
-_LogFp_App="appOut-${now}.log"
-_LogFP_Mix="${FridaOut}/Mix-${now}.log"
-_LogFP_PrefPure="${FridaOut}/PrefixPure-${now}.log"
+FridaOut="/gain/frida-out/appName--${_appName}" && mkdir -p ${FridaOut}
 _LogFP_Pure="${FridaOut}/Pure-${now}.log"
-#  目前日志文件软链接
-_LogFP_PureNow_link="/gain/frida-out/PureNow.log"
-#删除旧日志
-# rm -fv $_LogFp_App  $_LogFP_Mix $_LogFP_PrefPure $_LogFP_Pure
-# 运行frida , 产生日志文件 ， 并 记录日志文件的数字签名
-#  注意　   　目标应用和其参数　比如为 "aaa.elf arg1 arg2" frida不允许其中的参数以中划线开头　否则会被当成是frida的参数, 
-#     即 frida只允许应用携带非中划线参数
-#   为获取应用自身输出: 先后台延迟tailf 再前台启动frida进程
-sleep_tail_f   && ( sudo env "PATH=$PATH" frida  --load ./InterceptFnSym.js    --output $_LogFP_Mix    --file /app/qemu/build-v8.2.2/qemu-system-x86_64 > $_LogFp_App )  
-md5sum $_LogFP_Mix > $_LogFP_Mix.md5sum.txt
-# 日志后处理
-#   提取出带前缀的纯净日志， 并 记录日志文件的数字签名
-grep __@__@   $_LogFP_Mix >  $_LogFP_PrefPure
-md5sum $_LogFP_PrefPure > $_LogFP_PrefPure.md5sum.txt
-#   去掉前缀成为纯净日志， 并 记录日志文件的数字签名
-sed 's/^__@__@//' $_LogFP_PrefPure > $_LogFP_Pure
-#重新创建目前日志文件软链接"/gain/frida-out/PureNow.log"
-unlink $_LogFP_PureNow_link ; ln -s $_LogFP_Pure $_LogFP_PureNow_link
-md5sum $_LogFP_Pure > $_LogFP_Pure.md5sum.txt
-
-#最终产物日志文件名举例： frida-out-Pure-1712031317.log  
-#    其数字签名举例： frida-out-Pure-1712031317.log.md5sum.txt
+mv $(ls  $logFPattern) $_LogFP_Pure
