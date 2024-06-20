@@ -125,6 +125,10 @@ _moduleApp__exclude_fnNameLs.includes(fnSym.name)
     )  {
       return false;
     }
+    else{
+      //关注 本应用elf中其他函数
+      return true;
+    }
   }
 
   if(moduleName=="libffi.so.8"){
