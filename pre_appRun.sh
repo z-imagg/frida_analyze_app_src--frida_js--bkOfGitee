@@ -20,6 +20,9 @@ local Err3=3
 local Err3Msg="[错误] 磁盘分区dd镜像文件不存在, 错误代码[$Err3]"
 [[ -f $part_ddImg_F ]] || {  echo $Err3Msg ; return $Err3 ;}
 
+#建立恢复结果目录
+mkdir -p /app2/sleuthkit/recovery_result_dir/256M_FAT32_bs4M/
+
 local OkMsg="[成功] 获得磁盘分区dd镜像文件 [$part_ddImg_F]:"
 echo $OkMsg && ls -lh $part_ddImg_F
 }
