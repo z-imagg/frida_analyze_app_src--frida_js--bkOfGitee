@@ -1,14 +1,14 @@
 ////frida-trace初始化js
 
-// ［术语］　gTmPntTb==gTmPnt_Table==gTmPnt表格==tmPnt计数器集合
-// ［简写］ AbsThrdId==AbsoluteThreadId==绝对线程id==进程id_线程id , gTmPntTb == globalTimePointTable == 全局时刻表格
+// ［术语］　g_TmPntTb==gTmPnt_Table==gTmPnt表格==tmPnt计数器集合
+// ［简写］ AbsThrdId==AbsoluteThreadId==绝对线程id==进程id_线程id , g_TmPntTb == globalTimePointTable == 全局时刻表格
 //  [备注] 
 //       frida_js 的  fnCallId计数器为gFnCallId   ， fnCallId进程内唯一, 具体如下
 //           1. 在 单应用进程 内 fnCallId唯一且递增  
 //           2. 当 单应用进程 内 各线程 分配到的fnCallId 放到一起 是 从1到N的连续自然数 
 //           3. 当 单应用进程 内 的某个线程 分配到的fnCallId 一般是 断裂的、非连续、但递增的自然数
-//       frida_js 的  tmPnt计数器为gTmPntTb   ， tmPnt线程内唯一, 具体如下
-//           1. 在 单应用进程 内 的线程k 其tmPnt计数器 为 gTmPntTb[k]
+//       frida_js 的  tmPnt计数器为g_TmPntTb   ， tmPnt线程内唯一, 具体如下
+//           1. 在 单应用进程 内 的线程k 其tmPnt计数器 为 g_TmPntTb[k]
 //           2. 在 单应用进程 内 的某个线程 内 tmPnt 唯一且递增
 //           3. 在 单应用进程 内 ，线程1的 tmPnt 为 从1到N的连续自然数  ，线程2的 tmPnt 也为 从1到N的连续自然数 ，但是这两不同线程的 tmPnt 不表达任何关系
 
@@ -31,7 +31,7 @@ let gFnCallId:number = 0;
 let gLogId:number = 0;
 //时刻表格 全局变量
 //  进程_线程　对应的　最新时刻值
-const gTmPntTb:Map<MG_AbsThrdId,MG_TimePoint> = new Map();
+const g_TmPntTb:Map<MG_AbsThrdId,MG_TimePoint> = new Map();
 
 
 function toAbsThrdId(processId:number, thrdId:ThreadId):MG_AbsThrdId{
@@ -42,14 +42,14 @@ function toAbsThrdId(processId:number, thrdId:ThreadId):MG_AbsThrdId{
 //填充时刻表格
 function nextTmPnt(processId:number, thrdId:ThreadId):MG_TmPntVal{
   const absThrdId:MG_AbsThrdId=toAbsThrdId(processId,thrdId)
-  let tmPnt:MG_TimePoint|undefined=gTmPntTb.get(absThrdId);
+  let tmPnt:MG_TimePoint|undefined=g_TmPntTb.get(absThrdId);
   if(tmPnt){ // !isNil(tmPnt)
     // console.log(`##从缓存获得时刻tmPnt，　${absThrdId}:${JSON.stringify(tmPnt)}`);
     return tmPnt.nextVal();
   }
 
   tmPnt=MG_TimePoint.initTmPntVal(processId,thrdId)
-  gTmPntTb.set(absThrdId, tmPnt);
+  g_TmPntTb.set(absThrdId, tmPnt);
 
   console.log(`##只有首次新建对象tmPnt，${JSON.stringify(tmPnt)}`);
 
