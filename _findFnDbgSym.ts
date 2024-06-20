@@ -7,7 +7,7 @@ function findFnDbgSym(fnAdr:NativePointer,  _g_FnSymTab:Map<FnAdrHex,DebugSymbol
   const fnAdrHex:FnAdrHex=adrToHex(fnAdr);
   let fnSym:DebugSymbol|undefined=_g_FnSymTab.get(fnAdrHex);
       if(fnSym!=null && fnSym!=undefined){ // !isNil(fnSym)
-        // console.log(`##从缓存获得调试信息，${fnAdr}`);
+        // logWriteLn(`##从缓存获得调试信息，${fnAdr}`);
         return fnSym;
       }
 
@@ -18,7 +18,7 @@ function findFnDbgSym(fnAdr:NativePointer,  _g_FnSymTab:Map<FnAdrHex,DebugSymbol
         // const fileNm:string|null=fnSym.fileName;
 
         //打印函数地址k
-        console.log(`##只有首次查调试信息文件，${JSON.stringify(fnSym)}`);
+        logWriteLn(`##只有首次查调试信息文件，${JSON.stringify(fnSym)}`);
 
         //该函数地址插入表格: 建立 函数地址 到 函数调试符号详情 的 表格
         _g_FnSymTab.set(fnAdrHex, fnSym);

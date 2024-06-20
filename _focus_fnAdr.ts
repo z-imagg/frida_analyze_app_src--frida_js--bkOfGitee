@@ -47,7 +47,7 @@ function focus_fnAdr(fnAdr:NativePointer, _g_appName:string){
 
   //不关注名为空的函数
   if (fnSym.name==null || fnSym.name==undefined){
-    console.log(`##不关注名为空的函数.fnAdr=[${fnAdr}]`)
+    logWriteLn(`##不关注名为空的函数.fnAdr=[${fnAdr}]`)
     return false;
   }
 

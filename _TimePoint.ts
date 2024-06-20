@@ -40,14 +40,14 @@ function nextTmPnt(_g_TmPntTb:Map<MG_AbsThrdId,MG_TimePoint>, processId:number, 
   const absThrdId:MG_AbsThrdId=toAbsThrdId(processId,thrdId)
   let tmPnt:MG_TimePoint|undefined=_g_TmPntTb.get(absThrdId);
   if(tmPnt){ // !isNil(tmPnt)
-    // console.log(`##从缓存获得时刻tmPnt，　${absThrdId}:${JSON.stringify(tmPnt)}`);
+    // logWriteLn(`##从缓存获得时刻tmPnt，　${absThrdId}:${JSON.stringify(tmPnt)}`);
     return tmPnt.nextVal();
   }
 
   tmPnt=MG_TimePoint.initTmPntVal(processId,thrdId)
   _g_TmPntTb.set(absThrdId, tmPnt);
 
-  console.log(`##只有首次新建对象tmPnt，${JSON.stringify(tmPnt)}`);
+  logWriteLn(`##只有首次新建对象tmPnt，${JSON.stringify(tmPnt)}`);
 
   return tmPnt.nextVal()
 
