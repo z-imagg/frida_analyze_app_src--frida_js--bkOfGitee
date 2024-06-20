@@ -91,7 +91,7 @@ function focus_fnAdr(fnAdr:NativePointer, _g_appName:string){
 // 解决frida拦截目标进程中途崩溃 步骤  == frida_js_skip_crashFunc_when_Interceptor.attach.onEnter.md 
 
 // 日志量高达3千万行。 疑似特别长的有 pit_irq_timer 、 generate_memory_topology ， 尝试跳过
-
+  // 模块g_appName 中通常有函数被关注
   if(moduleName==_g_appName   ){
     // 'if ... return' 只关注给定条件, 不需要 全局条件 'return ...'   
     if  (
@@ -234,7 +234,7 @@ ldd /app/qemu/build-v8.2.2/qemu-system-x86_64
 
 //关注模块
 const modules_include=[
-  g_appName,
+  "other_module_1.so",
 ];
 // "libstdc++.so.6.0.30", //?如果libstdc++的代码 穿插在业务代码中， 若忽略之 则调用链条断裂
 // ldd /app/qemu/build-v8.2.2/qemu-system-x86_64 | awk '{print " \""$1"\","}'
