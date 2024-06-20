@@ -1,4 +1,5 @@
 {
-"appPath":"/app/qemu/build-v8.2.2/qemu-system-x86_64",
-"appArgLsAsTxt": "-nographic  -append 'console=ttyS0'  -kernel  /app/linux/vmlinux -initrd /app/linux/initRamFsHome/initramfs-busybox-i686.cpio.tar.gz"
+"命令注释": "sleuthkit恢复磁盘dd镜像文件到给定目录",
+"appPath":"/app2/sleuthkit/tools/autotools/tsk_recover",
+"appArgLsAsTxt": "/home/z/sda1.dd.bs4M  /home/z/sda1_bs4M_recover_dir"
 }
