@@ -24,7 +24,7 @@
 let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<void,[ThreadId,MG_TmPntVal]>  |null;  // ThreadId == number , TmPntVal == number 
 // let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<'void',['int']>  ;
 //函数符号表格 全局变量
-const gFnSymTab:Map<FnAdrHex,DebugSymbol> = new Map();
+const g_FnSymTab:Map<FnAdrHex,DebugSymbol> = new Map();
 //函数调用id
 let gFnCallId:number = 0;
 //日志id
@@ -135,7 +135,7 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   const curThreadId:ThreadId=Process.getCurrentThreadId()
   const tmPntVal:MG_TmPntVal=nextTmPnt(Process.id,curThreadId)
   var fnAdr=thiz.context.pc;
-  var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc)
+  var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc,g_FnSymTab)
   thiz.fnEnterLog=new FnLog(tmPntVal,++gLogId,Process.id,curThreadId, Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
   console.log(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`)
 
