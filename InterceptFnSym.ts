@@ -34,28 +34,6 @@ let gLogId:number = 0;
 const g_TmPntTb:Map<MG_AbsThrdId,MG_TimePoint> = new Map();
 
 
-function toAbsThrdId(processId:number, thrdId:ThreadId):MG_AbsThrdId{
-  const _absThrdId:MG_AbsThrdId=`${processId}_${thrdId}`;
-  return _absThrdId
-}
-
-//填充时刻表格
-function nextTmPnt(processId:number, thrdId:ThreadId):MG_TmPntVal{
-  const absThrdId:MG_AbsThrdId=toAbsThrdId(processId,thrdId)
-  let tmPnt:MG_TimePoint|undefined=g_TmPntTb.get(absThrdId);
-  if(tmPnt){ // !isNil(tmPnt)
-    // console.log(`##从缓存获得时刻tmPnt，　${absThrdId}:${JSON.stringify(tmPnt)}`);
-    return tmPnt.nextVal();
-  }
-
-  tmPnt=MG_TimePoint.initTmPntVal(processId,thrdId)
-  g_TmPntTb.set(absThrdId, tmPnt);
-
-  console.log(`##只有首次新建对象tmPnt，${JSON.stringify(tmPnt)}`);
-
-  return tmPnt.nextVal()
-
-}
 
 //方向枚举: 函数进入 或 函数离开
 enum Direct{
