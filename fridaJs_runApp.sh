@@ -12,12 +12,13 @@ source py_envAct_depInstl.sh
 #重新编译 ts 为 js 
 bash ./rebuild_ts.sh
 
-# 查找编译产物中的函数
-objdump --syms app.elf | grep fun
-
 # 从配置文件中读取应用名
 _appPath=$(jq -r .appPath config.json)
 _appName=$(basename $_appPath)
+
+# 查找编译产物中的函数
+objdump --syms $_appPath | grep TL_TmPnt__update
+
 #运行frida命令前，删除所有之前产生的日志文件
 logFPattern="InterceptFnSym-$_appName-*"
 rm -v $logFPattern
