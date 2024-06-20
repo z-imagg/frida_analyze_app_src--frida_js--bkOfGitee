@@ -203,7 +203,8 @@ function _main_(){
 
 }
 
-/** firda拦截应用的main函数并添加参数，注意只有类c编译器产生的应用才有main函数
+/** 在启动时, 附加到C语言main函数, 添加参数列表
+ * firda拦截应用的main函数并添加参数，注意只有类c编译器产生的应用才有main函数
  * 
  * 添加参数 /app/qemu/build-v8.2.2/qemu-system-x86_64 -nographic  -append "console=ttyS0"  -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
  * 参考 :  https://stackoverflow.com/questions/72871352/frida-spawn-a-windows-linux-process-with-command-line-arguments/72880066#72880066
@@ -214,7 +215,7 @@ function _main_(){
  这种就是有main函数的
 
  */
-function mainFunc_addArgTxt(mnArgTxt:string){
+function cMainFn_addArgLs_atBoot_attach(mnArgTxt:string){
   if (mnArgTxt.length==0){
     console.log("##main参数为空")
     return;
@@ -319,7 +320,7 @@ setTimeout(function () {
   const mnArgTxt:string='/app/qemu/build-v8.2.2/qemu-system-x86_64 -nographic  -append "console=ttyS0"  -kernel  /app/linux/vmlinux -initrd /app/linux/initRamFsHome/initramfs-busybox-i686.cpio.tar.gz';
   // -d exec -D qemu.log  
   //业务代码
-  mainFunc_addArgTxt(mnArgTxt)
+  cMainFn_addArgLs_atBoot_attach(mnArgTxt)
   _main_()
 
 }, 0);
