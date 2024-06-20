@@ -16,6 +16,10 @@ bash ./rebuild_ts.sh
 _appPath=$(jq -r .appPath config.json)
 _appName=$(basename $_appPath)
 
+_ErrCode=2
+_ErrMsg2="错误2,可执行应用程序不存在[$_appPath]，错误代码[$_ErrCode]"
+[[ -f $_appPath ]] || { echo $_ErrMsg2 ; exit $_ErrCode ;}
+
 # 查找编译产物中的函数
 objdump --syms $_appPath | grep TL_TmPnt__update
 
@@ -26,7 +30,7 @@ rm -v $logFPattern
 outJsFPath=./InterceptFnSym_generated.js
 
 # 以frida运行应用
-sudo env "PATH=$PATH" frida  --load $outJsFPath        --file /app/qemu/build-v8.2.2/qemu-system-x86_64
+sudo env "PATH=$PATH" frida  --load $outJsFPath        --file  $_appPath
 ls -lht $logFPattern
 
 exit 0
