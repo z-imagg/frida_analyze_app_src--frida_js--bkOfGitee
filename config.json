@@ -1,5 +1,5 @@
 {
 "命令注释": "sleuthkit恢复磁盘dd镜像文件到给定目录",
 "appPath":"/app2/sleuthkit/tools/autotools/tsk_recover",
-"appArgLsAsTxt": "/home/z/sda1.dd.bs4M  /home/z/sda1_bs4M_recover_dir"
+"appArgLsAsTxt": "/app2/sleuthkit/disk_partition_example/256M_FAT32.dd.bs4M  /home/z/sda1_bs4M_recover_dir"
 }
