@@ -11,6 +11,107 @@ ldd /app/可执行elf文件路径
         其他被依赖的so们
 */
 
+//默认行文枚举: 包括 或 排除
+enum MG_Enum_DefaultAct{
+  // 包括
+  Include = 1,
+  // 排除
+  Exclude = 2,
+}
+const MG_Enum_DefaultAct__Values:number[]=[ MG_Enum_DefaultAct.Exclude, MG_Enum_DefaultAct.Include] ;
+//断言是合法枚举
+function assertIsValidEnum_DefaultAct(defaultAct:number):void{
+  if(!MG_Enum_DefaultAct__Values.includes (defaultAct) ){
+    throw new Error(`[枚举量取值不合法] defaultAct[${defaultAct}] , 而MG_Enum_DefaultAct允许的列表为{${MG_Enum_DefaultAct__Values}}`)
+  }
+}
+
+const _FOCUS:boolean=true;
+const _NOT_FOCUS:boolean=false;
+
+class MG_Module{
+
+  static build_include(moduleName:string, fnNameLs_include:string[]){
+    return new MG_Module(moduleName, MG_Enum_DefaultAct.Include,fnNameLs_include, []);
+  }
+  
+  static build_exclude(moduleName:string, fnNameLs_exclude:string[]){
+    return new MG_Module(moduleName, MG_Enum_DefaultAct.Exclude,[], fnNameLs_exclude);
+  }
+
+  static build_excludeAllFunc(moduleName:string){
+    return new MG_Module(moduleName, MG_Enum_DefaultAct.Exclude,[], []);
+  }
+  
+  static build_excludeAllFunc_moduleLs(moduleName_ls:string[]){
+    
+  }
+
+moduleName:string;
+defaultAct:MG_Enum_DefaultAct;
+fnNameLs_include:string[];
+fnNameLs_exclude:string[];
+
+constructor (moduleName:string, defaultAct:MG_Enum_DefaultAct, fnNameLs_include:string[], fnNameLs_exclude:string[]){
+  //断言是合法枚举
+  assertIsValidEnum_DefaultAct(defaultAct);
+
+  this.moduleName=moduleName;
+  this.defaultAct = defaultAct;
+  this.fnNameLs_include=fnNameLs_include;
+  this.fnNameLs_exclude=fnNameLs_exclude;
+
+
+}
+
+focus(fnAdr:NativePointer):boolean{
+  const fnSym:DebugSymbol=DebugSymbol.fromAddress(fnAdr);
+  const fnName:string|null=fnSym.name;
+
+  const moduleName = fnSym.moduleName
+  if(moduleName==null){
+    throw new Error(`[无模块名错误][疑似无该函数] DebugSymbol查找到 函数地址[${fnAdr}] 的moduleName为null`)
+  }
+
+  if(this.moduleName==moduleName){
+    throw new Error(`[入参错误][疑似上层算法错误]   函数地址[${fnAdr}] 的moduleName[${moduleName}] 不等于 本MG_Module的moduleName[${this.moduleName}]`)
+  }
+
+  //不关注名为空的函数
+  if (fnName==null || fnName==undefined){
+    logWriteLn(`##不关注名为空的函数.fnAdr=[${fnAdr}]`)
+    return _NOT_FOCUS;
+  }
+
+  //是否包含 该函数名
+  if( this.fnNameLs_include.includes(fnName)){
+    return _FOCUS;
+  }
+
+  //是否排除 该函数名
+  if( this.fnNameLs_exclude.includes(fnName)){
+    return _NOT_FOCUS;
+  }
+
+  //默认动作 若为包含, 则包含
+  if(this.defaultAct==MG_Enum_DefaultAct.Include){
+    return _FOCUS;
+  }else 
+  //默认动作 若为排除, 则排除
+  if(this.defaultAct==MG_Enum_DefaultAct.Exclude){
+    return _NOT_FOCUS;
+  }else{
+    //断言是合法枚举
+    assertIsValidEnum_DefaultAct(this.defaultAct);
+  }
+
+  throw new Error(`[不应该能走到MG_Module.focus函数的最末尾][自身逻辑错误]   函数地址[${fnAdr}] ,json(fnSym)[${JSON.stringify(fnSym)}] , json(this)[${JSON.stringify(this)}]`)
+
+}
+
+};
+
+
 //关注模块
 const _modules_include=[
   "other_module_1.so",
@@ -97,6 +198,12 @@ const _moduleApp__exclude_fnNameLs:string[]=[
   "helper_stb_mmu",
   "helper_ldub_mmu",
 ];
+
+const mg_filter: MG_Module[]=[
+  //本应用自身模块的函数名过滤器
+  MG_Module.build_exclude(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs]),
+];
+
 //是否关注该函数
 function focus_fnAdr(fnAdr:NativePointer, _g_appName:string){
   const fnSym=DebugSymbol.fromAddress(fnAdr);
