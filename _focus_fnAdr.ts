@@ -233,15 +233,6 @@ const mg_moduleFilter_ls: MG_ModuleFilter[]=[
 
 ];
 
-// mg_moduleFilter_ls.map((moduleFilterK)=>{
-//   return 
-// })
-/*
-const userDictionary = userLs.reduce((accumulator: Record<string, User>, user: User) => {
-  accumulator[user.userName] = user;
-  return accumulator;
-}, {});
-*/
 //构造 以模块名查找过滤器 的 查找表
 const mg_moduleFilter_searchByModuleName:Record<string,MG_ModuleFilter>=mg_moduleFilter_ls.reduce(
 //reduce的函数1: 迭代函数
