@@ -1,9 +1,10 @@
 // [依赖] : 无
 
 function baseNameOfFilePath(filePath:string):string{
-  // const filePath = '/app/qemu/build-v8.2.2/qemu-system-x86_64';
+  // const filePath = '/app/xx/yy.elf';
 const parts = filePath.split('/');
 const baseName = parts[parts.length - 1];
+// baseName == 'yy.elf'
 
 // console.log(baseName); 
 return baseName;

@@ -2,23 +2,13 @@
 
 
 /**
-ldd /app/qemu/build-v8.2.2/qemu-system-x86_64
+ldd /app/可执行elf文件路径
         linux-vdso.so.1 (0x00007ffff7fc1000)
-        libpixman-1.so.0 => /lib/x86_64-linux-gnu/libpixman-1.so.0 (0x00007ffff67a2000)
-        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007ffff6786000)
-        libgio-2.0.so.0 => /lib/x86_64-linux-gnu/libgio-2.0.so.0 (0x00007ffff65ad000)
-        libgobject-2.0.so.0 => /lib/x86_64-linux-gnu/libgobject-2.0.so.0 (0x00007ffff654d000)
-        libglib-2.0.so.0 => /lib/x86_64-linux-gnu/libglib-2.0.so.0 (0x00007ffff6413000)
-        libgmodule-2.0.so.0 => /lib/x86_64-linux-gnu/libgmodule-2.0.so.0 (0x00007ffff640a000)
         libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007ffff6323000)
         libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ffff60fa000)
         /lib64/ld-linux-x86-64.so.2 (0x00007ffff7fc3000)
-        libmount.so.1 => /lib/x86_64-linux-gnu/libmount.so.1 (0x00007ffff60b6000)
         libselinux.so.1 => /lib/x86_64-linux-gnu/libselinux.so.1 (0x00007ffff608a000)
-        libffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0x00007ffff607d000)
-        libpcre.so.3 => /lib/x86_64-linux-gnu/libpcre.so.3 (0x00007ffff6005000)
-        libblkid.so.1 => /lib/x86_64-linux-gnu/libblkid.so.1 (0x00007ffff5fce000)
-        libpcre2-8.so.0 => /lib/x86_64-linux-gnu/libpcre2-8.so.0 (0x00007ffff5f37000)
+        其他被依赖的so们
 */
 
 //关注模块
@@ -26,7 +16,7 @@ const _modules_include=[
   "other_module_1.so",
 ];
 // "libstdc++.so.6.0.30", //?如果libstdc++的代码 穿插在业务代码中， 若忽略之 则调用链条断裂
-// ldd /app/qemu/build-v8.2.2/qemu-system-x86_64 | awk '{print " \""$1"\","}'
+// ldd /app/可执行elf文件路径 | awk '{print " \""$1"\","}'
 //排除模块
 const _modules_exclude:string[]=[
  "linux-vdso.so.1",
