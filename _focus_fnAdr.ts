@@ -29,23 +29,38 @@ function assertIsValidEnum_DefaultAct(defaultAct:number):void{
 const _FOCUS:boolean=true;
 const _NOT_FOCUS:boolean=false;
 
-class MG_Module{
+class MG_ModuleFilter{
 
   static build_include(moduleName:string, fnNameLs_include:string[]){
-    return new MG_Module(moduleName, MG_Enum_DefaultAct.Include,fnNameLs_include, []);
+    return new MG_ModuleFilter(moduleName, MG_Enum_DefaultAct.Include,fnNameLs_include, []);
   }
   
   static build_exclude(moduleName:string, fnNameLs_exclude:string[]){
-    return new MG_Module(moduleName, MG_Enum_DefaultAct.Exclude,[], fnNameLs_exclude);
+    return new MG_ModuleFilter(moduleName, MG_Enum_DefaultAct.Exclude,[], fnNameLs_exclude);
   }
 
   static build_excludeAllFunc(moduleName:string){
-    return new MG_Module(moduleName, MG_Enum_DefaultAct.Exclude,[], []);
+    return new MG_ModuleFilter(moduleName, MG_Enum_DefaultAct.Exclude,[], []);
   }
   
   static build_excludeAllFunc_moduleLs(moduleName_ls:string[]){
-    
+    const filterLs:MG_ModuleFilter[] = moduleName_ls.map((moduleNameK)=>{
+      return MG_ModuleFilter.build_excludeAllFunc(moduleNameK)
+    });
+    return filterLs;
   }
+
+  static build_includeAllFunc(moduleName:string){
+    return new MG_ModuleFilter(moduleName, MG_Enum_DefaultAct.Include,[], []);
+  }
+  
+  static build_includeAllFunc_moduleLs(moduleName_ls:string[]){
+    const filterLs:MG_ModuleFilter[] = moduleName_ls.map((moduleNameK)=>{
+      return MG_ModuleFilter.build_includeAllFunc(moduleNameK)
+    });
+    return filterLs;
+  }
+
 
 moduleName:string;
 defaultAct:MG_Enum_DefaultAct;
@@ -199,71 +214,50 @@ const _moduleApp__exclude_fnNameLs:string[]=[
   "helper_ldub_mmu",
 ];
 
-const mg_filter: MG_Module[]=[
-  //本应用自身模块的函数名过滤器
-  MG_Module.build_exclude(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs]),
+const mg_moduleFilter_ls: MG_ModuleFilter[]=[
+  //本应用自身模块的函数名过滤器 
+  //    排除clang-var插件的运行时的函数们、排除调用量很大的函数们
+  MG_ModuleFilter.build_exclude(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs]),
+  //排除其所有函数的模块
+  //   linux操作系统基础库、本应用调用的一些不需要关注的库
+  ...MG_ModuleFilter.build_excludeAllFunc_moduleLs(_modules_exclude),
+  //包含其所有函数的模块
+  //   实际没有这样的模块
+  ...MG_ModuleFilter.build_includeAllFunc_moduleLs(_modules_include)
+
 ];
+
+// mg_moduleFilter_ls.map((moduleFilterK)=>{
+//   return 
+// })
+/*
+const userDictionary = userLs.reduce((accumulator: Record<string, User>, user: User) => {
+  accumulator[user.userName] = user;
+  return accumulator;
+}, {});
+*/
+//构造 以模块名查找过滤器 的 查找表
+const mg_moduleFilter_searchByModuleName:Record<string,MG_ModuleFilter>=mg_moduleFilter_ls.reduce(
+//reduce的函数1: 迭代函数
+(_dict:Record<string,MG_ModuleFilter>, moduleFilterK:MG_ModuleFilter)=>{
+  _dict[moduleFilterK.moduleName] = moduleFilterK;
+  return _dict;
+}, 
+{} //reduce的函数2:  初始字典
+);
 
 //是否关注该函数
 function focus_fnAdr(fnAdr:NativePointer, _g_appName:string){
   const fnSym=DebugSymbol.fromAddress(fnAdr);
   const moduleName = fnSym.moduleName
   if(moduleName==null){
-    throw new Error(`【断言失败】moduleName为null`)
+    throw new Error(`[focus_fnAdr:函数地址的模块名为空错误] fnAdr[${fnAdr}] `)
   }
 
-  //不关注名为空的函数
-  if (fnSym.name==null || fnSym.name==undefined){
-    logWriteLn(`##不关注名为空的函数.fnAdr=[${fnAdr}]`)
-    return false;
-  }
+  //查找该模块的函数名过滤器
+  const moduleFilter:MG_ModuleFilter=mg_moduleFilter_searchByModuleName[moduleName];
 
-// 解决frida拦截目标进程中途崩溃 步骤  == frida_js_skip_crashFunc_when_Interceptor.attach.onEnter.md 
-
-// 日志量高达3千万行。 疑似特别长的有 pit_irq_timer 、 generate_memory_topology ， 尝试跳过
-  // 模块g_appName 中通常有函数被关注
-  if(moduleName==_g_appName   ){
-    // 'if ... return' 只关注给定条件, 不需要 全局条件 'return ...'   
-    if  (
-//跳过clangVar插件中c(c++)运行时函数们:
-      _moduleApp__clangVar_runtime_fnNameLs.includes(fnSym.name) || 
-//跳过qemu的大量调用函数们:
-_moduleApp__exclude_fnNameLs.includes(fnSym.name) 
-    )  {
-      return false;
-    }
-    else{
-      //关注 本应用elf中其他函数
-      return true;
-    }
-  }
-
-  if(moduleName=="libffi.so.8"){
-    // 'if ... return' 只关注给定条件, 不需要 全局条件 'return ...'   
-    if (
-      //跳过:
-      fnSym.name == "ffi_call"
-    ){
-      return false;
-    }
-  }
-
-/**已确认 结束时frida出现'Process terminated' 对应的进程qphotorec有正常退出码0
-https://gitee.com/repok/dwmkerr--linux-kernel-module/blob/e36a16925cd60c6e4b3487d254bfe7fa5b150f75/greeter/run.sh
-*/
-  //除上述特定关注外:
-  
-  //关注包含模块的所有函数
-  if(_modules_include.includes(moduleName)){
-    //  全局条件 'return ...'   , 不需要 'if ... return' 只关注给定条件
-    return true;
-  }
-  //忽略排除模块的所有函数
-  if(_modules_exclude.includes(moduleName)){
-    //  全局条件 'return ...'   , 不需要 'if ... return' 只关注给定条件
-    return false;
-  }
-
-  //其他情况 跳过
-  return false;
+  //执行该过滤器, 获得是否关注本函数
+  const _focus:boolean= moduleFilter.focus(fnAdr)
+  return _focus;
 }
