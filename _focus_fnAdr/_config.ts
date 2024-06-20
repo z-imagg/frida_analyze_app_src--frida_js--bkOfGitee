@@ -1,5 +1,5 @@
 // [依赖] : g_appName
-// [术语] :  参考 _focus_fnAdr__impl.ts
+// [术语] :  参考 _focus_fnAdr/_impl.ts
 
 
 
