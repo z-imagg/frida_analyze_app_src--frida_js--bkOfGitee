@@ -1,9 +1,9 @@
 
 ## 术语
 
-- [术语] : MG_ == Module Global Type == 模块中定义的全局类型
+- [术语] : MG_ == Module Global Type == 模块中定义的全局类型 且 只在该模块中使用 == 模块局类型
 
-- [术语] : mg_ == Module Global var  == mg模块中定义的全局变量
+- [术语] : mg_ == Module Global var  == 模块中定义的全局变量 且 只在该模块中使用 == 模块局变量
 
 - [术语] : _g_x == global var x 作为局部变量  == 比如 `函数调用f1(g_x)` 对应的 `函数签名f1(_g_x:Type)`
 
