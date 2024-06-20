@@ -18,6 +18,9 @@
 // 导入 _TimePoint.ts
 //MyTsCmd//_replaceCurLineByTsFileContent("./_TimePoint.ts" , curNextLn)
 
+// 导入 _findFnDbgSym.ts
+//MyTsCmd//_replaceCurLineByTsFileContent("./_findFnDbgSym.ts" , curNextLn)
+
 let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<void,[ThreadId,MG_TmPntVal]>  |null;  // ThreadId == number , TmPntVal == number 
 // let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<'void',['int']>  ;
 //函数符号表格 全局变量
@@ -30,31 +33,6 @@ let gLogId:number = 0;
 //  进程_线程　对应的　最新时刻值
 const gTmPntTb:Map<MG_AbsThrdId,MG_TimePoint> = new Map();
 
-//填充函数符号表格
-function findFnDbgSym(fnAdr:NativePointer,  _gFnSymTab:Map<FnAdrHex,DebugSymbol>):DebugSymbol {
-  // 相同内容的NativePointer可以是不同的对象，因为不能作为Map的key，必须用该NativePointer对应的字符串作为Map的key
-  const fnAdrHex:FnAdrHex=adrToHex(fnAdr);
-  let fnSym:DebugSymbol|undefined=_gFnSymTab.get(fnAdrHex);
-      if(fnSym!=null && fnSym!=undefined){ // !isNil(fnSym)
-        // console.log(`##从缓存获得调试信息，${fnAdr}`);
-        return fnSym;
-      }
-
-        //函数地址k的详情
-        fnSym=DebugSymbol.fromAddress(fnAdr);
-
-        // const modNm:string|null=fnSym.moduleName;
-        // const fileNm:string|null=fnSym.fileName;
-
-        //打印函数地址k
-        console.log(`##只有首次查调试信息文件，${JSON.stringify(fnSym)}`);
-
-        //该函数地址插入表格: 建立 函数地址 到 函数调试符号详情 的 表格
-        _gFnSymTab.set(fnAdrHex, fnSym);
-
-        return fnSym
-
-}
 
 function toAbsThrdId(processId:number, thrdId:ThreadId):MG_AbsThrdId{
   const _absThrdId:MG_AbsThrdId=`${processId}_${thrdId}`;
