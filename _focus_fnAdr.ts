@@ -37,6 +37,66 @@ const _modules_exclude:string[]=[
  "libpcre2-8.so.0",
 ];
 
+
+// objdump --syms /app2/qemu/build-v8.2.2/qemu-system-x86_64  2>/dev/null | grep " F" | egrep -i "varLs|TL_TmPnt"  | awk '{print " \""$6"\","}'
+/*去掉awk输出如下
+0000000000122610 l     F .text	0000000000000095              _ZSt10accumulateIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEES2_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsE3$_0ET0_T_SC_SB_T1_
+00000000001226b0 l     F .text	00000000000000a5              _ZSt8for_eachIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEEZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsE3$_1ET0_T_SC_SB_
+0000000000122760 l     F .text	0000000000000062              _ZZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsENK3$_0clERK9__VarDeclS4_
+00000000001227d0 l     F .text	0000000000000197              _ZZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsENK3$_1clE9__VarDecl
+0000000000121e80 g     F .text	00000000000000b0              _Z23_init_varLs_inFn__RtCxxNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES4_ii
+00000000001216f0 g     F .text	000000000000004a              TL_TmPnt__update
+000000000011e480 g     F .text	0000000000000079              _init_varLs_inFn__RtC00
+0000000000121740 g     F .text	0000000000000018              TL_TmPnt__get
+000000000011e580 g     F .text	000000000000016f              destroyVarLs_inFn__RtC00
+0000000000121760 g     F .text	0000000000000037              TL_TmPnt__printPtr
+0000000000121fd0 g     F .text	0000000000000632              _Z24destroyVarLs_inFn__RtCxxP11__VarDeclLs
+*/
+const _moduleApp__clangVar_runtime_fnNameLs:string[]=[
+  "_ZSt10accumulateIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEES2_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsE3$_0ET0_T_SC_SB_T1_",
+  "_ZSt8for_eachIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEEZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsE3$_1ET0_T_SC_SB_",
+  "_ZZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsENK3$_0clERK9__VarDeclS4_",
+  "_ZZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsENK3$_1clE9__VarDecl",
+  "_Z23_init_varLs_inFn__RtCxxNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES4_ii",
+  "TL_TmPnt__update",
+  "_init_varLs_inFn__RtC00",
+  "TL_TmPnt__get",
+  "destroyVarLs_inFn__RtC00",
+  "TL_TmPnt__printPtr",
+  "_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLs",
+];
+
+
+const _moduleApp__exclude_fnNameLs:string[]=[
+//跳过qemu的巨量调用函数们
+  "pit_irq_timer",
+  "generate_memory_topology",
+  "ffi_call",
+
+//analyze_by_graph 打印大于1万次调用的函数们（方便返工修改frida_js以跳过大量调用函数）
+  "symcmp64",
+  "pic_get_irq",
+  "pic_update_irq",
+  "pic_stat_update_irq",
+  "pic_set_irq",
+  "apic_accept_pic_intr",
+  "pic_irq_request",
+  "gsi_handler",
+  "ioapic_set_irq",
+  "icount_notify_exit",
+  "ioapic_stat_update_irq",
+  "qemu_timer_notify_cb",
+  "pit_get_next_transition_time",
+  "hpet_handle_legacy_irq",
+  "pit_get_out",
+  "pit_irq_timer_update.part.0",
+
+  "victim_tlb_hit",
+  "mmu_lookup",		
+  "mmu_lookup1",	
+  "helper_stb_mmu",
+  "helper_ldub_mmu",
+];
 //是否关注该函数
 function focus_fnAdr(fnAdr:NativePointer, _g_appName:string){
   const fnSym=DebugSymbol.fromAddress(fnAdr);
@@ -58,49 +118,10 @@ function focus_fnAdr(fnAdr:NativePointer, _g_appName:string){
   if(moduleName==_g_appName   ){
     // 'if ... return' 只关注给定条件, 不需要 全局条件 'return ...'   
     if  (
-      //跳过:
-      [
-//跳过clang-var的c运行时 runtime_c__vars_fn
-      "_init_varLs_inFn__RtC00", "createVar__RtC00", "destroyVarLs_inFn__RtC00",
-//跳过clang-var的c++运行时 runtime_cpp__vars_fn
-      // "_init_varLs_inFn__RtCxx", "createVar__RtCxx", "destroyVarLs_inFn__RtCxx", 
-      //执行命令  objdump --syms  /server_root/fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/libclangPlgVar_runtime_cxx.a
-      //发现 这些原始c++函数名 对应的abi函数名如下
-      "_Z23_init_varLs_inFn__RtCxxNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES4_ii", "_Z16createVar__RtCxxP11__VarDeclLsNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi", "_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLs",
-//跳过clang-var的运行时基础 runtime_c__TmPnt_ThreadLocal
-      "TL_TmPnt__update", "TL_TmPnt__get", "TL_TmPnt__printPtr",
-    ].includes(fnSym.name) || 
-//跳过qemu的巨量调用函数们:
-//  frida_js运行qemu, ..., 直到 analyze_by_graph,  analyze_by_graph能提供调用次数
-      fnSym.name == "pit_irq_timer" ||
-      fnSym.name == "generate_memory_topology"||
-      fnSym.name == "ffi_call" ||
-//analyze_by_graph 打印大于1万次调用的函数们（方便返工修改frida_js以跳过大量调用函数）
-      ["symcmp64",
-      "pic_get_irq",
-      "pic_update_irq",
-      "pic_stat_update_irq",
-      "pic_set_irq",
-      "apic_accept_pic_intr",
-      "pic_irq_request",
-      "gsi_handler",
-      "ioapic_set_irq",
-      "icount_notify_exit",
-      "ioapic_stat_update_irq",
-      "qemu_timer_notify_cb",
-      "pit_get_next_transition_time",
-      "hpet_handle_legacy_irq",
-      "pit_get_out",
-      "pit_irq_timer_update.part.0",
-
-      "victim_tlb_hit",
-      "mmu_lookup",		
-      "mmu_lookup1",	
-      "helper_stb_mmu",
-      "helper_ldub_mmu",
-      
-    ].includes(fnSym.name) || 
-      false
+//跳过clangVar插件中c(c++)运行时函数们:
+      _moduleApp__clangVar_runtime_fnNameLs.includes(fnSym.name) || 
+//跳过qemu的大量调用函数们:
+_moduleApp__exclude_fnNameLs.includes(fnSym.name) 
     )  {
       return false;
     }
