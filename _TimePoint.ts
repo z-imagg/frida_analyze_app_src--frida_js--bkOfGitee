@@ -36,16 +36,16 @@ function toAbsThrdId(processId:number, thrdId:ThreadId):MG_AbsThrdId{
 }
 
 //填充时刻表格
-function nextTmPnt(processId:number, thrdId:ThreadId):MG_TmPntVal{
+function nextTmPnt(_g_TmPntTb:Map<MG_AbsThrdId,MG_TimePoint>, processId:number, thrdId:ThreadId):MG_TmPntVal{
   const absThrdId:MG_AbsThrdId=toAbsThrdId(processId,thrdId)
-  let tmPnt:MG_TimePoint|undefined=g_TmPntTb.get(absThrdId);
+  let tmPnt:MG_TimePoint|undefined=_g_TmPntTb.get(absThrdId);
   if(tmPnt){ // !isNil(tmPnt)
     // console.log(`##从缓存获得时刻tmPnt，　${absThrdId}:${JSON.stringify(tmPnt)}`);
     return tmPnt.nextVal();
   }
 
   tmPnt=MG_TimePoint.initTmPntVal(processId,thrdId)
-  g_TmPntTb.set(absThrdId, tmPnt);
+  _g_TmPntTb.set(absThrdId, tmPnt);
 
   console.log(`##只有首次新建对象tmPnt，${JSON.stringify(tmPnt)}`);
 

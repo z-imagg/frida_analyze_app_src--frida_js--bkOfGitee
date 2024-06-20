@@ -48,7 +48,7 @@ const LogLinePrefix:string="\n__@__@";
  */
 function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   const curThreadId:ThreadId=Process.getCurrentThreadId()
-  const tmPntVal:MG_TmPntVal=nextTmPnt(Process.id,curThreadId)
+  const tmPntVal:MG_TmPntVal=nextTmPnt(g_TmPntTb,Process.id,curThreadId)
   var fnAdr=thiz.context.pc;
   var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc,g_FnSymTab)
   thiz.fnEnterLog=new FnLog(tmPntVal,++gLogId,Process.id,curThreadId, Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
@@ -64,7 +64,7 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
  */
 function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   const curThreadId:ThreadId=Process.getCurrentThreadId()
-  const tmPnt:MG_TmPntVal=nextTmPnt(Process.id,curThreadId)
+  const tmPnt:MG_TmPntVal=nextTmPnt(g_TmPntTb,Process.id,curThreadId)
   var fnAdr=thiz.context.pc;
   const fnEnterLog:FnLog=thiz.fnEnterLog;
   const fnLeaveLog:FnLog=new FnLog(tmPnt,++gLogId,Process.id,curThreadId, Direct.LeaveFn, fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);
