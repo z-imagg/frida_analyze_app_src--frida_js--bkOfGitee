@@ -111,23 +111,20 @@ focus(fnAdr:NativePointer):boolean{
     return _NOT_FOCUS;
   }
 
-  //关注 包含函数名们
-  if( this.fnNameLs_include.includes(fnName)){
-    return _FOCUS;
-  }
-
-  //讨厌 排除函数名们
-  if( this.fnNameLs_exclude.includes(fnName)){
-    return _NOT_FOCUS;
-  }
-
   //默认动作 若为包含, 则关注
   if(this.defaultAct==MG_Enum_DefaultAct.Include){
-    return _FOCUS;
-  }else 
+    //关注 包含函数名们
+    const __focus:boolean=this.fnNameLs_include.includes(fnName);
+    return __focus;
+
+  } 
   //默认动作 若为排除, 则讨厌
-  if(this.defaultAct==MG_Enum_DefaultAct.Exclude){
-    return _NOT_FOCUS;
+  else if(this.defaultAct==MG_Enum_DefaultAct.Exclude){
+
+    //讨厌 排除函数名们
+    const __focus:boolean=(!this.fnNameLs_exclude.includes(fnName));
+    return __focus;
+
   }else{
     //断言是合法枚举
     assertIsValidEnum_DefaultAct(this.defaultAct);
