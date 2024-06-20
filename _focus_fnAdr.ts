@@ -1,4 +1,4 @@
-// [依赖] : 无
+// [依赖] : g_appName
 // [术语] : focuse == 关注,  not_focuse == 不关注 == 讨厌, include == 包含, exclude == 排除
 //            包含 对应 关注, 
 //            排除 对应 不关注
