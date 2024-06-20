@@ -20,8 +20,14 @@ _ErrCode=2
 _ErrMsg2="错误2,可执行应用程序不存在[$_appPath]，错误代码[$_ErrCode]"
 [[ -f $_appPath ]] || { echo $_ErrMsg2 ; exit $_ErrCode ;}
 
+#尝试直接运行该应用,以确认是否能正常运行
+_appCmdFull="$_appPath $_appName"
+_Err3Code=3
+_Err3Msg="错误3,直接运行该应用失败[$_appCmdFull]，错误代码[$_Err3Code]"
+$_appCmdFull ||  { echo $_Err3Msg ; exit $_Err3Code ;}
+
 # 查找编译产物中的函数
-objdump --syms $_appPath | grep TL_TmPnt__update
+objdump --syms $_appPath 2>./error.log | grep TL_TmPnt__update
 
 #运行frida命令前，删除所有之前产生的日志文件
 logFPattern="InterceptFnSym-$_appName-*"
