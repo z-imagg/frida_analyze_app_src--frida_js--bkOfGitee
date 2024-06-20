@@ -74,7 +74,8 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   console.log(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
 }
 
-function focus_fnAdr(fnAdr:NativePointer){
+//是否关注该函数
+function focus_fnAdr(fnAdr:NativePointer, _g_appName:string){
   const fnSym=DebugSymbol.fromAddress(fnAdr);
   const moduleName = fnSym.moduleName
   if(moduleName==null){
@@ -91,7 +92,7 @@ function focus_fnAdr(fnAdr:NativePointer){
 
 // 日志量高达3千万行。 疑似特别长的有 pit_irq_timer 、 generate_memory_topology ， 尝试跳过
 
-  if(moduleName==g_appName   ){
+  if(moduleName==_g_appName   ){
     // 'if ... return' 只关注给定条件, 不需要 全局条件 'return ...'   
     if  (
       //跳过:
@@ -181,7 +182,7 @@ function _main_(){
   for (let [k,fnAdr] of  fnAdrLs.entries()){
     
     /*修复 在拦截libc.so.6 pthread_getschedparam时抛出异常说进程已终止并停在frida终端 ： 不拦截 比如libc.so、frida-agent.so等底层*/
-    if(!focus_fnAdr(fnAdr)){
+    if(!focus_fnAdr(fnAdr,g_appName)){
       continue;
     }
     // const fnSym=DebugSymbol.fromAddress(fnAdr);
