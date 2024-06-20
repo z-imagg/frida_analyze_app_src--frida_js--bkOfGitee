@@ -1,5 +1,7 @@
 // [依赖] : 无
-
+// [术语] : focuse == 关注,  not_focuse == 不关注 == 讨厌, include == 包含, exclude == 排除
+//            包含 对应 关注, 
+//            排除 对应 不关注
 
 /**
 ldd /app/可执行elf文件路径
@@ -13,9 +15,11 @@ ldd /app/可执行elf文件路径
 
 //默认行文枚举: 包括 或 排除
 enum MG_Enum_DefaultAct{
-  // 包括
+  // 包括 
+  //   包含 对应 关注
   Include = 1,
   // 排除
+  //   排除 对应 讨厌
   Exclude = 2,
 }
 const MG_Enum_DefaultAct__Values:number[]=[ MG_Enum_DefaultAct.Exclude, MG_Enum_DefaultAct.Include] ;
@@ -26,7 +30,9 @@ function assertIsValidEnum_DefaultAct(defaultAct:number):void{
   }
 }
 
+//关注==不讨厌
 const _FOCUS:boolean=true;
+//讨厌==不关注
 const _NOT_FOCUS:boolean=false;
 
 class MG_ModuleFilter{
@@ -92,27 +98,27 @@ focus(fnAdr:NativePointer):boolean{
     throw new Error(`[入参错误][疑似上层算法错误]   函数地址[${fnAdr}] 的moduleName[${moduleName}] 不等于 本MG_Module的moduleName[${this.moduleName}]`)
   }
 
-  //不关注名为空的函数
+  //讨厌名为空的函数
   if (fnName==null || fnName==undefined){
-    logWriteLn(`##不关注名为空的函数.fnAdr=[${fnAdr}]`)
+    logWriteLn(`##讨厌名为空的函数.fnAdr=[${fnAdr}]`)
     return _NOT_FOCUS;
   }
 
-  //是否包含 该函数名
+  //关注 包含函数名们
   if( this.fnNameLs_include.includes(fnName)){
     return _FOCUS;
   }
 
-  //是否排除 该函数名
+  //讨厌 排除函数名们
   if( this.fnNameLs_exclude.includes(fnName)){
     return _NOT_FOCUS;
   }
 
-  //默认动作 若为包含, 则包含
+  //默认动作 若为包含, 则关注
   if(this.defaultAct==MG_Enum_DefaultAct.Include){
     return _FOCUS;
   }else 
-  //默认动作 若为排除, 则排除
+  //默认动作 若为排除, 则讨厌
   if(this.defaultAct==MG_Enum_DefaultAct.Exclude){
     return _NOT_FOCUS;
   }else{
@@ -127,13 +133,13 @@ focus(fnAdr:NativePointer):boolean{
 };
 
 
-//关注模块
+//关注其所有函数的模块(暂无)
 const _modules_include=[
   "other_module_1.so",
 ];
 // "libstdc++.so.6.0.30", //?如果libstdc++的代码 穿插在业务代码中， 若忽略之 则调用链条断裂
-// ldd /app/可执行elf文件路径 | awk '{print " \""$1"\","}'
-//排除模块
+// ldd /app2/sleuthkit/tools/autotools/tsk_recover  | awk '{print " \""$1"\","}'
+//讨厌其所有函数的模块
 const _modules_exclude:string[]=[
  "linux-vdso.so.1",
  "libpixman-1.so.0",
@@ -218,10 +224,10 @@ const mg_moduleFilter_ls: MG_ModuleFilter[]=[
   //本应用自身模块的函数名过滤器 
   //    排除clang-var插件的运行时的函数们、排除调用量很大的函数们
   MG_ModuleFilter.build_exclude(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs]),
-  //排除其所有函数的模块
+  //讨厌其所有函数的模块
   //   linux操作系统基础库、本应用调用的一些不需要关注的库
   ...MG_ModuleFilter.build_excludeAllFunc_moduleLs(_modules_exclude),
-  //包含其所有函数的模块
+  //关注其所有函数的模块
   //   实际没有这样的模块
   ...MG_ModuleFilter.build_includeAllFunc_moduleLs(_modules_include)
 
