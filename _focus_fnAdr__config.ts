@@ -1,17 +1,5 @@
 // [依赖] : g_appName
-// [术语] : focuse == 关注,  not_focuse == 不关注 == 讨厌, include == 包含, exclude == 排除
-//            包含 对应 关注, 
-//            排除 对应 不关注
-
-/**
-ldd /app/可执行elf文件路径
-        linux-vdso.so.1 (0x00007ffff7fc1000)
-        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007ffff6323000)
-        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ffff60fa000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007ffff7fc3000)
-        libselinux.so.1 => /lib/x86_64-linux-gnu/libselinux.so.1 (0x00007ffff608a000)
-        其他被依赖的so们
-*/
+// [术语] :  参考 _focus_fnAdr__impl.ts
 
 
 
