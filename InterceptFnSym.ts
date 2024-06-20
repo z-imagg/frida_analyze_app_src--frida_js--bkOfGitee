@@ -215,19 +215,36 @@ function _main_(){
  这种就是有main函数的
 
  */
-function cMainFn_addArgLs_atBoot_attach(argLsAsTxt:string){
+function cMainFn_addArgLs_atBoot_attach(argLsAsTxt:string):boolean{
+  //若参数列表文本为空,则返回失败
   if (argLsAsTxt == null || argLsAsTxt== undefined || argLsAsTxt.length==0){
     console.log("##main参数为空")
-    return;
+    return false;
   }
+
   const mnFnPtr:NativePointer = DebugSymbol.fromName("main").address;
+  //若无名为main的函数,则返回失败
   if (mnFnPtr==null || mnFnPtr==undefined){
     console.log("##无main函数,无法通过拦截main函数来添加参数,可能不是类c编译器产生的应用")
-    return;
+    return false;
   }
   console.log(`##收到main函数参数mnArgTxt=${argLsAsTxt}`)
+
+  //若参数列表元素个数小于0,则返回失败
   const mnArgStrLs_raw:string[]=argLsAsTxt.split(" ")
+  if(mnArgStrLs_raw.length<=0){
+    return false;
+  }
+
+  //若参数列表中非空串的元素个数小于0,则返回失败
   const mnArgStrLs:string[]=mnArgStrLs_raw.filter(elm=>elm!="")
+  if(mnArgStrLs.length<=0){
+    return false;
+  }
+
+  //执行附加
+  //  被附加的代码 此时不会被执行, 
+  //  被附加的代码 在等到刚进入main函数被调用时  才会被执行 
   Interceptor.attach(mnFnPtr, {
       onEnter:function  (this: InvocationContext, args: InvocationArguments) {
         console.log(`##进入main函数`)
@@ -252,6 +269,9 @@ function cMainFn_addArgLs_atBoot_attach(argLsAsTxt:string){
           
       }
   });
+
+  //若到此时无错误,则默认成功
+  return true;
 }
 
 
