@@ -12,26 +12,17 @@ const _modules_include=[
 // ldd /app2/sleuthkit/tools/autotools/tsk_recover  | awk '{print " \""$1"\","}'
 //讨厌其所有函数的模块
 const _modules_exclude:string[]=[
- "linux-vdso.so.1",
- "libpixman-1.so.0",
- "libz.so.1",
- "libgio-2.0.so.0",
- "libgobject-2.0.so.0",
- "libglib-2.0.so.0",
- "libgmodule-2.0.so.0",
- "libm.so.6",
- "libc.so.6",
- "/lib64/ld-linux-x86-64.so.2",
- "libmount.so.1",
- "libselinux.so.1",
- "libffi.so.8",//被qemu大量调用的ffi_call在此模块libffi.so中
- "libpcre.so.3",
- "libblkid.so.1",
- "libpcre2-8.so.0",
+  "linux-vdso.so.1",
+  // "libstdc++.so.6",
+  "libz.so.1",
+  "libm.so.6",
+  "libgcc_s.so.1",
+  "libc.so.6",
+  "/lib64/ld-linux-x86-64.so.2",
 ];
 
 
-// objdump --syms /app2/qemu/build-v8.2.2/qemu-system-x86_64  2>/dev/null | grep " F" | egrep -i "varLs|TL_TmPnt"  | awk '{print " \""$6"\","}'
+// objdump --syms /app2/sleuthkit/tools/autotools/tsk_recover  2>/dev/null | grep " F" | egrep -i "varLs|TL_TmPnt"  | awk '{print " \""$6"\","}'
 /*去掉awk输出如下
 0000000000122610 l     F .text	0000000000000095              _ZSt10accumulateIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEES2_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsE3$_0ET0_T_SC_SB_T1_
 00000000001226b0 l     F .text	00000000000000a5              _ZSt8for_eachIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEEZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsE3$_1ET0_T_SC_SB_
@@ -61,34 +52,11 @@ const _moduleApp__clangVar_runtime_fnNameLs:string[]=[
 
 
 const _moduleApp__exclude_fnNameLs:string[]=[
-//跳过qemu的巨量调用函数们
-  "pit_irq_timer",
-  "generate_memory_topology",
-  "ffi_call",
+//跳过sleuthkit的巨量调用函数们
+//   sleuthkit暂无巨量调用函数
 
 //analyze_by_graph 打印大于1万次调用的函数们（方便返工修改frida_js以跳过大量调用函数）
-  "symcmp64",
-  "pic_get_irq",
-  "pic_update_irq",
-  "pic_stat_update_irq",
-  "pic_set_irq",
-  "apic_accept_pic_intr",
-  "pic_irq_request",
-  "gsi_handler",
-  "ioapic_set_irq",
-  "icount_notify_exit",
-  "ioapic_stat_update_irq",
-  "qemu_timer_notify_cb",
-  "pit_get_next_transition_time",
-  "hpet_handle_legacy_irq",
-  "pit_get_out",
-  "pit_irq_timer_update.part.0",
-
-  "victim_tlb_hit",
-  "mmu_lookup",		
-  "mmu_lookup1",	
-  "helper_stb_mmu",
-  "helper_ldub_mmu",
+//   sleuthkit暂无调用次数大于1万次的函数
 ];
 
 
