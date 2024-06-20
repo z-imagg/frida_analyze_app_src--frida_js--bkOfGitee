@@ -92,8 +92,10 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   logWriteLn(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
 }
 
-// 导入 ' _focus_fnAdr.ts 是否关注该函数 '
-//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr.ts" , curNextLn)
+// 导入 '模块的函数名过滤器配置 '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_config.ts" , curNextLn)
+// 导入 '模块的函数名过滤器实现 '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_impl.ts" , curNextLn)
 
 function _main_(){
   // 获取 本地函数   'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)'
