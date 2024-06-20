@@ -129,9 +129,9 @@ frida 运行报超时错误 "Failed to load script: the connection is closed" �
 正确的解决办法是，像下面这样  用 函数setTimeout(... , 0) 包裹 业务代码
  */
 // frida  https://github.com/frida/frida/issues/113#issuecomment-187134331
-setTimeout(function () {
+function _entry() {
   //qemu启动启用了PVH的（linux原始内核）vmlinux, 参考:  http://giteaz:3000/frida_analyze_app_src/app_env/src/tag/tag_release__qemu_v8.2.2_build/busz/02_qemu_boot_vmlinux.sh
-  const mnArgTxt:string="/app/qemu/build-v8.2.2/qemu-system-x86_64 -nographic  -append 'console=ttyS0'  -kernel  /app/linux/vmlinux -initrd /app/linux/initRamFsHome/initramfs-busybox-i686.cpio.tar.gz";
+  const mnArgTxt:string=`${g_appPath} ${g_appArgLsAsTxt}`;
   // -d exec -D qemu.log  
   // 若添加参数列表失败，则 退出[即不执行业务代码]
   if(!cMainFn_addArgLs_atBoot_attach(mnArgTxt)){
@@ -144,4 +144,5 @@ setTimeout(function () {
   }
 
   console.log("定时器函数退出");
-}, 0);
+}
+setTimeout(_entry, 0);
