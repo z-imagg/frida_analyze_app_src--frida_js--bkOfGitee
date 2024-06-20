@@ -92,10 +92,14 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   logWriteLn(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
 }
 
-// 导入 '模块的函数名过滤器配置 '
-//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_config.ts" , curNextLn)
-// 导入 '模块的函数名过滤器实现 '
+// '包装' 使用了  '实现' 和 '配置'
+// '配置' 使用了  '实现'
+// 导入 '模块的函数名过滤器 实现 '
 //MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_impl.ts" , curNextLn)
+// 导入 '模块的函数名过滤器 配置 '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_config.ts" , curNextLn)
+// 导入 '模块的函数名过滤器 包装 '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_wrap.ts" , curNextLn)
 
 function _main_(){
   // 获取 本地函数   'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)'
