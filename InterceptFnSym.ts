@@ -21,8 +21,9 @@
 // 导入 _findFnDbgSym.ts
 //MyTsCmd//_replaceCurLineByTsFileContent("./_findFnDbgSym.ts" , curNextLn)
 
-let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<void,[ThreadId,MG_TmPntVal]>  |null;  // ThreadId == number , TmPntVal == number 
-// let gNativeFn__clgVarRt__TL_TmPnt__update:NativeFunction<'void',['int']>  ;
+// 导入 _nativeFn__TL_TmPnt__update.ts
+//MyTsCmd//_replaceCurLineByTsFileContent("./_nativeFn__TL_TmPnt__update.ts" , curNextLn)
+
 //函数符号表格 全局变量
 const g_FnSymTab:Map<FnAdrHex,DebugSymbol> = new Map();
 //函数调用id
@@ -54,20 +55,8 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   console.log(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`)
 
 
-  /** 用frida调用函数 TL_TmPnt__update 用以表达 此线程的此次函数调用的 _vdLs 和 时刻点 tmPntVal 一 一 对 应
-
-  该函数签名:
-  /fridaAnlzAp/clang-var/runtime_c__TmPnt_ThreadLocal/include/rntm_c__TmPnt_ThrLcl.h
-  void TL_TmPnt__update(int _TmPnt_new);
-
-  调用该函数 的 伪代码：
-  TL_TmPnt__update(tmPntVal)
-  */
-  //调用 clang-var运行时基础 中函数 TL_TmPnt__update(tmPntVal)
-  if(gNativeFn__clgVarRt__TL_TmPnt__update){
-    //call(返回值,参数们) 无返回值，传递null
-    gNativeFn__clgVarRt__TL_TmPnt__update.call(null,curThreadId,tmPntVal);
-  }
+// 函数进入时, 调用本地函数 'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)', 用以表达 此线程的此次函数调用的 _vdLs 和 时刻点 tmPntVal 一 一 对 应
+  call_nativeFn__TL_TmPnt__update(curThreadId,tmPntVal)
 
 }
 
@@ -183,17 +172,9 @@ https://gitee.com/repok/dwmkerr--linux-kernel-module/blob/e36a16925cd60c6e4b3487
   return false;
 }
 
-/** 获取 clang-var运行时基础 中函数 TL_TmPnt__update(tmPntVal)
- /fridaAnlzAp/clang-var/runtime_c__TmPnt_ThreadLocal/include/rntm_c__TmPnt_ThrLcl.h
- void TL_TmPnt__update(int _TmPnt_new);
- */
-function get_gNativeFn__clgVarRt__TL_TmPnt__update(){
-  const fnAdr__clgVarRt__TL_TmPnt__update:NativePointer = DebugSymbol.fromName("TL_TmPnt__update").address;
-  return  new NativeFunction(fnAdr__clgVarRt__TL_TmPnt__update, 'void',['int','int']);
-}
 function _main_(){
-  //获取 clang-var运行时基础 中函数 TL_TmPnt__update(tmPntVal)
-  gNativeFn__clgVarRt__TL_TmPnt__update=get_gNativeFn__clgVarRt__TL_TmPnt__update();
+  // 获取 本地函数   'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)'
+  get_nativeFn__clgVarRt__TL_TmPnt__update();
 
   const fnAdrLs:NativePointer[]=DebugSymbol.findFunctionsMatching("*");
   const fnAdrCnt=fnAdrLs.length
