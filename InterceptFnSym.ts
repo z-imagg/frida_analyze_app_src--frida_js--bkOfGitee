@@ -108,23 +108,10 @@ class FnLog {
   }
 }
 
-//判断两个函数地址值 是否相同
-function adrEq(adr1:NativePointer, adr2:NativePointer){
-  if(adr1==adr2){
-    return true;
-  }
-  const adr1Null:boolean=  isNil(adr1)
-  const adr2Null:boolean=  isNil(adr2)
-  if( adr1Null || adr2Null){
-    return false;
-  }
 
-  const adr1Hex:FnAdrHex=adrToHex(adr1);//adr1.toInt32()?
-  const adr2Hex:FnAdrHex=adrToHex(adr2);//adr2.toInt32()?
+// 导入 ' _adrEq.ts 判断两个函数地址值 是否相同 '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_adrEq.ts" , curNextLn)
 
-  const eq:boolean= (adr1Hex == adr2Hex);
-  return eq;
-}
 //日志开头标记
 //  以换行开头的理由是，避开应用程序日志中不换行的日志 造成的干扰。
 const LogLinePrefix:string="\n__@__@";
