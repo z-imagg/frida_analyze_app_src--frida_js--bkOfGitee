@@ -5,6 +5,8 @@
 
 - [术语] : mg_ == Module Global var  == mg模块中定义的全局变量
 
+- [术语] : _g_x == global var x 作为局部变量  == 比如 `函数调用f1(g_x)` 对应的 `函数签名f1(_g_x:Type)`
+
 
 ## frida命令只允许目标应用携带非中划线参数
 
