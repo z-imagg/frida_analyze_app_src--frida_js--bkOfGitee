@@ -215,8 +215,8 @@ function _main_(){
  这种就是有main函数的
 
  */
-function cMainFn_addArgLs_atBoot_attach(mnArgTxt:string){
-  if (mnArgTxt.length==0){
+function cMainFn_addArgLs_atBoot_attach(argLsAsTxt:string){
+  if (argLsAsTxt.length==0){
     console.log("##main参数为空")
     return;
   }
@@ -225,8 +225,8 @@ function cMainFn_addArgLs_atBoot_attach(mnArgTxt:string){
     console.log("##无main函数,无法通过拦截main函数来添加参数,可能不是类c编译器产生的应用")
     return;
   }
-  console.log(`##收到main函数参数mnArgTxt=${mnArgTxt}`)
-  const mnArgStrLs_raw:string[]=mnArgTxt.split(" ")
+  console.log(`##收到main函数参数mnArgTxt=${argLsAsTxt}`)
+  const mnArgStrLs_raw:string[]=argLsAsTxt.split(" ")
   const mnArgStrLs:string[]=mnArgStrLs_raw.filter(elm=>elm!="")
   Interceptor.attach(mnFnPtr, {
       onEnter:function  (this: InvocationContext, args: InvocationArguments) {
