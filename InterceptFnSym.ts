@@ -216,7 +216,7 @@ function _main_(){
 
  */
 function cMainFn_addArgLs_atBoot_attach(argLsAsTxt:string){
-  if (argLsAsTxt.length==0){
+  if (argLsAsTxt == null || argLsAsTxt== undefined || argLsAsTxt.length==0){
     console.log("##main参数为空")
     return;
   }
