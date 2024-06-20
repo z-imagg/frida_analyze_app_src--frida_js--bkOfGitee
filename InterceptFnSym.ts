@@ -12,6 +12,12 @@
 //           2. 在 单应用进程 内 的某个线程 内 tmPnt 唯一且递增
 //           3. 在 单应用进程 内 ，线程1的 tmPnt 为 从1到N的连续自然数  ，线程2的 tmPnt 也为 从1到N的连续自然数 ，但是这两不同线程的 tmPnt 不表达任何关系
 
+// 以命令MyTsCmd从配置文件config.json读取应用程序名 填充到下一行
+//MyTsCmd//_replaceSubStrInNextLine("_appPath_" ,  _fileName(_jsonLoad0("./config.json","$.appPath")) , curNextLn )
+const g_appFullPath: string ="_appPath_"; // 应用程序全路径
+//应用程序名字
+const g_appName: string =baseNameOfFilePath(g_appFullPath);
+
 // 导入 _msic_util.ts
 //MyTsCmd//_replaceCurLineByTsFileContent("./_msic_util.ts" , curNextLn)
 
@@ -109,13 +115,6 @@ function _main_(){
 }
 // 导入 ' _cMainFn_addArgLs_atBoot_attach.ts。 在启动时, 附加到C语言main函数, 添加参数列表 '
 //MyTsCmd//_replaceCurLineByTsFileContent("./_cMainFn_addArgLs_atBoot_attach.ts" , curNextLn)
-
-
-//应用程序全路径
-const g_appFullPath: string ='/app/qemu/build-v8.2.2/qemu-system-x86_64';
-//应用程序名字
-const g_appName: string =baseNameOfFilePath(g_appFullPath);
-
 
 /**
 frida 运行报超时错误 "Failed to load script: timeout was reached" 解决
