@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 cd /fridaAnlzAp/frida_js/
 
@@ -20,6 +20,9 @@ _appName=$(basename $_appPath)
 _ErrCode=2
 _ErrMsg2="错误2,可执行应用程序不存在[$_appPath]，错误代码[$_ErrCode]"
 [[ -f $_appPath ]] || { echo $_ErrMsg2 ; exit $_ErrCode ;}
+
+#应用运行前准备工作
+bash  pre_appRun.sh
 
 #尝试直接运行该应用,以确认是否能正常运行
 _appCmdFull="$_appPath $_appArgLsAsTxt"
