@@ -13,10 +13,14 @@
 //           3. 在 单应用进程 内 ，线程1的 tmPnt 为 从1到N的连续自然数  ，线程2的 tmPnt 也为 从1到N的连续自然数 ，但是这两不同线程的 tmPnt 不表达任何关系
 
 // 以命令MyTsCmd从配置文件config.json读取应用程序名 填充到下一行
-//MyTsCmd//_replaceSubStrInNextLine("_appPath_" ,  _fileName(_jsonLoad0("./config.json","$.appPath")) , curNextLn )
-const g_appFullPath: string ="_appPath_"; // 应用程序全路径
+//MyTsCmd//_replaceSubStrInNextLine('{}' ,  readTxtFile("./config.json") , curNextLn )
+const g_cfg:{[key:string]:string} =  {}; //配置文件文本
+//应用程序全路径
+const g_appPath: string = g_cfg["appPath"];
+//应用程序参数列表作为字符串
+const g_appArgLsAsTxt: string = g_cfg["appArgLsAsTxt"];
 //应用程序名字
-const g_appName: string =baseNameOfFilePath(g_appFullPath);
+const g_appName: string =baseNameOfFilePath(g_appPath);
 
 // 导入 _msic_util.ts
 //MyTsCmd//_replaceCurLineByTsFileContent("./_msic_util.ts" , curNextLn)
