@@ -22,13 +22,13 @@ ldd /app/qemu/build-v8.2.2/qemu-system-x86_64
 */
 
 //关注模块
-const modules_include=[
+const _modules_include=[
   "other_module_1.so",
 ];
 // "libstdc++.so.6.0.30", //?如果libstdc++的代码 穿插在业务代码中， 若忽略之 则调用链条断裂
 // ldd /app/qemu/build-v8.2.2/qemu-system-x86_64 | awk '{print " \""$1"\","}'
 //排除模块
-const modules_exclude:string[]=[
+const _modules_exclude:string[]=[
  "linux-vdso.so.1",
  "libpixman-1.so.0",
  "libz.so.1",
@@ -132,12 +132,12 @@ https://gitee.com/repok/dwmkerr--linux-kernel-module/blob/e36a16925cd60c6e4b3487
   //除上述特定关注外:
   
   //关注包含模块的所有函数
-  if(modules_include.includes(moduleName)){
+  if(_modules_include.includes(moduleName)){
     //  全局条件 'return ...'   , 不需要 'if ... return' 只关注给定条件
     return true;
   }
   //忽略排除模块的所有函数
-  if(modules_exclude.includes(moduleName)){
+  if(_modules_exclude.includes(moduleName)){
     //  全局条件 'return ...'   , 不需要 'if ... return' 只关注给定条件
     return false;
   }
