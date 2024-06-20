@@ -37,18 +37,22 @@ const _NOT_FOCUS:boolean=false;
 
 class MG_ModuleFilter{
 
-  static build_include(moduleName:string, fnNameLs_include:string[]){
+  //关注该模块中的一些函数
+  static build_includeFuncLs(moduleName:string, fnNameLs_include:string[]){
     return new MG_ModuleFilter(moduleName, MG_Enum_DefaultAct.Include,fnNameLs_include, []);
   }
   
-  static build_exclude(moduleName:string, fnNameLs_exclude:string[]){
+  //讨厌该模块中的一些函数
+  static build_excludeFuncLs(moduleName:string, fnNameLs_exclude:string[]){
     return new MG_ModuleFilter(moduleName, MG_Enum_DefaultAct.Exclude,[], fnNameLs_exclude);
   }
 
+  //讨厌该模块中的全部函数
   static build_excludeAllFunc(moduleName:string){
     return new MG_ModuleFilter(moduleName, MG_Enum_DefaultAct.Exclude,[], []);
   }
   
+  //给定模块们, 讨厌任意一个模块的全部函数
   static build_excludeAllFunc_moduleLs(moduleName_ls:string[]){
     const filterLs:MG_ModuleFilter[] = moduleName_ls.map((moduleNameK)=>{
       return MG_ModuleFilter.build_excludeAllFunc(moduleNameK)
@@ -56,10 +60,12 @@ class MG_ModuleFilter{
     return filterLs;
   }
 
+  //关注该模块中的全部函数
   static build_includeAllFunc(moduleName:string){
     return new MG_ModuleFilter(moduleName, MG_Enum_DefaultAct.Include,[], []);
   }
   
+  //给定模块们, 关注任意一个模块的全部函数
   static build_includeAllFunc_moduleLs(moduleName_ls:string[]){
     const filterLs:MG_ModuleFilter[] = moduleName_ls.map((moduleNameK)=>{
       return MG_ModuleFilter.build_includeAllFunc(moduleNameK)
@@ -220,10 +226,15 @@ const _moduleApp__exclude_fnNameLs:string[]=[
   "helper_ldub_mmu",
 ];
 
+
+//本应用自身模块的函数名过滤器 
+//    排除clang-var插件的运行时的函数们、排除调用量很大的函数们
+const _appFilter:MG_ModuleFilter=MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs])
+const _moduleFilterLs:MG_ModuleFilter[]=[_appFilter];
+
 const mg_moduleFilter_ls: MG_ModuleFilter[]=[
-  //本应用自身模块的函数名过滤器 
-  //    排除clang-var插件的运行时的函数们、排除调用量很大的函数们
-  MG_ModuleFilter.build_exclude(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs]),
+  //一般模块过滤器们
+  ..._moduleFilterLs,
   //讨厌其所有函数的模块
   //   linux操作系统基础库、本应用调用的一些不需要关注的库
   ...MG_ModuleFilter.build_excludeAllFunc_moduleLs(_modules_exclude),
