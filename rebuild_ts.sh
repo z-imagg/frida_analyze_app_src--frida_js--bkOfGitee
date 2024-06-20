@@ -18,6 +18,7 @@ local outJsFName=InterceptFnSym_generated.js
 python3 processMyTsCmd.py $inTsFName && \
 npx frida-compile  $outTsFName --no-source-maps --output $outJsFName  && \
 #删除frida-compile生成的 js文件开头 乱七八糟的 几行
+# 删除文件 InterceptFnSym_generated.js 的第一行到含有的MyTsBegin行
 sed -i '1,/MyTsBegin/d' $outJsFName
 }
 
