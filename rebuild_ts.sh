@@ -4,7 +4,7 @@
 #【备注】 并删除frida-compile再js文件开头添加的乱七八糟的几行
 
 #去此脚本所在目录
-cd /fridaAnlzAp/frida_js_demo/
+cd /fridaAnlzAp/frida_js/
 
 #激活py环境 、 py依赖安装
 source py_envAct_depInstl.sh

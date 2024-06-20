@@ -2,7 +2,7 @@
 
 #[描述] 激活py环境 、 py依赖安装
 
-cd /fridaAnlzAp/frida_js_demo/
+cd /fridaAnlzAp/frida_js/
 
 # 激活py环境
 set +x ; source /app/Miniconda3-py310_22.11.1-1/bin/activate ; set -x
