@@ -14,6 +14,7 @@ bash ./rebuild_ts.sh
 
 # 从配置文件中读取应用名
 _appPath=$(jq -r .appPath config.json)
+_appArgLsAsTxt=$(jq -r .appArgLsAsTxt config.json)
 _appName=$(basename $_appPath)
 
 _ErrCode=2
@@ -21,7 +22,7 @@ _ErrMsg2="错误2,可执行应用程序不存在[$_appPath]，错误代码[$_Err
 [[ -f $_appPath ]] || { echo $_ErrMsg2 ; exit $_ErrCode ;}
 
 #尝试直接运行该应用,以确认是否能正常运行
-_appCmdFull="$_appPath $_appName"
+_appCmdFull="$_appPath $_appArgLsAsTxt"
 _Err3Code=3
 _Err3Msg="错误3,直接运行该应用失败[$_appCmdFull]，错误代码[$_Err3Code]"
 $_appCmdFull ||  { echo $_Err3Msg ; exit $_Err3Code ;}
