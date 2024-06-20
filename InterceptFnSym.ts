@@ -70,7 +70,7 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   var fnAdr=thiz.context.pc;
   var fnSym :DebugSymbol|undefined= findFnDbgSym(thiz.context.pc,g_FnSymTab)
   thiz.fnEnterLog=new FnLog(tmPntVal,++gLogId,Process.id,curThreadId, Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
-  console.log(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`)
+  logWriteLn(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`)
 
 
 // 函数进入时, 调用本地函数 'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)', 用以表达 此线程的此次函数调用的 _vdLs 和 时刻点 tmPntVal 一 一 对 应
@@ -87,9 +87,9 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   const fnEnterLog:FnLog=thiz.fnEnterLog;
   const fnLeaveLog:FnLog=new FnLog(tmPnt,++gLogId,Process.id,curThreadId, Direct.LeaveFn, fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);
   if(!adrEq(fnAdr,thiz.fnEnterLog.fnAdr)){
-    console.log(`##断言失败，onEnter、onLeave的函数地址居然不同？ 立即退出进程，排查问题. OnLeave.fnAdr=【${fnAdr}】, thiz.fnEnterLog.fnAdr=【${thiz.fnEnterLog.fnAdr}】, thiz.fnEnterLog=【${thiz.fnEnterLog.toJson()}】,fnLeaveLog=【${fnLeaveLog.toJson()}】`)
+    logWriteLn(`##断言失败，onEnter、onLeave的函数地址居然不同？ 立即退出进程，排查问题. OnLeave.fnAdr=【${fnAdr}】, thiz.fnEnterLog.fnAdr=【${thiz.fnEnterLog.fnAdr}】, thiz.fnEnterLog=【${thiz.fnEnterLog.toJson()}】,fnLeaveLog=【${fnLeaveLog.toJson()}】`)
   }
-  console.log(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
+  logWriteLn(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
 }
 
 // 导入 ' _focus_fnAdr.ts 是否关注该函数 '
@@ -110,7 +110,7 @@ function _main_(){
     // const fnSym=DebugSymbol.fromAddress(fnAdr);
     //进度百分数
     const progress_percent:string=(100*k/fnAdrCnt).toFixed(2);
-    console.log(`##${nowTxt()};Interceptor.attach fnAdr=${fnAdr};  进度【${progress_percent}%,${k}~${fnAdrCnt} 】`)
+    logWriteLn(`##${nowTxt()};Interceptor.attach fnAdr=${fnAdr};  进度【${progress_percent}%,${k}~${fnAdrCnt} 】`)
 
 
     Interceptor.attach(fnAdr,{
@@ -141,7 +141,7 @@ function _entry() {
   const mnArgTxt:string=`${g_appPath} ${g_appArgLsAsTxt}`;
   // 若添加参数列表失败，则 退出[即不执行业务代码]
   if(!cMainFn_addArgLs_atBoot_attach(mnArgTxt)){
-    console.log("[失败] 在启动时, 附加到C语言main函数, 添加参数列表 [因这失败而不执行业务代码]");
+    logWriteLn("[失败] 在启动时, 附加到C语言main函数, 添加参数列表 [因这失败而不执行业务代码]");
   }
   //否则[即添加参数列表正常] ，则进入业务主体代码
   else{
@@ -149,6 +149,6 @@ function _entry() {
   _main_();
   }
 
-  console.log("定时器函数退出");
+  logWriteLn("定时器函数退出");
 }
 setTimeout(_entry, 0);

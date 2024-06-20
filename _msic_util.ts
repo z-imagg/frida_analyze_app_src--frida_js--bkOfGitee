@@ -6,7 +6,7 @@ const parts = filePath.split('/');
 const baseName = parts[parts.length - 1];
 // baseName == 'yy.elf'
 
-// console.log(baseName); 
+// logWriteLn(baseName); 
 return baseName;
 }
 function nowTxt(){
