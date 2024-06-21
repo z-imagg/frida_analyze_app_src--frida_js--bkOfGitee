@@ -1,4 +1,4 @@
-////frida-trace初始化js
+////MyTsBegin
 
 // ［术语］　g_TmPntTb==gTmPnt_Table==gTmPnt表格==tmPnt计数器集合
 // ［简写］ AbsThrdId==AbsoluteThreadId==绝对线程id==进程id_线程id , g_TmPntTb == globalTimePointTable == 全局时刻表格
@@ -92,8 +92,14 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   logWriteLn(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
 }
 
-// 导入 ' _focus_fnAdr.ts 是否关注该函数 '
-//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr.ts" , curNextLn)
+// '包装' 使用了  '实现' 和 '配置'
+// '配置' 使用了  '实现'
+// 导入 '模块的函数名过滤器 实现 '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_impl.ts" , curNextLn)
+// 导入 '模块的函数名过滤器 配置 '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_config.ts" , curNextLn)
+// 导入 '模块的函数名过滤器 包装 '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_wrap.ts" , curNextLn)
 
 function _main_(){
   // 获取 本地函数   'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)'
@@ -104,13 +110,13 @@ function _main_(){
   for (let [k,fnAdr] of  fnAdrLs.entries()){
     
     /*修复 在拦截libc.so.6 pthread_getschedparam时抛出异常说进程已终止并停在frida终端 ： 不拦截 比如libc.so、frida-agent.so等底层*/
-    if(!focus_fnAdr(fnAdr,g_appName)){
+    if(!focus_fnAdr(fnAdr)){
       continue;
     }
-    // const fnSym=DebugSymbol.fromAddress(fnAdr);
+    const fnSym=DebugSymbol.fromAddress(fnAdr);
     //进度百分数
     const progress_percent:string=(100*k/fnAdrCnt).toFixed(2);
-    logWriteLn(`##${nowTxt()};Interceptor.attach fnAdr=${fnAdr};  进度【${progress_percent}%,${k}~${fnAdrCnt} 】`)
+    logWriteLn(`##${nowTxt()}; [关注函数]; fnSym.json= ${JSON.stringify(fnSym)}`)
 
 
     Interceptor.attach(fnAdr,{
