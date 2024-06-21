@@ -48,6 +48,11 @@ const _moduleApp__clangVar_runtime_fnNameLs:string[]=[
   "TL_TmPnt__printPtr",
 ];
 
+  //  grep runtime  /fridaAnlzAp/frida_js/InterceptFnSym-tsk_recover.log
+const _moduleApp__clangVar_runtime_fnNameLs_fromFridaJsLog:string[]=[
+  "_GLOBAL__sub_I_runtime_cpp__vars_fn.cpp",
+];
+
 
 // 忽略 clangVar 的 c运行时 依赖的 antirez_sds 中所有函数
 //  objdump --syms /app2/sleuthkit/tools/autotools/tsk_recover  2>/dev/null | grep " F" | awk '{print " \""$6"\","}' | tr -d ' '  | grep '^"sds'
@@ -134,7 +139,7 @@ const _moduleApp__exclude_fnNameLs:string[]=[
 
 //本应用自身模块的函数名过滤器 
 //    排除clang-var插件的运行时的函数们、排除调用量很大的函数们
-const _appFilter:MG_ModuleFilter=MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs, ..._moduleApp__clangVar_runtime_c_dependency_antirezSds_fnNameLs, ..._moduleApp__clangVar_runtime_c_dependency_clibsList_fnNameLs])
+const _appFilter:MG_ModuleFilter=MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs, ..._moduleApp__clangVar_runtime_c_dependency_antirezSds_fnNameLs, ..._moduleApp__clangVar_runtime_c_dependency_clibsList_fnNameLs, ..._moduleApp__clangVar_runtime_fnNameLs_fromFridaJsLog])
 const _moduleFilterLs:MG_ModuleFilter[]=[_appFilter];
 
 // 之后 _wrap.ts 中 组装出 最终使用的过滤器 mg_moduleFilter_ls  如下所示 
