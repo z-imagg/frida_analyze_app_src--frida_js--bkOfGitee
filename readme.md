@@ -25,3 +25,28 @@ frida只允许应用携带非中划线参数 ,
 
 - `frida --load x.ts --file app.elf -app_option1 app_value1` 不合法的 目标应用及其参数
    因为 `-app_option1` 会被当成是 `frida命令` 的参数, 而不是`应用app.elf`的参数
+
+
+### 应用们
+
+#### sleuthkit-4.12.1 
+
+对一个 [32M_FAT dd磁盘镜像](https://prgrmz07.coding.net/p/app/d/sleuthkit/git/tree/clang-var-modify%2Fsleuthkit-4.12.1%2FF/disk_partition_example/32M_FAT.dd.bs4M.tar.gz) 做数据恢复 , 正常运行，获得被恢复的文件
+
+[clang-var-modify/sleuthkit-4.12.1/F](https://prgrmz07.coding.net/p/app/d/sleuthkit/git/tree/clang-var-modify%2Fsleuthkit-4.12.1%2FF) ,  [6c9bada97f355813ba11c7b56856d61597f06b46](https://prgrmz07.coding.net/p/app/d/sleuthkit/git/commit/6c9bada97f355813ba11c7b56856d61597f06b46)
+
+
+```shell
+cd /fridaAnlzAp/frida_js/
+bash fridaJs_runApp.sh 
+#Files Recovered: 4
+
+```
+
+获得145万条函数进出日志
+```shell
+wc -l        /fridaAnlzAp/frida_js/InterceptFnSym-tsk_recover.log
+# 1458564 /fridaAnlzAp/frida_js/InterceptFnSym-tsk_recover.log
+
+
+```
