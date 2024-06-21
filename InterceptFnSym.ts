@@ -22,6 +22,10 @@ const g_appArgLsAsTxt: string = g_cfg["appArgLsAsTxt"];
 //应用程序名字
 const g_appName: string =baseNameOfFilePath(g_appPath);
 
+
+// 导入 _Const.ts
+//MyTsCmd//_replaceCurLineByTsFileContent("./_Const.ts" , curNextLn)
+
 // 以命令MyTsCmd导入文件 _DateTime_util.ts
 //MyTsCmd//_replaceCurLineByTsFileContent("./_DateTime_util.ts" , curNextLn)
 //脚本启动时的绝对毫秒数
@@ -62,6 +66,30 @@ const g_TmPntTb:Map<MG_AbsThrdId,MG_TimePoint> = new Map();
 //  以换行开头的理由是，避开应用程序日志中不换行的日志 造成的干扰。
 const LogLinePrefix:string="\n__@__@";
 
+//判断是否为clang-var插件的runtime中的destroy函数
+function isClgVarRuntimeDestroyFunc( fnSym :DebugSymbol|undefined):boolean{
+  if(fnSym && fnSym.name && [mg_fnNmAbi_clgVarC00RtDestry, mg_fnNmAbi_clgVarCxxRtDestry].includes(fnSym.name)){
+    //是destroy函数 
+      return true;
+  }else{
+    //不是destroy函数 
+    return false;
+  }
+}
+
+//判断是否为clang-var插件的c语言runtime中的destroy函数
+function isClgVarRuntimeC00DestroyFunc( fnSym :DebugSymbol|undefined):boolean{
+  if(fnSym && fnSym.name && mg_fnNmAbi_clgVarC00RtDestry==fnSym.name){
+    //是destroy函数 
+      return true;
+  }else{
+    //不是destroy函数 
+    return false;
+  }
+}
+
+const g_Buffer_Limit:number=  1024*4;
+
 /** onEnter ， 函数进入
  */
 function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
@@ -72,10 +100,23 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   thiz.fnEnterLog=new FnLog(tmPntVal,++gLogId,Process.id,curThreadId, Direct.EnterFn, fnAdr, ++gFnCallId, fnSym);
   logWriteLn(`${LogLinePrefix}${thiz.fnEnterLog.toJson()}`)
 
-
 // 函数进入时, 调用本地函数 'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)', 用以表达 此线程的此次函数调用的 _vdLs 和 时刻点 tmPntVal 一 一 对 应
   call_nativeFn__TL_TmPnt__update(curThreadId,tmPntVal)
 
+  if(isClgVarRuntimeC00DestroyFunc(fnSym  )){
+    //准备destroy函数的jsonText返回量缓冲区
+    const destroyFn_outArg_jsonTxt:NativePointer=Memory.alloc(g_Buffer_Limit);
+    thiz.destroyFn_outArg_jsonTxt=destroyFn_outArg_jsonTxt;
+    
+  // destroy函数签名
+  // /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/runtime_c__vars_fn.h
+  //void destroyVarLs_inFn__RtC00(_VarDeclLs *_vdLs, int jsonTxtOutLimit, char* jsonTxtOut_, int* jsonTxtOutLen_)
+
+  //草稿
+    args[1]=g_Buffer_Limit;
+    args[2]=destroyFn_outArg_jsonTxt;
+    args[3]=destroyFn_outArg_jsonTxtLen_;
+  }
 }
 
 /**  OnLeave ，函数离开
@@ -85,6 +126,15 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   const tmPnt:MG_TmPntVal=nextTmPnt(g_TmPntTb,Process.id,curThreadId)
   var fnAdr=thiz.context.pc;
   const fnEnterLog:FnLog=thiz.fnEnterLog;
+
+  const fnSym:DebugSymbol|undefined=fnEnterLog.fnSym;
+  if(isClgVarRuntimeC00DestroyFunc(fnSym  )){
+    //如果是destroy函数, 
+    const destroyFn_outArg_jsonTxt:NativePointer=thiz.destroyFn_outArg_jsonTxt;
+    destroyFn_outArg_jsonTxt.readCString()
+    return;
+  }
+
   const fnLeaveLog:FnLog=new FnLog(tmPnt,++gLogId,Process.id,curThreadId, Direct.LeaveFn, fnAdr, fnEnterLog.fnCallId, fnEnterLog.fnSym);
   if(!adrEq(fnAdr,thiz.fnEnterLog.fnAdr)){
     logWriteLn(`##断言失败，onEnter、onLeave的函数地址居然不同？ 立即退出进程，排查问题. OnLeave.fnAdr=【${fnAdr}】, thiz.fnEnterLog.fnAdr=【${thiz.fnEnterLog.fnAdr}】, thiz.fnEnterLog=【${thiz.fnEnterLog.toJson()}】,fnLeaveLog=【${fnLeaveLog.toJson()}】`)
