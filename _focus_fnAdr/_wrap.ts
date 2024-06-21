@@ -27,8 +27,9 @@ const mg_moduleFilter_searchByModuleName:Record<string,MG_ModuleFilter>=mg_modul
 );
 
 //是否关注该函数
-function focus_fnAdr(fnAdr:NativePointer, _g_appName:string){
+function focus_fnAdr(fnAdr:NativePointer){
   const fnSym=DebugSymbol.fromAddress(fnAdr);
+  logWriteLn(`[json(fnSym)]: ${JSON.stringify(fnSym)}`)
   const moduleName = fnSym.moduleName
   if(moduleName==null){
     throw new Error(`[focus_fnAdr:函数地址的模块名为空错误] fnAdr[${fnAdr}] `)
@@ -36,6 +37,12 @@ function focus_fnAdr(fnAdr:NativePointer, _g_appName:string){
 
   //查找该模块的函数名过滤器
   const moduleFilter:MG_ModuleFilter=mg_moduleFilter_searchByModuleName[moduleName];
+
+  //若 模块过滤器找不到， 则警告 并 排除该模块
+  if(moduleFilter==null){
+    logWriteLn(`[警告]: 不关注此模块; 此模块没有对应的过滤器,请修改配置文件[_focus_fnAdr/_config.ts]，以增加模块[moduleName=${moduleName}]的过滤器 `)
+    return false;
+  }
 
   //执行该过滤器, 获得是否关注本函数
   const _focus:boolean= moduleFilter.focus(fnAdr)
