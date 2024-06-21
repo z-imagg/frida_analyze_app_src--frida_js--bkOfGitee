@@ -10,6 +10,7 @@ _CondaActv=$_CondaBin/activate
 _CondaPip=$_CondaBin/pip
 _CondaPy=$_CondaBin/python
 _CondaFrida=$_CondaBin/frida
+_CondaFridaCompile=$_CondaBin/frida-compile
 
 # 激活py环境(不再需要)
 # source $_CondaActv ; 
