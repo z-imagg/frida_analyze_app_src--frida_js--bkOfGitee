@@ -9,9 +9,12 @@ const _modules_include=[
   "other_module_1.so",
 ];
 // "libstdc++.so.6.0.30", //?如果libstdc++的代码 穿插在业务代码中， 若忽略之 则调用链条断裂
-// ldd /app2/sleuthkit/tools/autotools/tsk_recover  | awk '{print " \""$1"\","}'
+// ldd /fridaAnlzAp/frida_js_demo/app.elf  | awk '{print " \""$1"\","}'
 //讨厌其所有函数的模块
 const _modules_exclude:string[]=[
+  //总是要排除frida-agent.so的， 否则frida会自己调用自己 从而陷入 自死循环 中
+  "frida-agent-64.so", 
+  //排除 linux可执行elf文件的基础依赖
   "linux-vdso.so.1",
   // "libstdc++.so.6",
   "libz.so.1",
