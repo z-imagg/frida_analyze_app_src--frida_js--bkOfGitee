@@ -113,10 +113,10 @@ function _main_(){
     if(!focus_fnAdr(fnAdr)){
       continue;
     }
-    // const fnSym=DebugSymbol.fromAddress(fnAdr);
+    const fnSym=DebugSymbol.fromAddress(fnAdr);
     //进度百分数
     const progress_percent:string=(100*k/fnAdrCnt).toFixed(2);
-    logWriteLn(`##${nowTxt()};Interceptor.attach fnAdr=${fnAdr};  进度【${progress_percent}%,${k}~${fnAdrCnt} 】`)
+    logWriteLn(`##${nowTxt()}; [关注函数]; fnSym.json= ${JSON.stringify(fnSym)}`)
 
 
     Interceptor.attach(fnAdr,{
