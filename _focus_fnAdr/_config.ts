@@ -31,19 +31,6 @@ const _modules_exclude:string[]=[
 
 
 // objdump --syms /app2/sleuthkit/tools/autotools/tsk_recover  2>/dev/null | grep " F" | egrep -i "varLs|TL_TmPnt"  | awk '{print " \""$6"\","}'
-/*去掉awk输出如下
-0000000000122610 l     F .text	0000000000000095              _ZSt10accumulateIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEES2_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsE3$_0ET0_T_SC_SB_T1_
-00000000001226b0 l     F .text	00000000000000a5              _ZSt8for_eachIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEEZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsE3$_1ET0_T_SC_SB_
-0000000000122760 l     F .text	0000000000000062              _ZZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsENK3$_0clERK9__VarDeclS4_
-00000000001227d0 l     F .text	0000000000000197              _ZZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsENK3$_1clE9__VarDecl
-0000000000121e80 g     F .text	00000000000000b0              _Z23_init_varLs_inFn__RtCxxNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES4_ii
-00000000001216f0 g     F .text	000000000000004a              TL_TmPnt__update
-000000000011e480 g     F .text	0000000000000079              _init_varLs_inFn__RtC00
-0000000000121740 g     F .text	0000000000000018              TL_TmPnt__get
-000000000011e580 g     F .text	000000000000016f              destroyVarLs_inFn__RtC00
-0000000000121760 g     F .text	0000000000000037              TL_TmPnt__printPtr
-0000000000121fd0 g     F .text	0000000000000632              _Z24destroyVarLs_inFn__RtCxxP11__VarDeclLs
-*/
 const _moduleApp__clangVar_runtime_fnNameLs:string[]=[
   "_ZSt10accumulateIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEES2_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE3$_0ET0_T_SJ_SI_T1_",
   "_ZSt8for_eachIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEEZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE3$_1ET0_T_SJ_SI_",
@@ -60,6 +47,80 @@ const _moduleApp__clangVar_runtime_fnNameLs:string[]=[
 ];
 
 
+// 忽略 clangVar 的 c运行时 依赖的 antirez_sds 中所有函数
+//  objdump --syms /app2/sleuthkit/tools/autotools/tsk_recover  2>/dev/null | grep " F" | awk '{print " \""$6"\","}' | tr -d ' '  | grep '^"sds'
+//  objdump --syms /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/CMakeFiles/clangPlgVar_runtime_c.dir/app/antirez--sds/sds.c.o | grep " F"  | awk '{print " \""$6"\","}'
+const _moduleApp__clangVar_runtime_c_dependency_antirezSds_fnNameLs:string[]=[
+  "sdsReqType",
+  "sdsHdrSize",
+  "sdslen",
+  "sdssetlen",
+  "sdsavail",
+  "sdssetalloc",
+  "sdsalloc",
+  "sdsinclen",
+  "sdsnewlen",
+  "sdsempty",
+  "sdsnew",
+  "sdsdup",
+  "sdsfree",
+  "sdsupdatelen",
+  "sdsclear",
+  "sdsMakeRoomFor",
+  "sdsRemoveFreeSpace",
+  "sdsAllocSize",
+  "sdsAllocPtr",
+  "sdsIncrLen",
+  "sdsgrowzero",
+  "sdscatlen",
+  "sdscat",
+  "sdscatsds",
+  "sdscpylen",
+  "sdscpy",
+  "sdsll2str",
+  "sdsull2str",
+  "sdsfromlonglong",
+  "sdscatvprintf",
+  "sdscatprintf",
+  "sdscatfmt",
+  "sdstrim",
+  "sdsrange",
+  "sdstolower",
+  "sdstoupper",
+  "sdscmp",
+  "sdssplitlen",
+  "sdsfreesplitres",
+  "sdscatrepr",
+  "is_hex_digit",
+  "hex_digit_to_int",
+  "sdssplitargs",
+  "sdsmapchars",
+  "sdsjoin",
+  "sdsjoinsds",
+  "sds_malloc",
+  "sds_realloc",
+  "sds_free",
+];
+
+// 忽略 clangVar 的 c运行时 依赖的 libclibs_list 中所有函数
+// objdump --syms  /app/clibs--list/build/libclibs_list.a | grep " F"    | awk '{print " \""$6"\","}'
+const _moduleApp__clangVar_runtime_c_dependency_clibsList_fnNameLs:string[]=[
+  "list_new",
+  "list_destroy",
+  "list_rpush",
+  "list_rpop",
+  "list_lpop",
+  "list_lpush",
+  "list_find",
+  "list_at",
+  "list_remove",
+  "list_node_new",
+  "list_iterator_new",
+  "list_iterator_new_from_node",
+  "list_iterator_next",
+  "list_iterator_destroy",
+];
+
 const _moduleApp__exclude_fnNameLs:string[]=[
 //跳过sleuthkit的巨量调用函数们
 //   sleuthkit暂无巨量调用函数
@@ -71,7 +132,7 @@ const _moduleApp__exclude_fnNameLs:string[]=[
 
 //本应用自身模块的函数名过滤器 
 //    排除clang-var插件的运行时的函数们、排除调用量很大的函数们
-const _appFilter:MG_ModuleFilter=MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs])
+const _appFilter:MG_ModuleFilter=MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs, ..._moduleApp__clangVar_runtime_c_dependency_antirezSds_fnNameLs, ..._moduleApp__clangVar_runtime_c_dependency_clibsList_fnNameLs])
 const _moduleFilterLs:MG_ModuleFilter[]=[_appFilter];
 
 // 之后 _wrap.ts 中 组装出 最终使用的过滤器 mg_moduleFilter_ls  如下所示 
