@@ -54,3 +54,9 @@ exit 0
 FridaOut="/gain/frida-out/appName--${_appName}" && mkdir -p ${FridaOut}
 _LogFP_Pure="${FridaOut}/Pure-${now}.log"
 mv $(ls  $logFPattern) $_LogFP_Pure
+
+
+
+outTsFPath=InterceptFnSym_generated.ts
+#删除中间结果文件 .ts .js
+rm -v $outTsFPath $outJsFPath
