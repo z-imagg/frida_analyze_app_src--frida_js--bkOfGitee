@@ -8,6 +8,7 @@ bash ASLR_disable.sh
 
 #激活py环境 、 py依赖安装
 source py_envAct_depInstl.sh
+#输出 变量 _CondaFrida
 
 #重新编译 ts 为 js 
 bash ./rebuild_ts.sh
@@ -44,7 +45,7 @@ rm -v $logFPattern
 outJsFPath=./InterceptFnSym_generated.js
 
 # 以frida运行应用
-sudo env "PATH=$PATH" frida  --load $outJsFPath        --file  $_appPath
+$_CondaFrida  --load $outJsFPath        --file  $_appPath
 ls -lht $logFPattern
 
 exit 0
