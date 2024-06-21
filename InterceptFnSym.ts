@@ -110,7 +110,7 @@ function _main_(){
   for (let [k,fnAdr] of  fnAdrLs.entries()){
     
     /*修复 在拦截libc.so.6 pthread_getschedparam时抛出异常说进程已终止并停在frida终端 ： 不拦截 比如libc.so、frida-agent.so等底层*/
-    if(!focus_fnAdr(fnAdr,g_appName)){
+    if(!focus_fnAdr(fnAdr)){
       continue;
     }
     // const fnSym=DebugSymbol.fromAddress(fnAdr);
