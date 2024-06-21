@@ -32,7 +32,7 @@ const _modules_exclude:string[]=[
 
 
 // objdump --syms /app2/sleuthkit/tools/autotools/tsk_recover  2>/dev/null | grep " F" | egrep -i "RtC00|RtCxx|TL_TmPnt"  | awk '{print " \""$6"\","}'
-const _moduleApp__clangVar_runtime_fnNameLs:string[]=[
+const _mainModule__clgVarRuntime_fnNmLs:string[]=[
   "_ZSt10accumulateIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEES2_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE3$_0ET0_T_SJ_SI_T1_",
   "_ZSt8for_eachIN9__gnu_cxx17__normal_iteratorIP9__VarDeclSt6vectorIS2_SaIS2_EEEEZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE3$_1ET0_T_SJ_SI_",
   "_ZZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEENK3$_0clERK9__VarDeclSB_",
@@ -49,7 +49,7 @@ const _moduleApp__clangVar_runtime_fnNameLs:string[]=[
 ];
 
   //  grep runtime  /fridaAnlzAp/frida_js/InterceptFnSym-tsk_recover.log
-const _moduleApp__clangVar_runtime_fnNameLs_fromFridaJsLog:string[]=[
+const _mainModule__clgVarRuntime_fnNmLs_fromFridaJsLog:string[]=[
   "_GLOBAL__sub_I_runtime_cpp__vars_fn.cpp",
 ];
 
@@ -57,7 +57,7 @@ const _moduleApp__clangVar_runtime_fnNameLs_fromFridaJsLog:string[]=[
 // 忽略 clangVar 的 c运行时 依赖的 antirez_sds 中所有函数
 //  objdump --syms /app2/sleuthkit/tools/autotools/tsk_recover  2>/dev/null | grep " F" | awk '{print " \""$6"\","}' | tr -d ' '  | grep '^"sds'
 //  objdump --syms /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/CMakeFiles/clangPlgVar_runtime_c.dir/app/antirez--sds/sds.c.o | grep " F"  | awk '{print " \""$6"\","}'
-const _moduleApp__clangVar_runtime_c_dependency_antirezSds_fnNameLs:string[]=[
+const _mainModule__clgVarRuntime_c_dep_antirezSds_fnNmLs:string[]=[
   "sdsReqType",
   "sdsHdrSize",
   "sdslen",
@@ -111,7 +111,7 @@ const _moduleApp__clangVar_runtime_c_dependency_antirezSds_fnNameLs:string[]=[
 
 // 忽略 clangVar 的 c运行时 依赖的 libclibs_list 中所有函数
 // objdump --syms  /app/clibs--list/build/libclibs_list.a | grep " F"    | awk '{print " \""$6"\","}'
-const _moduleApp__clangVar_runtime_c_dependency_clibsList_fnNameLs:string[]=[
+const _mainModule__clgVarRuntime_c_dep_clibsList_fnNmLs:string[]=[
   "list_new",
   "list_destroy",
   "list_rpush",
@@ -128,7 +128,7 @@ const _moduleApp__clangVar_runtime_c_dependency_clibsList_fnNameLs:string[]=[
   "list_iterator_destroy",
 ];
 
-const _moduleApp__exclude_fnNameLs:string[]=[
+const _mainModule__exclude_fnNmLs:string[]=[
 //跳过sleuthkit的巨量调用函数们
 //   sleuthkit暂无巨量调用函数
 
@@ -139,8 +139,8 @@ const _moduleApp__exclude_fnNameLs:string[]=[
 
 //本应用自身模块的函数名过滤器 
 //    排除clang-var插件的运行时的函数们、排除调用量很大的函数们
-const _appFilter:MG_ModuleFilter=MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._moduleApp__clangVar_runtime_fnNameLs, ..._moduleApp__exclude_fnNameLs, ..._moduleApp__clangVar_runtime_c_dependency_antirezSds_fnNameLs, ..._moduleApp__clangVar_runtime_c_dependency_clibsList_fnNameLs, ..._moduleApp__clangVar_runtime_fnNameLs_fromFridaJsLog])
-const _moduleFilterLs:MG_ModuleFilter[]=[_appFilter];
+const _mainModule_filter:MG_ModuleFilter=MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._mainModule__clgVarRuntime_fnNmLs, ..._mainModule__exclude_fnNmLs, ..._mainModule__clgVarRuntime_c_dep_antirezSds_fnNmLs, ..._mainModule__clgVarRuntime_c_dep_clibsList_fnNmLs, ..._mainModule__clgVarRuntime_fnNmLs_fromFridaJsLog])
+const _moduleFilterLs:MG_ModuleFilter[]=[_mainModule_filter];
 
 // 之后 _wrap.ts 中 组装出 最终使用的过滤器 mg_moduleFilter_ls  如下所示 
 /*
