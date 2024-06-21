@@ -33,30 +33,24 @@ $_appCmdFull ||  { echo $_Err3Msg ; exit $_Err3Code ;}
 #应用运行前准备工作
 source  /app2/sleuthkit/app_run/appRun.sh && pre_appRun
 #直接运行应用
-normal_appRun
+# normal_appRun 1>/dev/null
 
 # 查找编译产物中的函数
 objdump --syms $_appPath 2>./error.log | grep TL_TmPnt__update
 
 #运行frida命令前，删除所有之前产生的日志文件
 logFPattern="InterceptFnSym-$_appName-*"
-rm -v $logFPattern
+# rm -v $logFPattern
 
 outJsFPath=./InterceptFnSym_generated.js
 
 # 以frida运行应用
 $_CondaFrida  --load $outJsFPath        --file  $_appPath
 ls -lht $logFPattern
-
-exit 0
-#日志后处理(日志文件更名)
-#  'appName--' 是analyze_by_graph/config.py获取应用名称的依据, 不要乱动 
-FridaOut="/gain/frida-out/appName--${_appName}" && mkdir -p ${FridaOut}
-_LogFP_Pure="${FridaOut}/Pure-${now}.log"
-mv $(ls  $logFPattern) $_LogFP_Pure
-
+wc -l $logFPattern
 
 
 outTsFPath=InterceptFnSym_generated.ts
 #删除中间结果文件 .ts .js
 rm -v $outTsFPath $outJsFPath
+
