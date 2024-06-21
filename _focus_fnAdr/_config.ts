@@ -17,6 +17,7 @@ const _modules_exclude:string[]=[
   //排除 linux可执行elf文件的基础依赖
   "linux-vdso.so.1",
   // "libstdc++.so.6",
+  "libstdc++.so.6.0.30",
   "libz.so.1",
   "libm.so.6",
   "libgcc_s.so.1",
