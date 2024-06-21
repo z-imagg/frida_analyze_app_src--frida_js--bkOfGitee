@@ -21,14 +21,18 @@ _ErrCode=2
 _ErrMsg2="错误2,可执行应用程序不存在[$_appPath]，错误代码[$_ErrCode]"
 [[ -f $_appPath ]] || { echo $_ErrMsg2 ; exit $_ErrCode ;}
 
-#应用运行前准备工作
-bash  pre_appRun.sh
-
+#应用运行 函数
+function normal_appRun(){
 #尝试直接运行该应用,以确认是否能正常运行
-_appCmdFull="$_appPath $_appArgLsAsTxt"
-_Err3Code=3
-_Err3Msg="错误3,直接运行该应用失败[$_appCmdFull]，错误代码[$_Err3Code]"
+local _appCmdFull="$_appPath $_appArgLsAsTxt"
+local _Err3Code=3
+local _Err3Msg="错误3,直接运行该应用失败[$_appCmdFull]，错误代码[$_Err3Code]"
 $_appCmdFull ||  { echo $_Err3Msg ; exit $_Err3Code ;}
+}
+#应用运行前准备工作
+source  /app2/sleuthkit/app_run/appRun.sh && pre_appRun
+#直接运行应用
+normal_appRun
 
 # 查找编译产物中的函数
 objdump --syms $_appPath 2>./error.log | grep TL_TmPnt__update
