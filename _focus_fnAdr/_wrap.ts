@@ -9,10 +9,10 @@ const mg_moduleFilter_ls: MG_ModuleFilter[]=[
   ..._moduleFilterLs,
   //讨厌其所有函数的模块
   //   linux操作系统基础库、本应用调用的一些不需要关注的库
-  ...MG_ModuleFilter.build_excludeAllFunc_moduleLs(_modules_exclude),
+  ...MG_ModuleFilter.build_excludeAllFn_moduleLs(_modules_exclude),
   //关注其所有函数的模块
   //   实际没有这样的模块
-  ...MG_ModuleFilter.build_includeAllFunc_moduleLs(_modules_include)
+  ...MG_ModuleFilter.build_includeAllFn_moduleLs(_modules_include)
 
 ];
 
@@ -38,7 +38,6 @@ function focus_fnAdr(fnAdr:NativePointer){
   //查找该模块的函数名过滤器
   const moduleFilter:MG_ModuleFilter=mg_moduleFilter_searchByModuleName[moduleName];
 
-  //若 模块过滤器找不到， 则警告 并 排除该模块
   if(moduleFilter==null){
     logWriteLn(`[警告]: 不关注此模块; 此模块没有对应的过滤器,请修改配置文件[_focus_fnAdr/_config.ts]，以增加模块[moduleName=${moduleName}]的过滤器 `)
     return false;
