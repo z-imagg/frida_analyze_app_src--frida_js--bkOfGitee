@@ -1,4 +1,5 @@
 // [依赖] : _logFile.ts/logWriteLn
+// [描述] : clang-var插件中runtime c00中destroy函数json串出参 操纵
 
 enum FnArgIdx_DestroyRtC00{
 // destroyVarLs_inFn__RtC00 函数签名
@@ -9,6 +10,8 @@ enum FnArgIdx_DestroyRtC00{
     jsonTxtOut_=2,
     jTxtOLenOut_=3,
 }
+
+//clang-var插件中runtime c00中destroy函数json串出参 操纵.
 class FnOutArg_DestroyRtC00{
     
   int__jTxtOLimit:number
@@ -24,7 +27,7 @@ class FnOutArg_DestroyRtC00{
     return new FnOutArg_DestroyRtC00(args, _int__jTxtOLimit, _charArr__jsonTxtOut_,_intPtr__jTxtOLenOut_);
   }
     
-//进入函数func05_userQuery的处理
+//给出参赋以全局内存空间
   constructor(
     args:InvocationArguments,
     _int__jTxtOLimit:number,
@@ -51,27 +54,27 @@ class FnOutArg_DestroyRtC00{
     this.intPtr_jTxtOLenOut_=_intPtr_jTxtOLenOut_ //保留 之
     }
     
-    //离开函数func05_userQuery的处理
-      Leave(){
-      //现在是函数离开时, 由于函数进入时 参数们args[k]被保存在thiz下, 因此此时可以拿出来
-      logWriteLn(`[frida_js Fn05OutArg.Leave] json(this)=[${JSON.stringify(this)}]`);
+  //拿出参内容
+  Leave(){
+    //现在是函数离开时, 由于函数进入时 参数们args[k]被保存在thiz下, 因此此时可以拿出来
+    logWriteLn(`[frida_js Fn05OutArg.Leave] json(this)=[${JSON.stringify(this)}]`);
+
+  // destroyVarLs_inFn__RtC00 函数签名
+  // void destroyVarLs_inFn__RtC00(_VarDeclLs * _vdLs, int jTxtOLimit, char* jsonTxtOut_, int* jTxtOLenOut_);
     
-// destroyVarLs_inFn__RtC00 函数签名
-// void destroyVarLs_inFn__RtC00(_VarDeclLs * _vdLs, int jTxtOLimit, char* jsonTxtOut_, int* jTxtOLenOut_);
-      
-      //this.int__jTxtOLimit // == jTxtOLimit
-      logWriteLn(`[frida_js  Fn05OutArg.Leave] int__jTxtOLimit=[${this.int__jTxtOLimit}]`); 
+    //this.int__jTxtOLimit // == jTxtOLimit
+    logWriteLn(`[frida_js  Fn05OutArg.Leave] int__jTxtOLimit=[${this.int__jTxtOLimit}]`); 
+
+    //函数离开时, 获取到 函数出参 jsonTxtOut_
+    const arg3_readCString:string| null=this.charArr__jsonTxtOut_.readCString() // == jsonTxtOut_
+    if(arg3_readCString){
+      logWriteLn(`[frida_js  Fn05OutArg.Leave] arg3_readCString=[${arg3_readCString}]`);
+    }
     
-      //函数离开时, 获取到 函数出参 jsonTxtOut_
-      const arg3_readCString:string| null=this.charArr__jsonTxtOut_.readCString() // == jsonTxtOut_
-      if(arg3_readCString){
-        logWriteLn(`[frida_js  Fn05OutArg.Leave] arg3_readCString=[${arg3_readCString}]`);
-      }
-      
-      //函数离开时, 获取到 函数出参 jTxtOLenOut_
-      const arg4_readInt:number=this.intPtr_jTxtOLenOut_.readInt() // == jTxtOLenOut_
-      logWriteLn(`[frida_js  Fn05OutArg.Leave] arg4_readInt=[${arg4_readInt}]`);
-      // this.intPtr_jTxtOLenOut_.writeInt(-88); // 修改 输入参数 jTxtOLenOut_ 为 -88; 这句是为了实验，并无业务目的
-      }
+    //函数离开时, 获取到 函数出参 jTxtOLenOut_
+    const arg4_readInt:number=this.intPtr_jTxtOLenOut_.readInt() // == jTxtOLenOut_
+    logWriteLn(`[frida_js  Fn05OutArg.Leave] arg4_readInt=[${arg4_readInt}]`);
+    // this.intPtr_jTxtOLenOut_.writeInt(-88); // 修改 输入参数 jTxtOLenOut_ 为 -88; 这句是为了实验，并无业务目的
+    }
     
     }
