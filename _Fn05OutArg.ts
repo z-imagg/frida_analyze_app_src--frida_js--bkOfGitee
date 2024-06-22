@@ -1,6 +1,6 @@
 // [依赖] : _logFile.ts/logWriteLn
 
-enum Fn05ArgIdx{
+enum FnArgIdx_DestroyRtC00{
 // destroyVarLs_inFn__RtC00 函数签名
 // /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/runtime_c__vars_fn.h
 // void destroyVarLs_inFn__RtC00(_VarDeclLs * _vdLs, int jTxtOLimit, char* jsonTxtOut_, int* jTxtOLenOut_);
@@ -36,17 +36,17 @@ class FnOutArg_DestroyRtC00{
     // const arg0_toInt32:number=args[0].toInt32() // ==  _vdLs
     
     // args[1].toInt32() // == jTxtOLimit
-    args[Fn05ArgIdx.jTxtOLimit]=new NativePointer(_int__jTxtOLimit);// 修改 输入参数 jTxtOLimit 为 _int__jTxtOLimit
+    args[FnArgIdx_DestroyRtC00.jTxtOLimit]=new NativePointer(_int__jTxtOLimit);// 修改 输入参数 jTxtOLimit 为 _int__jTxtOLimit
     logWriteLn(`[frida_js Fn05OutArg.constructor] jTxtOLimit=[${_int__jTxtOLimit}]`); 
     this.int__jTxtOLimit=_int__jTxtOLimit
     
     // args[2].readCString() // == jsonTxtOut_
-    args[Fn05ArgIdx.jsonTxtOut_]=_charArr__jsonTxtOut_ // 修改 入参 jsonTxtOut_ 为 _charArr__jsonTxtOut_
+    args[FnArgIdx_DestroyRtC00.jsonTxtOut_]=_charArr__jsonTxtOut_ // 修改 入参 jsonTxtOut_ 为 _charArr__jsonTxtOut_
     logWriteLn(`[frida_js Fn05OutArg.constructor] jsonTxtOut_=[${_charArr__jsonTxtOut_}]`); 
     this.charArr__jsonTxtOut_=_charArr__jsonTxtOut_ //保留 之
     
     //  args[3].readInt() // == jTxtOLenOut_
-    args[Fn05ArgIdx.jTxtOLenOut_]=_intPtr_jTxtOLenOut_ // 修改 入参 jTxtOLenOut_ 为 _intPtr_jTxtOLenOut_
+    args[FnArgIdx_DestroyRtC00.jTxtOLenOut_]=_intPtr_jTxtOLenOut_ // 修改 入参 jTxtOLenOut_ 为 _intPtr_jTxtOLenOut_
     logWriteLn(`[frida_js Fn05OutArg.constructor] jTxtOLenOut_=[${_intPtr_jTxtOLenOut_}]`); 
     this.intPtr_jTxtOLenOut_=_intPtr_jTxtOLenOut_ //保留 之
     }
