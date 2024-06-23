@@ -52,11 +52,19 @@ let gLogId:number = 0;
 //  进程_线程　对应的　最新时刻值
 const g_TmPntTb:Map<MG_AbsThrdId,MG_TimePoint> = new Map();
 
+const C_Lang__sizeof_int=4; // sizeof(int)
+const C_jsonTxtOut_Limit:number = 1024*2;
+const g_charArr__jsonTxtOut_:NativePointer=Memory.alloc(C_jsonTxtOut_Limit-1)
+const g_intPtr__jTxtOLenOut_:NativePointer=Memory.alloc(C_Lang__sizeof_int);
+
 // 导入 ' _FnLog.ts 函数调用描述(函数调用日志) '
 //MyTsCmd//_replaceCurLineByTsFileContent("./_FnLog.ts" , curNextLn)
 
 // 导入 ' _adrEq.ts 判断两个函数地址值 是否相同 '
 //MyTsCmd//_replaceCurLineByTsFileContent("./_adrEq.ts" , curNextLn)
+
+// 导入 ' _FnOutArg_DestroyRtC00.ts  clang-var插件中runtime c00中destroy函数json串出参 操纵 '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_FnOutArg_DestroyRtC00.ts" , curNextLn)
 
 //日志开头标记
 //  以换行开头的理由是，避开应用程序日志中不换行的日志 造成的干扰。
@@ -76,6 +84,13 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
 // 函数进入时, 调用本地函数 'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)', 用以表达 此线程的此次函数调用的 _vdLs 和 时刻点 tmPntVal 一 一 对 应
   call_nativeFn__TL_TmPnt__update(curThreadId,tmPntVal)
 
+  //clang-var插件中runtime c00中destroy函数json串出参 操纵.  给出参赋以全局内存空间
+  if(fnSym && fnSym.name=="destroyVarLs_inFn__RtC00"){
+    logWriteLn(`[frida_js, OnFnEnterBusz] before Fn05OutArg Enter`); 
+    thiz.fnOutArg_DestroyRtC00=FnOutArg_DestroyRtC00.Enter(args,C_jsonTxtOut_Limit,g_charArr__jsonTxtOut_,g_intPtr__jTxtOLenOut_);
+    logWriteLn(`[frida_js, OnFnEnterBusz] after Fn05OutArg Enter`); 
+    //走到这里了
+  }
 }
 
 /**  OnLeave ，函数离开
@@ -90,6 +105,13 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
     logWriteLn(`##断言失败，onEnter、onLeave的函数地址居然不同？ 立即退出进程，排查问题. OnLeave.fnAdr=【${fnAdr}】, thiz.fnEnterLog.fnAdr=【${thiz.fnEnterLog.fnAdr}】, thiz.fnEnterLog=【${thiz.fnEnterLog.toJson()}】,fnLeaveLog=【${fnLeaveLog.toJson()}】`)
   }
   logWriteLn(`${LogLinePrefix}${fnLeaveLog.toJson()}`)
+
+  //clang-var插件中runtime c00中destroy函数json串出参 操纵.  拿出参内容
+  if(thiz && thiz.fnEnterLog && thiz.fnEnterLog.fnSym && thiz.fnEnterLog.fnSym.name=="destroyVarLs_inFn__RtC00"){
+    logWriteLn(`[frida_js, OnFnLeaveBusz] before FnOutArg_DestroyRtC00 Leave`); 
+    thiz.fnOutArg_DestroyRtC00.Leave();
+    logWriteLn(`[frida_js, OnFnLeaveBusz] after FnOutArg_DestroyRtC00 Leave`); 
+  }
 }
 
 // '包装' 使用了  '实现' 和 '配置'

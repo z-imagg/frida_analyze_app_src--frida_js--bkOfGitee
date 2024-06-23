@@ -9,6 +9,14 @@
 
 - [术语] : _x == 该处的局部变量x
 
+- [术语] : Nm == Name == 名字
+
+- [术语] : Abi == Application binary interface  == '应用程序二进制接口 描述在可执行文件中如何调用接口函数'
+
+- [术语] : Api == Application program interface  == '应用程序编程接口 描述以源代码如何调用接口函数'
+
+- [术语] : fnNmAbi == functionNameAbi == 在可执行文件中的函数名字
+
 
 
 ## frida命令只允许目标应用携带非中划线参数
