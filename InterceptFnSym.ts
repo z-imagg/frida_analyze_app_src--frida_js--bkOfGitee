@@ -99,7 +99,7 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   }
 
   // 对 函数 DestroyRtCxx 做特定处理
-  if(fnSym && fnSym.name==mg_fnName__DestroyRtCxx_outArgString){
+  if(fnSym && fnSym.name==mg_fnName__DestroyRtCxx){
     logWriteLn(`[frida_js, OnFnEnterBusz] before FnOutArg_DestroyRtCxx Enter`); 
     thiz.cxxFnOutArg_stdString__Fn06=FnOutArg_DestroyRtCxx.Enter(args);
     logWriteLn(`[frida_js, OnFnEnterBusz] after FnOutArg_DestroyRtCxx Enter`); 
@@ -127,7 +127,7 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   }
 
   //对 函数 DestroyRtCxx 做特定处理
-  if(thiz && thiz.fnEnterLog && thiz.fnEnterLog.fnSym && thiz.fnEnterLog.fnSym.name==mg_fnName__DestroyRtCxx_outArgString      && thiz  && thiz.cxxFnOutArg_stdString__Fn06){
+  if(thiz && thiz.fnEnterLog && thiz.fnEnterLog.fnSym && thiz.fnEnterLog.fnSym.name==mg_fnName__DestroyRtCxx      && thiz  && thiz.cxxFnOutArg_stdString__Fn06){
     logWriteLn(`[frida_js, OnFnLeaveBusz] before FnOutArg_DestroyRtCxx Leave`); 
     thiz.cxxFnOutArg_stdString__Fn06.Leave();
     logWriteLn(`[frida_js, OnFnLeaveBusz] after FnOutArg_DestroyRtCxx Leave`); 

@@ -1,8 +1,8 @@
 // [依赖] : _logFile.ts/logWriteLn
 // [描述] : clang-var插件中runtime cxx中destroy函数json串出参 操纵
 
-// const mg_abiName__cxxFunc06_outArgString:string="_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE";
-const mg_fnName__DestroyRtCxx_outArgString:string="destroyVarLs_inFn__RtCxx";
+// const mg_abiName__DestroyRtCxx:string="_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE";
+const mg_fnName__DestroyRtCxx:string="destroyVarLs_inFn__RtCxx";
 
 enum FnArgIdx_Fn06{
 // cxxFunc06_outArgString 函数签名
