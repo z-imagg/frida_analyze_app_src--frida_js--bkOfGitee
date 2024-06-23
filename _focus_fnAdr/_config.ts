@@ -9,7 +9,7 @@ const _modules_include=[
   "other_module_1.so",
 ];
 // "libstdc++.so.6.0.30", //?如果libstdc++的代码 穿插在业务代码中， 若忽略之 则调用链条断裂
-// ldd /fridaAnlzAp/frida_js_demo/app.elf  | awk '{print " \""$1"\","}'
+// ldd /app2/sleuthkit/tools/autotools/tsk_recover  | awk '{print " \""$1"\","}'
 //讨厌其所有函数的模块
 const _modules_exclude:string[]=[
   //总是要排除frida-agent.so的， 否则frida会自己调用自己 从而陷入 自死循环 中
@@ -23,11 +23,14 @@ const _modules_exclude:string[]=[
   "libgcc_s.so.1",
   "libc.so.6",
   "ld-linux-x86-64.so.2",
+  "libstdc++.so.6", "libstdc++.so.6.0.30",
 
   //以下这些是谁带来的?  'ldd ...app.elf' 中貌似没有, 难道是 frida带来的
+  "libm.so.6",
   "libpthread.so.0",
   "librt.so.1",
-  "libdl.so.2"
+  "libdl.so.2",
+  "libgcc_s.so.1"
 ];
 
 
@@ -139,7 +142,10 @@ const _mainModule__clgVarRuntime_c_dep_clibsList_fnNmLs:string[]=[
 
 const _mainModule__exclude_fnNmLs:string[]=[
 //跳过sleuthkit的巨量调用函数们
-//   sleuthkit暂无巨量调用函数
+"fridaHelper__cxxFuncWrap__std_string_new",
+"fridaHelper__cxxFuncWrap__std_string_delete",
+"_Z41fridaHelper__cxxFuncWrap__std_string_sizePv",
+"_Z41fridaHelper__cxxFuncWrap__std_string_cstrPviPc",
 
 //analyze_by_graph 打印大于1万次调用的函数们（方便返工修改frida_js以跳过大量调用函数）
 //   sleuthkit暂无调用次数大于1万次的函数
