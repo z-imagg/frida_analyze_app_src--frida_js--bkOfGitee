@@ -36,6 +36,9 @@ source  /app2/sleuthkit/app_run/appRun.sh && pre_appRun
 # normal_appRun 1>/dev/null
 
 # 查找编译产物中的函数
+#  查找编译产物中 std::string的无参构造函数
+objdump --syms $_appPath | grep fridaHelper
+objdump --syms $_appPath 2>./error.log | grep " main"
 objdump --syms $_appPath 2>./error.log | grep TL_TmPnt__update
 
 #运行frida命令前，删除所有之前产生的日志文件
@@ -46,11 +49,14 @@ outJsFPath=./InterceptFnSym_generated.js
 
 # 以frida运行应用
 $_CondaFrida  --load $outJsFPath        --file  $_appPath
-ls -lht $logFPattern
-wc -l $logFPattern
+
 
 
 outTsFPath=InterceptFnSym_generated.ts
 #删除中间结果文件 .ts .js
-rm -v $outTsFPath $outJsFPath
+#rm -v $outTsFPath $outJsFPath
+mv  $outTsFName  ${outTsFName}.txt
+mv  $outJsFName  ${outJsFName}.txt
 
+ls -lht $logFPattern
+wc -l $logFPattern

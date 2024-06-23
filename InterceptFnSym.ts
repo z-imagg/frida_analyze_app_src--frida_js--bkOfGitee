@@ -66,6 +66,12 @@ const g_intPtr__jTxtOLenOut_:NativePointer=Memory.alloc(C_Lang__sizeof_int);
 // 导入 ' _FnOutArg_DestroyRtC00.ts  clang-var插件中runtime c00中destroy函数json串出参 操纵 '
 //MyTsCmd//_replaceCurLineByTsFileContent("./_FnOutArg_DestroyRtC00.ts" , curNextLn)
 
+// 导入 ' _nativeFn__fridaHelper__cxxFuncWrap__std_string.ts    frida 通过本地助手函数 间接调用 c++ std::string 的new 、 delete   '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_nativeFn__fridaHelper__cxxFuncWrap__std_string.ts" , curNextLn)
+
+// 导入 ' _FnOutArg_DestroyRtCxx.ts  修改函数的类型为std::string的出参   '
+//MyTsCmd//_replaceCurLineByTsFileContent("./_FnOutArg_DestroyRtCxx.ts" , curNextLn)
+
 //日志开头标记
 //  以换行开头的理由是，避开应用程序日志中不换行的日志 造成的干扰。
 const LogLinePrefix:string="\n__@__@";
@@ -91,6 +97,13 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
     logWriteLn(`[frida_js, OnFnEnterBusz] after Fn05OutArg Enter`); 
     //走到这里了
   }
+
+  // 对 函数 DestroyRtCxx 做特定处理
+  if(fnSym && fnSym.name==mg_fnName__DestroyRtCxx){
+    logWriteLn(`[frida_js, OnFnEnterBusz] before FnOutArg_DestroyRtCxx Enter`); 
+    thiz.cxxFnOutArg_stdString__DestroyRtCxx=FnOutArg_DestroyRtCxx.Enter(args);
+    logWriteLn(`[frida_js, OnFnEnterBusz] after FnOutArg_DestroyRtCxx Enter`); 
+  }
 }
 
 /**  OnLeave ，函数离开
@@ -112,6 +125,13 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
     thiz.fnOutArg_DestroyRtC00.Leave();
     logWriteLn(`[frida_js, OnFnLeaveBusz] after FnOutArg_DestroyRtC00 Leave`); 
   }
+
+  //对 函数 DestroyRtCxx 做特定处理
+  if(thiz && thiz.fnEnterLog && thiz.fnEnterLog.fnSym && thiz.fnEnterLog.fnSym.name==mg_fnName__DestroyRtCxx      && thiz  && thiz.cxxFnOutArg_stdString__DestroyRtCxx){
+    logWriteLn(`[frida_js, OnFnLeaveBusz] before FnOutArg_DestroyRtCxx Leave`); 
+    thiz.cxxFnOutArg_stdString__DestroyRtCxx.Leave();
+    logWriteLn(`[frida_js, OnFnLeaveBusz] after FnOutArg_DestroyRtCxx Leave`); 
+  }
 }
 
 // '包装' 使用了  '实现' 和 '配置'
@@ -126,6 +146,15 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
 function _main_(){
   // 获取 本地函数   'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)'
   get_nativeFn__clgVarRt__TL_TmPnt__update();
+
+  // 获取 本地函数 fridaHelper__cxxFuncWrap__std_string_new
+  get__fridaHelper__cxxFuncWrap__std_string_new();
+  //获取 本地函数 fridaHelper__cxxFuncWrap__std_string_delete
+  get__fridaHelper__cxxFuncWrap__std_string_delete();
+  //获取 本地函数 get__fridaHelper__cxxFuncWrap__std_string_size
+  get__fridaHelper__cxxFuncWrap__std_string_size();
+  //获取 本地函数 get__fridaHelper__cxxFuncWrap__std_string_cstr
+  get__fridaHelper__cxxFuncWrap__std_string_cstr();
 
   const fnAdrLs:NativePointer[]=DebugSymbol.findFunctionsMatching("*");
   const fnAdrCnt=fnAdrLs.length
