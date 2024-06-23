@@ -14,7 +14,7 @@ enum FnArgIdx_Fn06{
 }
 
 //clang-var插件中runtime cxx中destroy函数json串出参 操纵.
-class CxxFnOutArg_DestroyRtCxx{
+class FnOutArg_DestroyRtCxx{
 
   //  /fridaAnlzAp/frida_js_demo/app.cpp / fridaHelper__cxxFuncWrap__std_string_cstr / _Err1 == 1
   static  stdStr_2_fridaBuf__Err1:number = 1;
@@ -27,7 +27,7 @@ class CxxFnOutArg_DestroyRtCxx{
     
   static Enter(
     args:InvocationArguments,
-  ):CxxFnOutArg_DestroyRtCxx|null{
+  ):FnOutArg_DestroyRtCxx|null{
 
   let  _ptrCxxStdStr__jsonTxtOut_:NativePointer;
     //调用本地函数 fridaHelper__cxxFuncWrap__std_string_new 
@@ -38,7 +38,7 @@ class CxxFnOutArg_DestroyRtCxx{
     logWriteLn(`[frida_js CxxFnOutArg_DestroyRtCxx.Enter] _ptrCxxStdStr__jsonTxtOut_=[${_ptrCxxStdStr__jsonTxtOut_}]`); 
     
     if(_ptrCxxStdStr__jsonTxtOut_){
-      return new CxxFnOutArg_DestroyRtCxx(args,  _ptrCxxStdStr__jsonTxtOut_);
+      return new FnOutArg_DestroyRtCxx(args,  _ptrCxxStdStr__jsonTxtOut_);
     }
 
   return null;
@@ -70,16 +70,16 @@ class CxxFnOutArg_DestroyRtCxx{
 // void destroyVarLs_inFn__RtCxx(_VarDeclLs * _vdLs, std::string * jsonTxtOut_)
     
     // 不关注参数 _vdLs
-    
+
     //函数离开时, 获取到 函数出参 jsonTxtOut_
     if(this.ptrCxxStdStr__jsonTxtOut_){
         //调用std::string::size方法
         const stdStr_size:number=nativeFn__fridaHelper__cxxFuncWrap__std_string_size(this.ptrCxxStdStr__jsonTxtOut_)
         //为cstr分配缓冲区
-        const cStrBuf:NativePointer=Memory.alloc(stdStr_size+CxxFnOutArg_DestroyRtCxx.stdStr_2_fridaBuf_gap+1);
+        const cStrBuf:NativePointer=Memory.alloc(stdStr_size+FnOutArg_DestroyRtCxx.stdStr_2_fridaBuf_gap+1);
         //调用std::string::c_str方法
         const retCode:number=nativeFn__fridaHelper__cxxFuncWrap__std_string_cstr(this.ptrCxxStdStr__jsonTxtOut_, stdStr_size, cStrBuf);
-        if(retCode==CxxFnOutArg_DestroyRtCxx.stdStr_2_fridaBuf__OK){
+        if(retCode==FnOutArg_DestroyRtCxx.stdStr_2_fridaBuf__OK){
           const jsonTxtOut_CStr:string| null=cStrBuf.readCString() // == jsonTxtOut_
           if(jsonTxtOut_CStr){
             logWriteLn(`[frida_js  CxxFnOutArg_DestroyRtCxx.Leave] jsonTxtOut_CStr=[${jsonTxtOut_CStr}]`);
