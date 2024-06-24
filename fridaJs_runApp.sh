@@ -33,17 +33,20 @@ $_appCmdFull ||  { echo $_Err3Msg ; exit $_Err3Code ;}
 #应用运行前准备工作
 source  /app2/sleuthkit/app_run/appRun.sh && pre_appRun
 #直接运行应用
-# normal_appRun 1>/dev/null
+normal_appRun  > normal_appRun.log
+echo -n "原生运行sleuthkit获得的vdLs行数为:"
+grep --fixed-strings '{"vdLs":' normal_appRun.log  | wc -l 
+#原生运行sleuthkit获得的vdLs行数为:56006
 
 # 查找编译产物中的函数
 #  查找编译产物中 std::string的无参构造函数
-objdump --syms $_appPath | grep fridaHelper
-objdump --syms $_appPath 2>./error.log | grep " main"
-objdump --syms $_appPath 2>./error.log | grep TL_TmPnt__update
+objdump --syms $_appPath 2>>./error.log  | grep fridaHelper
+objdump --syms $_appPath 2>>./error.log | grep " main"
+objdump --syms $_appPath 2>>./error.log | grep TL_TmPnt__update
 
 #运行frida命令前，删除所有之前产生的日志文件
-logFPattern="InterceptFnSym-$_appName*"
-# rm -v $logFPattern
+logF="InterceptFnSym-$_appName.log"
+# rm -v $logF
 
 outJsFPath=./InterceptFnSym_generated.js
 
@@ -58,5 +61,13 @@ outTsFPath=InterceptFnSym_generated.ts
 mv  $outTsFPath  ${outTsFPath}.txt
 mv  $outJsFPath  ${outJsFPath}.txt
 
-ls -lht $logFPattern
-wc -l $logFPattern
+ls -lht $logF
+wc -l $logF
+
+echo -n "frida_js运行sleuthkit获得的vdLs行数为:"
+grep --fixed-strings '{"vdLs":' $logF | wc -l 
+#frida_js运行sleuthkit获得的vdLs行数为:148
+
+# grep --fixed-strings "[frida_js  CxxFnOutArg_DestroyRtCxx.Leave] jsonTxtOut_CStr="   InterceptFnSym-tsk_recover.log |wc -l     #1
+# grep --fixed-strings "[frida_js  Fn05OutArg.Leave] arg3_readCString="   InterceptFnSym-tsk_recover.log  | wc -l  #148
+
