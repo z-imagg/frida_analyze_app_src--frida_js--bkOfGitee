@@ -64,13 +64,13 @@ mv  $outJsFPath  ${outJsFPath}.txt
 
 ls -lht $logF
 wc -l $logF
-# 2302043 InterceptFnSym-tsk_recover.log
+# 2301906 InterceptFnSym-tsk_recover.log
 # -rwxrwxrwx   294M  6月 24 13:59 InterceptFnSym-tsk_recover.log
 
 
 echo -n "frida_js运行sleuthkit获得的vdLs行数为:"
 grep --fixed-strings '{"vdLs":' $logF | wc -l 
-#frida_js运行sleuthkit获得的vdLs行数为:56112
+#frida_js运行sleuthkit获得的vdLs行数为:56006
 
 
 #frida_js运行sleuthkit,调整出参jsonTxtOut_ 长度超过 sleuthkit运行出现的最大长度， 则正常运行  , 无超出日志, 
