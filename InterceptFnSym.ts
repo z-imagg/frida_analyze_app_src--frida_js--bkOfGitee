@@ -58,8 +58,6 @@ const g_TmPntTb:Map<MG_AbsThrdId,MG_TimePoint> = new Map();
 const C_Lang__sizeof_int=4; // sizeof(int)
 //  调整出参jsonTxtOut_ 长度超过 sleuthkit运行出现的最大长度 51719 
 const C_jsonTxtOut_Limit:number = 1024*60;
-const g_charArr__jsonTxtOut_:NativePointer=Memory.alloc(C_jsonTxtOut_Limit-1)
-const g_intPtr__jTxtOLenOut_:NativePointer=Memory.alloc(C_Lang__sizeof_int);
 
 // 导入 ' _FnLog.ts 函数调用描述(函数调用日志) '
 //MyTsCmd//_replaceCurLineByTsFileContent("./_FnLog.ts" , curNextLn)
@@ -97,6 +95,8 @@ function OnFnEnterBusz(thiz:InvocationContext,  args:InvocationArguments){
   //clang-var插件中runtime c00中destroy函数json串出参 操纵.  给出参赋以全局内存空间
   if(fnSym && fnSym.name=="destroyVarLs_inFn__RtC00"){
     logWriteLn(`[frida_js, OnFnEnterBusz] before Fn05OutArg Enter`); 
+    const g_charArr__jsonTxtOut_:NativePointer=Memory.alloc(C_jsonTxtOut_Limit-1)
+    const g_intPtr__jTxtOLenOut_:NativePointer=Memory.alloc(C_Lang__sizeof_int);
     thiz.fnOutArg_DestroyRtC00=FnOutArg_DestroyRtC00.Enter(args,C_jsonTxtOut_Limit,g_charArr__jsonTxtOut_,g_intPtr__jTxtOLenOut_);
     logWriteLn(`[frida_js, OnFnEnterBusz] after Fn05OutArg Enter`); 
     //走到这里了
