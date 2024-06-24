@@ -42,7 +42,7 @@ objdump --syms $_appPath 2>./error.log | grep " main"
 objdump --syms $_appPath 2>./error.log | grep TL_TmPnt__update
 
 #运行frida命令前，删除所有之前产生的日志文件
-logFPattern="InterceptFnSym-$_appName-*"
+logFPattern="InterceptFnSym-$_appName*"
 # rm -v $logFPattern
 
 outJsFPath=./InterceptFnSym_generated.js
