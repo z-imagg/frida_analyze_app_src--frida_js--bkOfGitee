@@ -56,7 +56,8 @@ let gLogId:number = 0;
 const g_TmPntTb:Map<MG_AbsThrdId,MG_TimePoint> = new Map();
 
 const C_Lang__sizeof_int=4; // sizeof(int)
-const C_jsonTxtOut_Limit:number = 1024*2;
+//  调整出参jsonTxtOut_ 长度超过 sleuthkit运行出现的最大长度 51719 
+const C_jsonTxtOut_Limit:number = 1024*60;
 const g_charArr__jsonTxtOut_:NativePointer=Memory.alloc(C_jsonTxtOut_Limit-1)
 const g_intPtr__jTxtOLenOut_:NativePointer=Memory.alloc(C_Lang__sizeof_int);
 

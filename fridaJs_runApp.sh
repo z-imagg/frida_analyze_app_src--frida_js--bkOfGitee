@@ -64,45 +64,14 @@ mv  $outJsFPath  ${outJsFPath}.txt
 
 ls -lht $logF
 wc -l $logF
+# 2302043 InterceptFnSym-tsk_recover.log
+# -rwxrwxrwx   294M  6月 24 13:59 InterceptFnSym-tsk_recover.log
+
 
 echo -n "frida_js运行sleuthkit获得的vdLs行数为:"
 grep --fixed-strings '{"vdLs":' $logF | wc -l 
 #frida_js运行sleuthkit获得的vdLs行数为:56112
 
-# grep --fixed-strings "[frida_js  CxxFnOutArg_DestroyRtCxx.Leave] jsonTxtOut_CStr="   InterceptFnSym-tsk_recover.log |wc -l     #1
-# grep --fixed-strings "[frida_js  Fn05OutArg.Leave] arg3_readCString="   InterceptFnSym-tsk_recover.log  | wc -l  #148
 
-#frida_js运行sleuthkit, 能正常跑完, clang-var的runtime c 的destroy函数的出参数jsonTxtOut_, 缓冲区为2048字节 长度不够, 长度超出日志 如下
+#frida_js运行sleuthkit,调整出参jsonTxtOut_ 长度超过 sleuthkit运行出现的最大长度， 则正常运行  , 无超出日志, 
 grep --fixed-strings "[Err01_Beyond_JsonTxtOutLimit]" InterceptFnSym-tsk_recover.log  
-#输出有很多行, 列举最长json如下:
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[40877],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[40877],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[5912],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[7142],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[5912],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[3271],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[6445],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[6281],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[5912],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[6281],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[40877],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[5912],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[7142],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[5912],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[3271],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[6445],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[6281],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[5912],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[2296],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[6281],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
-# [frida_js  Fn05OutArg.Leave] arg3_readCString=[[Err01_Beyond_JsonTxtOutLimit] ,jsonTxtLen=[51719],jTxtOLimit=[2048],__Gap_Danger_Char_Cnt=[9]; fixWay: use bigger jsonTxtOut_
