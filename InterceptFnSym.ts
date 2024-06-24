@@ -12,6 +12,9 @@
 //           2. 在 单应用进程 内 的某个线程 内 tmPnt 唯一且递增
 //           3. 在 单应用进程 内 ，线程1的 tmPnt 为 从1到N的连续自然数  ，线程2的 tmPnt 也为 从1到N的连续自然数 ，但是这两不同线程的 tmPnt 不表达任何关系
 
+
+const NULL_num=NULL.toInt32();
+
 // 以命令MyTsCmd从配置文件config.json读取应用程序名 填充到下一行
 //MyTsCmd//_replaceSubStrInNextLine('{}' ,  readTxtFile("./config.json") , curNextLn )
 const g_cfg:{[key:string]:string} =  {}; //配置文件文本
