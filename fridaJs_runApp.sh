@@ -55,8 +55,8 @@ $_CondaFrida  --load $outJsFPath        --file  $_appPath
 outTsFPath=InterceptFnSym_generated.ts
 #删除中间结果文件 .ts .js
 #rm -v $outTsFPath $outJsFPath
-mv  $outTsFName  ${outTsFName}.txt
-mv  $outJsFName  ${outJsFName}.txt
+mv  $outTsFPath  ${outTsFPath}.txt
+mv  $outJsFPath  ${outJsFPath}.txt
 
 ls -lht $logFPattern
 wc -l $logFPattern
