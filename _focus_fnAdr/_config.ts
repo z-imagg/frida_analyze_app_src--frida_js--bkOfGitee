@@ -51,11 +51,11 @@ const _mainModule__clgVarRuntime_fnNmLs:string[]=[
 
   //  /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/runtime_cpp__vars_fn.h
   // void destroyVarLs_inFn__RtCxx(_VarDeclLs * _vdLs, std::string * jsonTxtOut_)
-  "_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+  // "_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
 
   // /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/runtime_c__vars_fn.h
   //void destroyVarLs_inFn__RtC00(_VarDeclLs *_vdLs, int jsonTxtOutLimit, char* jsonTxtOut_, int* jsonTxtOutLen_)
-  "destroyVarLs_inFn__RtC00",
+  // "destroyVarLs_inFn__RtC00",
 
   "TL_TmPnt__printPtr",
 ];
