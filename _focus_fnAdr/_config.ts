@@ -142,39 +142,29 @@ const  _fnNameLs__hugeCallCnt:string[]=[
 
 // 跳过导致frida崩溃的函数
 const  _fnNameLs__libjvm__causeFridaCrash:string[]=[
-  "SafeFetch32_impl",
-/* 
-  Error: unable to intercept function at 0x7fffdb739610; please file a bug  (不确定 升级frida版本能否避免 ，等完事后可以试一试)
-      at value (frida/runtime/core.js:367)
-      at _main_ (/fridaAnlzAp/frida_js/InterceptFnSym_generated.js:847)
-      at _entry (/fridaAnlzAp/frida_js/InterceptFnSym_generated.js:926)
-      at apply (native)
-      at <anonymous> (frida/runtime/core.js:51)
+  "SafeFetch32_impl", "_SafeFetch32_continuation", "SafeFetchN_impl" ,"_SafeFetchN_continuation", 
+  /* 报错举例
+    Error: unable to intercept function at 0x7fffdb739610; please file a bug  (不确定 升级frida版本能否避免 ，等完事后可以试一试)
+        at value (frida/runtime/core.js:367)
+        at _main_ (/fridaAnlzAp/frida_js/InterceptFnSym_generated.js:847)
+        at _entry (/fridaAnlzAp/frida_js/InterceptFnSym_generated.js:926)
+        at apply (native)
+        at <anonymous> (frida/runtime/core.js:51)
+  
+    DebugSymbol.fromAddress(new NativePointer("0x7fffdb739610"))
+    {
+        "address": "0x7fffdb739610",
+        "column": 0,
+        "fileName": "",
+        "lineNumber": 0,
+        "moduleName": "libjvm.so",
+        "name": "SafeFetch32_impl"
+    }
 
-  DebugSymbol.fromAddress(new NativePointer("0x7fffdb739610"))
-  {
-      "address": "0x7fffdb739610",
-      "column": 0,
-      "fileName": "",
-      "lineNumber": 0,
-      "moduleName": "libjvm.so",
-      "name": "SafeFetch32_impl"
-  }
-
-*/
-"_SafeFetch32_continuation",
-/* 
-  0x7fffdb739613 报错同上
-  DebugSymbol.fromAddress(new NativePointer("0x7fffdb739613"))
-{
-    "address": "0x7fffdb739613",
-    "column": 0,
-    "fileName": "",
-    "lineNumber": 0,
-    "moduleName": "libjvm.so",
-    "name": "_SafeFetch32_continuation"
-}
-*/
+    一次性 多获取一些
+    DebugSymbol.findFunctionsMatching("*SafeFetch*").map(f=>DebugSymbol.fromAddress(f))
+  
+  */
   
 ];
 
