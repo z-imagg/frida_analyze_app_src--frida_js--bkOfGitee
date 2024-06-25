@@ -138,6 +138,7 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
   }
 }
 
+
 // '包装' 使用了  '实现' 和 '配置'
 // '配置' 使用了  '实现'
 // 导入 '模块的函数名过滤器 实现 '
@@ -181,6 +182,7 @@ function _main_(){
     const fnSym=DebugSymbol.fromAddress(fnAdr);
     //进度百分数
     const progress_percent:string=(100*k/fnAdrCnt).toFixed(2);
+    if(k%1000==0){ console.log(`Interceptor.attach进度 (百分数 # 第k个函数 # 函数总数): %${progress_percent} # ${k} # ${fnAdrCnt}`); }
     logWriteLn(`##${nowTxt()}; [关注函数]; fnSym.json= ${JSON.stringify(fnSym)}`)
 
 
