@@ -160,6 +160,20 @@ const  _fnNameLs__libjvm__causeFridaCrash:string[]=[
       "moduleName": "libjvm.so",
       "name": "SafeFetch32_impl"
   }
+
+*/
+"_SafeFetch32_continuation",
+/* 
+  0x7fffdb739613 报错同上
+  DebugSymbol.fromAddress(new NativePointer("0x7fffdb739613"))
+{
+    "address": "0x7fffdb739613",
+    "column": 0,
+    "fileName": "",
+    "lineNumber": 0,
+    "moduleName": "libjvm.so",
+    "name": "_SafeFetch32_continuation"
+}
 */
   
 ];
