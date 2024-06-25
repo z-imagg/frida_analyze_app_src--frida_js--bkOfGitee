@@ -139,6 +139,31 @@ const  _fnNameLs__hugeCallCnt:string[]=[
   //跳过sleuthkit的巨量调用函数们
   
 ];
+
+// 跳过导致frida崩溃的函数
+const  _fnNameLs__libjvm__causeFridaCrash:string[]=[
+  "SafeFetch32_impl",
+/* 
+  Error: unable to intercept function at 0x7fffdb739610; please file a bug  (不确定 升级frida版本能否避免 ，等完事后可以试一试)
+      at value (frida/runtime/core.js:367)
+      at _main_ (/fridaAnlzAp/frida_js/InterceptFnSym_generated.js:847)
+      at _entry (/fridaAnlzAp/frida_js/InterceptFnSym_generated.js:926)
+      at apply (native)
+      at <anonymous> (frida/runtime/core.js:51)
+
+  DebugSymbol.fromAddress(new NativePointer("0x7fffdb739610"))
+  {
+      "address": "0x7fffdb739610",
+      "column": 0,
+      "fileName": "",
+      "lineNumber": 0,
+      "moduleName": "libjvm.so",
+      "name": "SafeFetch32_impl"
+  }
+*/
+  
+];
+
 //  openjdk-24+0 的 java命令 的 静态依赖 、 动态依赖 请参考 :  https://prgrmz07.coding.net/p/app/d/jdk/git/tree/brch_jdk-24%2B0__cmdWrapBuildByClangVar_2024_0625_1358/_build_/test.sh
 // 静态依赖
 // _fieldK=1; ldd /app2/jdk-jdk-24-0/build_home/jdk/bin/java  | alias__fromPipe_rmRepeatBlank_getFieldK_rmBlank_LoopLineAdd2Quotes1comma
@@ -154,7 +179,7 @@ const  _fnNameLs__hugeCallCnt:string[]=[
 const _moduleFilterLs:MG_ModuleFilter[]=[
 MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._fnNameLs__clgVarRuntimeC00Cxx]),
 MG_ModuleFilter.build_excludeFuncLs("libjli.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
-MG_ModuleFilter.build_excludeFuncLs("libjvm.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
+MG_ModuleFilter.build_excludeFuncLs("libjvm.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__libjvm__causeFridaCrash]),
 MG_ModuleFilter.build_excludeFuncLs("libjimage.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
 MG_ModuleFilter.build_excludeFuncLs("libjava.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
 MG_ModuleFilter.build_excludeFuncLs("libjsvml.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
