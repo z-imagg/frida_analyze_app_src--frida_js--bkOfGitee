@@ -148,9 +148,17 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
 //MyTsCmd//_replaceCurLineByTsFileContent("./_focus_fnAdr/_wrap.ts" , curNextLn)
 
 function _main_(){
+  // 主模块 jdk/bin/java  中 没有 使用 runtimeC00 、 runtimeCxx ，  只有 依赖模块 使用了 ，因此 要先强制加载依赖模块, 依赖模块们 参考 https://prgrmz07.coding.net/p/app/d/jdk/git/tree/brch_jdk-24%2B0__cmdWrapBuildByClangVar_2024_0625_1358/_build_/find__clangVar_runtime_fn.out.txt
+  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjli.so");
+  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/server/libjvm.so");
+  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjimage.so");
+  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjava.so");
+  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjsvml.so");
+  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libnio.so");
+  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libnet.so");
+
   // 获取 本地函数   'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)'
   get_nativeFn__clgVarRt__TL_TmPnt__update();
-
   // 获取 本地函数 fridaHelper__cxxFuncWrap__std_string_new
   get__fridaHelper__cxxFuncWrap__std_string_new();
   //获取 本地函数 fridaHelper__cxxFuncWrap__std_string_delete
