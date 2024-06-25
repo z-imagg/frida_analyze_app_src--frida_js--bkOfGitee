@@ -127,17 +127,18 @@ const _fnNameLs__clgVarRuntimeCxx:string[]=[
 "_Z41fridaHelper__cxxFuncWrap__std_string_cstrPviPc",
 ];
 
-//analyze_by_graph 打印大于1万次调用的函数们（方便返工修改frida_js以跳过大量调用函数）
-const  _fnNameLs__hugeCallCnt:string[]=[
-  //跳过sleuthkit的巨量调用函数们
-  
-];
+
 
 const _fnNameLs__clgVarRuntimeC00Cxx:string[]=[
 ..._fnNameLs__clgVarRuntimeC00_dep_antirezSds,  ..._fnNameLs__clgVarRuntimeC00_dep_clibsList, ..._fnNameLs__clgVarRuntimeC00, 
 ..._fnNameLs__clgVarRuntimeCxx
  ];
-
+ 
+//analyze_by_graph 打印大于1万次调用的函数们（方便返工修改frida_js以跳过大量调用函数）
+const  _fnNameLs__hugeCallCnt:string[]=[
+  //跳过sleuthkit的巨量调用函数们
+  
+];
 //  openjdk-24+0 的 java命令 的 静态依赖 、 动态依赖 请参考 :  https://prgrmz07.coding.net/p/app/d/jdk/git/tree/brch_jdk-24%2B0__cmdWrapBuildByClangVar_2024_0625_1358/_build_/test.sh
 // 静态依赖
 // _fieldK=1; ldd /app2/jdk-jdk-24-0/build_home/jdk/bin/java  | alias__fromPipe_rmRepeatBlank_getFieldK_rmBlank_LoopLineAdd2Quotes1comma
