@@ -1,5 +1,7 @@
 {
-"命令注释": "sleuthkit恢复磁盘dd镜像文件到给定目录",
-"appPath":"/app2/sleuthkit/tools/autotools/tsk_recover",
-"appArgLsAsTxt": "/app2/sleuthkit/disk_partition_example/32M_FAT.dd.bs4M  /app2/sleuthkit/recovery_result_dir/32M_FAT_bs4M"
+"命令注释1": "openjdk-24+0 java运行TestClz.class",
+"命令注释2": " TestClz.java的完整运行过程 请参考  https://prgrmz07.coding.net/p/app/d/jdk/git/tree/brch_jdk-24%2B0__cmdWrapBuildByClangVar_2024_0625_1358/_build_/test.sh",
+"命令注释3": " 本配置运行的 命令 也在 test.sh 中",
+"appPath":"/app2/jdk-jdk-24-0/build_home/jdk/bin/java",
+"appArgLsAsTxt": "-cp /app2/jdk-jdk-24-0/_build_/ my_pkg.TestClz"
 }
