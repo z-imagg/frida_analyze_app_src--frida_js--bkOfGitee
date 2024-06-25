@@ -152,7 +152,7 @@ function _main_(){
   console.log(`[应用日志文件路径] ${mg_logFPath}`);
 
   // 主模块 jdk/bin/java  中 没有 使用 runtimeC00 、 runtimeCxx ，  只有 依赖模块 使用了 ，因此 要先强制加载依赖模块, 依赖模块们 参考 https://prgrmz07.coding.net/p/app/d/jdk/git/tree/brch_jdk-24%2B0__cmdWrapBuildByClangVar_2024_0625_1358/_build_/find__clangVar_runtime_fn.out.txt
-  const m:Module=Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjli.so");
+  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjli.so");
   Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/server/libjvm.so");
   Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjimage.so");
   Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjava.so");
