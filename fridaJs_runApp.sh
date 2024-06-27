@@ -1,14 +1,30 @@
 #!/bin/bash
 
-cd /fridaAnlzAp/frida_js/
+#【术语】  frida_js主脚本
+#【备注】  
+#【使用】
+#    bash /fridaAnlzAp/frida_js/fridaJs_runApp.sh
+
+_PrjHome=/fridaAnlzAp/frida_js/
+cd $_PrjHome
 
 #临时关闭Linux的ASLR(地址空间随机化) ， 否则 x.so 中的函数地址 每次都不同
 bash ASLR_disable.sh
 
+#加载依赖脚本
+source /app/bash-simplify/condaEnvActivate_pipInstallRequirements.sh
 
-#激活py环境 、 py依赖安装
-source py_envAct_depInstl.sh
-#输出 变量 _CondaFrida
+# miniconda激活环境、pip安装项目目录下的requirements.txt依赖
+_CondaHome=/app/Miniconda3-py310_22.11.1-1
+_condaEnvActivate_pipInstallRequirements  $_CondaHome  $_PrjHome
+_CondaBin=$_CondaHome/bin
+# _CondaActv=$_CondaBin/activate
+# _CondaPip=$_CondaBin/pip
+_CondaPy=$_CondaBin/python
+_CondaFrida=$_CondaBin/frida
+_CondaFridaCompile=$_CondaBin/frida-compile
+
+
 
 #重新编译 ts 为 js 
 bash ./rebuild_ts.sh
