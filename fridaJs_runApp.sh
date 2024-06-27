@@ -17,6 +17,10 @@ bash ASLR_disable.sh
 #加载依赖脚本
 source /app/bash-simplify/condaEnvActivate_pipInstallRequirements.sh
 
+#此脚本 允许某行出错 、允许使用未定义变量
+#'-e': 任一语句异常将导致此脚本终止; '-u': 使用未声明变量将导致异常;  
+set +e +u  
+
 # miniconda激活环境、pip安装项目目录下的requirements.txt依赖
 _CondaHome=/app/Miniconda3-py310_22.11.1-1
 _condaEnvActivate_pipInstallRequirements  $_CondaHome  $_PrjHome
