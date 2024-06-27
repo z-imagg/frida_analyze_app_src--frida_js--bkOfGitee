@@ -50,11 +50,11 @@ local _Err3Msg="错误3,直接运行该应用失败[$_appCmdFull]，错误代码
 $_appCmdFull ||  { echo $_Err3Msg ; exit $_Err3Code ;}
 }
 #应用运行前准备工作
-source  /app2/sleuthkit/app_run/appRun.sh && pre_appRun
+source  /app2/jdk-jdk-24-0/app_run/appRun.sh && pre_appRun
 #直接运行应用
 normal_appRun  > normal_appRun.log
-echo -n "原生运行sleuthkit获得的vdLs行数为:"
-grep --fixed-strings '{"vdLs":' normal_appRun.log  | wc -l 
+# echo -n "原生运行sleuthkit获得的vdLs行数为:"
+# grep --fixed-strings '{"vdLs":' normal_appRun.log  | wc -l 
 #原生运行sleuthkit获得的vdLs行数为:56006
 
 # 查找编译产物中的函数
