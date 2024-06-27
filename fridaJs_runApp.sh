@@ -3,7 +3,10 @@
 #【术语】  frida_js主脚本
 #【备注】  
 #【使用】
+#开发常用
 #    bash /fridaAnlzAp/frida_js/fridaJs_runApp.sh
+#您认为此次日志文件可以作为生产用， 从fridaJs本地日志文件产生fridaJs全局纯净日志文件, 以使得后续步骤 项目 analyze_by_graph 能看到 该日志文件 
+#  do__from_LocalFridaJsLog_Generate_GlobalFridaJsPureLog=true  bash /fridaAnlzAp/frida_js/fridaJs_runApp.sh
 
 _PrjHome=/fridaAnlzAp/frida_js/
 cd $_PrjHome
@@ -91,3 +94,21 @@ grep --fixed-strings '{"vdLs":' $logF | wc -l
 
 #frida_js运行sleuthkit,调整出参jsonTxtOut_ 长度超过 sleuthkit运行出现的最大长度， 则正常运行  , 无超出日志, 
 grep --fixed-strings "[Err01_Beyond_JsonTxtOutLimit]" InterceptFnSym-tsk_recover.log  
+
+
+#您认为此次日志文件可以作为生产用， 从fridaJs本地日志文件产生fridaJs全局纯净日志文件, 以使得后续步骤 项目 analyze_by_graph 能看到 该日志文件 
+function _genPureLog(){
+local FridaLogF_local__prePure="${FridaLogF_local}--prePure"
+grep __@__@   $FridaLogF_local >  $FridaLogF_local__prePure
+sed 's/^__@__@//' $FridaLogF_local__prePure > $FridaLogF_global
+}
+#  appPath中/替换为_
+_appPathAsFileName=(echo $appPath | tr '/' '_')
+#  _app2_jdk-jdk-24-0_build_home_jdk_bin_java
+_nowMs=$(date +%s)
+FridaLogF_local="/fridaAnlzAp/frida_js/InterceptFnSym-java.log"
+FridaLogF_global="/gain/frida-out/appName--${_appPathAsFileName}/Pure-${_nowMs}.log"
+_tip_msg="您认为此次日志文件可以作为生产用， 故而将此fridaLog本地日志文件[$FridaLogF_local]移动为全局日志文件[${FridaLogF_global}]， 以使得后续步骤 项目 analyze_by_graph 能看到 该日志文件  "
+_do_gen=false; [[ "X"$do__from_LocalFridaJsLog_Generate_GlobalFridaJsPureLog == "Xtrue" ]] && _do_gen=true;
+$_do_gen && { echo $_tip_msg;  _genPureLog ;}
+
