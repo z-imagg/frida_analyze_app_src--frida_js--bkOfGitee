@@ -135,7 +135,7 @@ const _fnNameLs__clgVarRuntimeC00Cxx:string[]=[
  ];
  
 //analyze_by_graph 打印大于1万次调用的函数们（方便返工修改frida_js以跳过大量调用函数）
-const  _fnNameLs__libjvm__hugeCallCnt:string[]=[
+const  _fnNameLs__hugeCallCnt:string[]=[
   // openjdk-24/jdk/bin/java  跳过 大于1万次调用的函数们 （analyze_by_graph将fridaLog转为sqlite3后执行统计sql获得 ），  参考 http://giteaz:3000/frida_analyze_app_src/analyze_by_graph/src/commit/276d6f90fcf97ba5cfbb00184f745c7db82101d7/fridaLog-sqlite3-java.log.txt
   "_ZNSt15basic_streambufIcSt11char_traitsIcEE6xsputnEPKcl",
   "_ZNSo6sentryC1ERSo",
@@ -298,14 +298,14 @@ const  _fnNameLs__libjvm__causeFridaCrash:string[]=[
 
 //openjdk-24的java命令 的 各模块的函数名过滤器 
 const _moduleFilterLs:MG_ModuleFilter[]=[
-MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._fnNameLs__clgVarRuntimeC00Cxx]),
-MG_ModuleFilter.build_excludeFuncLs("libjli.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
-MG_ModuleFilter.build_excludeFuncLs("libjvm.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__libjvm__causeFridaCrash, ..._fnNameLs__libjvm__hugeCallCnt]),
-MG_ModuleFilter.build_excludeFuncLs("libjimage.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
-MG_ModuleFilter.build_excludeFuncLs("libjava.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
-MG_ModuleFilter.build_excludeFuncLs("libjsvml.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
-MG_ModuleFilter.build_excludeFuncLs("libnio.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
-MG_ModuleFilter.build_excludeFuncLs("libnet.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx]),
+MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
+MG_ModuleFilter.build_excludeFuncLs("libjli.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
+MG_ModuleFilter.build_excludeFuncLs("libjvm.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__libjvm__causeFridaCrash, ..._fnNameLs__hugeCallCnt]),
+MG_ModuleFilter.build_excludeFuncLs("libjimage.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
+MG_ModuleFilter.build_excludeFuncLs("libjava.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
+MG_ModuleFilter.build_excludeFuncLs("libjsvml.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
+MG_ModuleFilter.build_excludeFuncLs("libnio.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
+MG_ModuleFilter.build_excludeFuncLs("libnet.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
 ];
 
 // 之后 _wrap.ts 中 组装出 最终使用的过滤器 mg_moduleFilter_ls  如下所示 
