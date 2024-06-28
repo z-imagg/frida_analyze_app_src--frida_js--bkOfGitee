@@ -120,7 +120,10 @@ const _fnNameLs__clgVarRuntimeCxx:string[]=[
 "_ZZ24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEENK3$_1clE9__VarDecl",
 "_Z23_init_varLs_inFn__RtCxxNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES4_ii",
 "_Z16createVar__RtCxxP11__VarDeclLsNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEibi",
-"_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+
+// runtime c++ 中的 destroyVarLs_inFn 函数, 需要被fridaJs监控，因此不能跳过
+// "_Z24destroyVarLs_inFn__RtCxxP11__VarDeclLsPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE", 
+
 "_Z40fridaHelper__cxxFuncWrap__std_string_newv",
 "_Z43fridaHelper__cxxFuncWrap__std_string_deletePv",
 "_Z41fridaHelper__cxxFuncWrap__std_string_sizePv",
