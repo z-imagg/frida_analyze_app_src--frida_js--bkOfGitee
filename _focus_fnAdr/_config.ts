@@ -258,6 +258,29 @@ const  _fnNameLs__hugeCallCnt:string[]=[
   "_ZNSt8ios_baseD2Ev",
   "_ZNSt8ios_base20_M_dispose_callbacksEv",
   "_ZNSt8ios_base17_M_call_callbacksENS_5eventE",
+
+  "_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE6assignERKS4_", //跳过理由: 含 basic_string
+  "_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2EPKcRKS3_", //跳过理由: 含 basic_string
+  "_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_S_copy_charsEPcPKcS7_", //跳过理由: 含 basic_string
+  "_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_set_lengthEm", //跳过理由: 含 basic_string
+  "_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7_M_dataEv", //跳过理由: 含 basic_string
+  "_ZSt19__iterator_categoryIPKcENSt15iterator_traitsIT_E17iterator_categoryERKS3_", //跳过理由: 含 iterator
+  "_ZSt10__distanceIPKcENSt15iterator_traitsIT_E15difference_typeES3_S3_St26random_access_iterator_tag", //跳过理由: 含 iterator
+  "_ZZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tagEN6_GuardD2Ev",  //跳过理由: 含 basic_string
+  "_ZZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tagEN6_GuardC2EPS4_",  //跳过理由: 含 basic_string
+  "_ZSt8distanceIPKcENSt15iterator_traitsIT_E15difference_typeES3_S3_", //跳过理由: 含 iterator
+  "_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tag",  //跳过理由: 含 basic_string
+  "_ZN5Mutex6unlockEv", //跳过理由: 存疑 但量大故暂时跳过
+  "_ZN5Mutex28lock_without_safepoint_checkEv", //跳过理由: 存疑 但量大故暂时跳过
+  "_ZNK10Relocation9copy_intoER16RelocationHolder", //跳过理由: 存疑 但量大故暂时跳过
+  "_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv",  //跳过理由: 含 basic_string
+  "_ZN7VMError17is_error_reportedEv", //跳过理由: 存疑 但量大故暂时跳过
+  "_ZN15PlatformMonitor4waitEm", //跳过理由: 存疑 但量大故暂时跳过
+  "_ZN7Monitor28wait_without_safepoint_checkEm", //跳过理由: 存疑 但量大故暂时跳过
+  "_ZL10to_abstimeP8timespeclbb", //跳过理由: 存疑 但量大故暂时跳过
+  "_ZNK13WatcherThread5sleepEv", //跳过理由: 存疑 但量大故暂时跳过
+  "_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE11_M_capacityEm",  //跳过理由: 含 basic_string
+  "_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7_M_dataEPc",  //跳过理由: 含 basic_string
 ];
 
 // 跳过导致frida崩溃的函数
