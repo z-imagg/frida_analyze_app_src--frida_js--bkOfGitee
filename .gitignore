@@ -6,3 +6,5 @@ __handlers__
 *.md5sum.txt
 
 .idea/
+
+.fuse_hidden*
