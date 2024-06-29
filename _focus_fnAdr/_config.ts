@@ -108,6 +108,7 @@ const _fnNameLs__clgVarRuntimeC00_dep_clibsList:string[]=[
 const _fnNameLs__clgVarRuntimeC00:string[]=[
 "_init_varLs_inFn__RtC00",
 "createVar__RtC00",
+// runtime c00 中的 destroyVarLs_inFn 函数, 需要被fridaJs监控，因此不能跳过
 // "destroyVarLs_inFn__RtC00",
   ];
 
