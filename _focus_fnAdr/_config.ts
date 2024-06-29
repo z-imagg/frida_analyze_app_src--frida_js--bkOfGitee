@@ -328,6 +328,10 @@ const  _fnNameLs__hugeCallCnt:string[]=[
   "_ZN11SymbolTable16do_add_if_neededEPKcimb",
   "_ZN6SymbolC2ERKS_",
   "_ZN6SymbolC2EPKhii",
+
+  //以下 函数(被frida拦截会)导致 jdk/bin/java 崩溃, 因此跳过
+  "_ZN13SharedRuntime14resolve_helperEbbP10JavaThread",
+
 ];
 
 // 跳过导致frida崩溃的函数
