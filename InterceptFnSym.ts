@@ -151,16 +151,11 @@ function OnFnLeaveBusz(thiz:InvocationContext,  retval:any ){
 function _main_(){
   console.log(`[应用日志文件路径] ${mg_logFPath}`);
 
-  // 主模块 jdk/bin/java  中 没有 使用 runtimeC00 、 runtimeCxx ，  只有 依赖模块 使用了 ，因此 要先强制加载依赖模块, 依赖模块们 参考 https://prgrmz07.coding.net/p/app/d/jdk/git/tree/brch_jdk-24%2B0__cmdWrapBuildByClangVar_2024_0625_1358/_build_/find__clangVar_runtime_fn.out.txt
-  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjli.so");
-  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/server/libjvm.so");
-  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjimage.so");
-  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjava.so");
-  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libjsvml.so");
-  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libnio.so");
-  Module.load("/app2/jdk-jdk-24-0/build_home/jdk/lib/libnet.so");
-  //加载x.so后,延迟1秒钟(1秒是拍脑袋的, 请 确认这1秒内应用没有运行 才能这样做),否则后面的get_nativeFn中的DebugSymbol.findFunc还是拿不到
-  Thread.sleep(1);
+  //sleuthkit的主模块 tsk_recover 中 已经使用了  runtimeC00 、 runtimeCxx ，因此 不需要 强制加载依赖模块
+  // 主模块    中 没有 使用 runtimeC00 、 runtimeCxx ，  只有 依赖模块 使用了 ，  要先强制加载依赖模块,  
+  // Module.load("/app2/sleuthkit/libxxx.so");
+  //加载xxx.so后,延迟1秒钟(1秒是拍脑袋的, 请 确认这1秒内应用没有运行 才能这样做),否则后面的get_nativeFn中的DebugSymbol.findFunc还是拿不到
+  // Thread.sleep(1);
 
   // 获取 本地函数   'clang-var运行时基础 中的 TL_TmPnt__update(tmPntVal)'
   get_nativeFn__clgVarRt__TL_TmPnt__update();
