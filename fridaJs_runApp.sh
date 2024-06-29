@@ -107,7 +107,7 @@ grep __@__@   $FridaLogF_local >  $FridaLogF_local__prePure
 sed 's/^__@__@//' $FridaLogF_local__prePure > $FridaLogF_global
 }
 #  appPath中/替换为_
-_appPathAsFileName=(echo $appPath | tr '/' '_')
+_appPathAsFileName=$(echo $appPath | tr '/' '_')
 #  _app2_sleuthkit_tools_autotools_tsk_recover
 _nowMs=$(date +%s)
 FridaLogF_local="/fridaAnlzAp/frida_js/InterceptFnSym-sleuthkit__tsk_recover.log"
