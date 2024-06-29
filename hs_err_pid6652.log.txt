@@ -7,7 +7,18 @@
 # Java VM: OpenJDK 64-Bit Server VM (23-internal-adhoc.z.jdk-jdk-24-0, mixed mode, tiered, compressed oops, compressed class ptrs, g1 gc, linux-amd64)
 # Problematic frame:
 # V  [libjvm.so+0x1769fa6]  SharedRuntime::resolve_helper(bool, bool, JavaThread*)+0x556
-#
+
+#ls -lh /fridaAnlzAp/frida_js/InterceptFnSym-java.log
+#-rw-rw-r-- 1 z z 3.3G  6月 29 21:00 /fridaAnlzAp/frida_js/InterceptFnSym-java.log
+
+# grep resolve_helper /fridaAnlzAp/frida_js/InterceptFnSym-java.log
+##1719645570420,06/29/2024, 03:19:30 PM; [关注函数]; fnSym.json= {"address":"0x7fffe6369a50","name":"_ZN13SharedRuntime14resolve_helperEbbP10JavaThread","moduleName":"libjvm.so","fileName":"","lineNumber":0,"col
+umn":0}
+##只有首次查调试信息文件，{"address":"0x7fffe6369a50","name":"_ZN13SharedRuntime14resolve_helperEbbP10JavaThread","moduleName":"libjvm.so","fileName":"","lineNumber":0,"column":0}
+__@__@{"tmPnt":3883949,"logId":6250400,"processId":6652,"curThreadId":6674,"direct":1,"fnAdr":"0x7fffe6369a50","fnCallId":3125258,"fnSym":{"address":"0x7fffe6369a50","name":"_ZN13SharedRuntime14resolve_helperEbb
+P10JavaThread","moduleName":"libjvm.so","fileName":"","lineNumber":0,"column":0},"modueBase":"0x7fffe4c00000"}
+
+
 # Core dump will be written. Default location: Core dumps may be processed with "/usr/share/apport/apport -p%p -s%s -c%c -d%d -P%P -u%u -g%g -- %E" (or dumping to /fridaAnlzAp/frida_js/core.6652)
 #
 # If you would like to submit a bug report, please visit:
