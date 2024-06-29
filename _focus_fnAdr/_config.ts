@@ -2,7 +2,6 @@
 // [依赖] : g_appName
 // [术语] :  参考 _focus_fnAdr/_impl.ts
 
-// alias alias__fromPipe_rmRepeatBlank_getFieldK_rmBlank_LoopLineAdd2Quotes1comma='tr  --squeeze-repeats " " |tr  --squeeze-repeats "\t" | cut -d" " -f${_fieldK} | tr  --delete " " |tr  --delete "\t" | while IFS= read -r line; do echo "\"$line\","; done  '
 
 //关注其所有函数的模块(暂无)
 const _modules_include=[
@@ -12,17 +11,18 @@ const _modules_include=[
 const _modules_exclude:string[]=[
   //总是要排除frida-agent.so的， 否则frida会自己调用自己 从而陷入 自死循环 中
   "frida-agent-64.so", 
-  //排除 linux可执行elf文件的基础依赖
-  "linux-vdso.so.1", "libz.so.1", "libc.so.6", "ld-linux-x86-64.so.2",
 
-  // "libstdc++.so.6", "libstdc++.so.6.0.30",  // openjdk-24+0 的 java命令 居然不依赖 libstdc++
-
-  //以下这些是谁带来的?  'ldd ...app.elf' 中貌似没有, 难道是 frida带来的
+  // source /app/bash-simplify/elfUtil_printStrArr.sh
+  // elfDepList_by_ldd /app2/sleuthkit/tools/autotools/tsk_recover
+  "linux-vdso.so.1",
+  "libstdc++.so.6",
+  "libz.so.1",
   "libm.so.6",
-  "libpthread.so.0",
-  "librt.so.1",
-  "libdl.so.2",
-  "libgcc_s.so.1"
+  "libgcc_s.so.1",
+  "libc.so.6",
+  "ld-linux-x86-64.so.2",
+  //上面排除了 linux可执行elf文件的基础依赖
+  
 ];
 
 //  grep runtime  /fridaAnlzAp/frida_js/InterceptFnSym-tsk_recover.log
@@ -155,13 +155,6 @@ const  _fnNameLs__libjvm__causeFridaCrash:string[]=[
 //openjdk-24的java命令 的 各模块的函数名过滤器 
 const _moduleFilterLs:MG_ModuleFilter[]=[
 MG_ModuleFilter.build_excludeFuncLs(g_appName, [..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
-MG_ModuleFilter.build_excludeFuncLs("libjli.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
-MG_ModuleFilter.build_excludeFuncLs("libjvm.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__libjvm__causeFridaCrash, ..._fnNameLs__hugeCallCnt]),
-MG_ModuleFilter.build_excludeFuncLs("libjimage.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
-MG_ModuleFilter.build_excludeFuncLs("libjava.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
-MG_ModuleFilter.build_excludeFuncLs("libjsvml.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
-MG_ModuleFilter.build_excludeFuncLs("libnio.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
-MG_ModuleFilter.build_excludeFuncLs("libnet.so", [ ..._fnNameLs__clgVarRuntimeC00Cxx, ..._fnNameLs__hugeCallCnt]),
 ];
 
 // 之后 _wrap.ts 中 组装出 最终使用的过滤器 mg_moduleFilter_ls  如下所示 
