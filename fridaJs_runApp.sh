@@ -107,7 +107,7 @@ grep __@__@   $FridaLogF_local >  $FridaLogF_local__prePure
 sed 's/^__@__@//' $FridaLogF_local__prePure > $FridaLogF_global
 }
 #  appPath中/替换为_
-_appPathAsFileName=(echo $appPath | tr '/' '_')
+_appPathAsFileName=$(echo $appPath | tr '/' '_')
 #  _app2_jdk-jdk-24-0_build_home_jdk_bin_java
 _nowMs=$(date +%s)
 FridaLogF_local="/fridaAnlzAp/frida_js/InterceptFnSym-java.log"
