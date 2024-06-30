@@ -11,6 +11,9 @@
 _PrjHome=/fridaAnlzAp/frida_js/
 cd $_PrjHome
 
+#临时启用coredump, （崩溃时生成coredump文件 以 协助调查问题）.   必须要source执行 否则 ulimit不生效
+source coredump_enable.sh
+
 #临时关闭Linux的ASLR(地址空间随机化) ， 否则 x.so 中的函数地址 每次都不同
 bash ASLR_disable.sh
 
